@@ -3,7 +3,9 @@ import React from 'react';
 const CallToActionButton = () => {
     return (
         <button className="cta-btn" onClick={() => window.location.href='stay.html'}>
-            BOOK A STAY
+            BOOK <br />
+            A <br />
+            STAY
         </button>
     );
 };

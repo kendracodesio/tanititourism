@@ -1,5 +1,4 @@
 import React from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 
@@ -45,6 +44,6 @@ const Navbar: React.FC<NavbarProps> = () => {
             </div>
         </nav>
     );
-}
+};
 
 export default Navbar;
