@@ -1,13 +1,15 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const CallToActionButton = () => {
+function CallToActionButton () {
+    const navigate = useNavigate();
     return (
-        <button className="cta-btn" onClick={() => window.location.href='stay.html'}>
+        <button className="cta-btn" onClick={() => navigate('/stay')}>
             BOOK <br />
             A <br />
             STAY
         </button>
     );
-};
+}
 
 export default CallToActionButton;

@@ -3,10 +3,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHotel } from '@fortawesome/free-solid-svg-icons'
 import { faUtensils } from '@fortawesome/free-solid-svg-icons'
 import { faPersonHiking } from '@fortawesome/free-solid-svg-icons'
+import { useNavigate } from 'react-router-dom';
 
 
 
-const Discover = () => {
+function Discover () {
+    const navigate = useNavigate();
     return(
         <div className="discover">
             <div className="d-flex justify-content-center pb-5 align-items-center pt-5 ">
@@ -41,7 +43,7 @@ const Discover = () => {
                             finibus
                             magna
                         </p>
-                        <button className="btn btn-custom btn-lg text-uppercase pt-3" onClick={() => window.location.href='stay.html'}>read
+                        <button className="btn btn-custom btn-lg text-uppercase pt-3" onClick={() => navigate('/stay')}>read
                             more
                         </button>
                     </div>
@@ -52,7 +54,7 @@ const Discover = () => {
                             magna
                         </p>
                         <button className="btn btn-custom btn-lg text-uppercase pt-3"
-                                onClick={() => window.location.href='restaurants-nightlife.html'}>read
+                                onClick={() =>  navigate('/dine')}>read
                             more
                         </button>
                     </div>
@@ -62,7 +64,7 @@ const Discover = () => {
                             finibus
                             magna
                         </p>
-                        <button className="btn btn-custom btn-lg text-uppercase pt-3" onClick={() => window.location.href='do.html'}>read
+                        <button className="btn btn-custom btn-lg text-uppercase pt-3" onClick={() =>  navigate('/do')}>read
                             more
                         </button>
                     </div>

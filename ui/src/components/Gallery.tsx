@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Gallery = () => {
+function Gallery () {
     return (
 
         <div className="d-flex justify-content-evenly pt-5 pb-5">
@@ -18,6 +18,6 @@ const Gallery = () => {
             </div>
         </div>
     );
-};
+}
 
 export default Gallery;

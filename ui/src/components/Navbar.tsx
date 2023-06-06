@@ -1,6 +1,7 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
+import { NavLink } from 'react-router-dom';
 
 
 
@@ -11,9 +12,10 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = () => {
     return (
         <nav className="navbar navbar-expand-lg pt-3 shadow">
-            <a className="navbar-brand ps-5 pe-4" href="index.html">
-                <img className="navbar-img" src="/images/taniti-logo.png" alt="taniti-logo" />
-            </a>
+            <NavLink to="/" className ="navbar-brand ps-5 pe-4"><img className="navbar-img" src="/images/taniti-logo.png" alt="taniti-logo" /></NavLink>
+            {/*<a className="navbar-brand ps-5 pe-4" href="index.html">*/}
+            {/*    <img className="navbar-img" src="/images/taniti-logo.png" alt="taniti-logo" />*/}
+            {/*</a>*/}
             <button className="navbar-toggler me-2" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
                     aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span className="navbar-toggler-icon"></span>
@@ -21,16 +23,20 @@ const Navbar: React.FC<NavbarProps> = () => {
             <div className="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul className="navbar-nav mx-auto">
                     <li className="nav-item me-5 text-center">
-                        <a className="nav-link" href="do.html">THINGS TO<br /> DO</a>
+                        <NavLink to="/do" className="nav-link">THINGS TO<br /> DO</NavLink>
+                        {/*<a className="nav-link" href="do.html">THINGS TO<br /> DO</a>*/}
                     </li>
                     <li className="nav-item me-5 text-center">
-                        <a className="nav-link" href="stay.html">PLACES <br />TO STAY</a>
+                        <NavLink to="/stay" className="nav-link">PLACES <br />TO STAY</NavLink>
+                        {/*<a className="nav-link" href="stay.html">PLACES <br />TO STAY</a>*/}
                     </li>
                     <li className="nav-item me-5 text-center">
-                        <a className="nav-link" href="restaurants-nightlife.html">RESTAURANTS & <br /> NIGHTLIFE</a>
+                        <NavLink to="/dine" className="nav-link">RESTAURANTS & <br /> NIGHTLIFE</NavLink>
+                        {/*<a className="nav-link" href="restaurants-nightlife.html">RESTAURANTS & <br /> NIGHTLIFE</a>*/}
                     </li>
                     <li className="nav-item me-5 text-center">
-                        <a className="nav-link" href="plan.html">PLAN YOUR <br /> TRIP</a>
+                        <NavLink to="/plan" className="nav-link">PLAN YOUR <br /> TRIP</NavLink>
+                        {/*<a className="nav-link" href="plan.html">PLAN YOUR <br /> TRIP</a>*/}
                     </li>
                 </ul>
                 <form className="search-area d-flex justify-content-end me-3" role="search">

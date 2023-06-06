@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleUp } from '@fortawesome/free-solid-svg-icons'
 
-const GoToTopButton: React.FC = () => {
+function GoToTopButton () {
     const [isVisible, setIsVisible] = useState(false);
 
     //Show button when page is scrolled up to a given amount

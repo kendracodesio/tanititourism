@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Hero = () => {
+function Hero () {
     return (
     <div>
         <img src="/images/taniti-hero.jpg" className="d-block w-100 img-hero" alt="taniti tropical island"/>

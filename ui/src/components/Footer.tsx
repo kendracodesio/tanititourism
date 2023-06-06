@@ -1,7 +1,7 @@
 import React from 'react';
 import SocialLinks from "./SocialLinks";
 
-const Footer = () => {
+function Footer () {
     return (
         <footer>
             <div className="line-full"></div>
