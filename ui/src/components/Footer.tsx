@@ -24,7 +24,7 @@ function Footer () {
                         <SocialLinks />
                     </div>
                 </div>
-                    <p className="copyright pt-5 ps-2 pb-2">© 2022 Taniti Office of Tourism.</p>
+                    <p className="copyright pt-5 ps-2 pb-2">© 2023 Taniti Office of Tourism.</p>
                 </div>
         </footer>
     )

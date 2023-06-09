@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Hero () {
+function HomePageHero () {
     return (
     <div>
         <img src="/images/taniti-hero.jpg" className="d-block w-100 img-hero" alt="taniti tropical island"/>
@@ -12,4 +12,4 @@ function Hero () {
     );
 };
 
-export default Hero;
+export default HomePageHero;

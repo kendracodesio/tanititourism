@@ -3,6 +3,8 @@ package com.kendrareynolds.tanititourism.service;
 import com.kendrareynolds.tanititourism.entity.ThingToDo;
 import com.kendrareynolds.tanititourism.repository.ThingToDoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,19 +18,19 @@ public class ThingToDoService {
         this.thingToDoRepository = thingToDoRepository;
     }
 
-    public List<ThingToDo> findAll() {
-        return thingToDoRepository.findAll();
+    public Page<ThingToDo> findAll(int page, int size) {
+        return thingToDoRepository.findAll(PageRequest.of(page - 1, size));
     }
 
-    public List<ThingToDo> findByDoType(String doTypeName) {
-        return thingToDoRepository.findByDoTypesTypeName(doTypeName);
+    public Page<ThingToDo> findByDoType(String doTypeName, int page, int size) {
+        return thingToDoRepository.findByDoTypesTypeName(doTypeName, PageRequest.of(page - 1, size));
     }
 
-    public List<ThingToDo> findByRegion(String regionName) {
-        return thingToDoRepository.findByRegionName(regionName);
+    public Page<ThingToDo> findByRegion(String regionName, int page, int size) {
+        return thingToDoRepository.findByRegionName(regionName, PageRequest.of(page - 1, size));
     }
 
-    public List<ThingToDo> findByDoTypeAndRegion(String doTypeName, String regionName) {
-        return thingToDoRepository.findByDoTypesTypeNameAndRegionName(doTypeName, regionName);
+    public Page<ThingToDo> findByDoTypeAndRegion(String doTypeName, String regionName, int page, int size) {
+        return thingToDoRepository.findByDoTypesTypeNameAndRegionName(doTypeName, regionName, PageRequest.of(page - 1, size));
     }
 }

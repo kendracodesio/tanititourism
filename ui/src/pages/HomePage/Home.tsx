@@ -1,13 +1,13 @@
 import React from 'react';
-import Hero from "./Hero";
-import About from "./About";
-import Discover from "./Discover";
-import Gallery from "./Gallery";
+import HomePageHero from "./components/HomePageHero";
+import About from "./components/About";
+import Discover from "./components/Discover";
+import Gallery from "./components/Gallery";
 
 function Home() {
     return (
         <div>
-            <Hero />
+            <HomePageHero />
             <div className="container">
                 <About />
                 <Discover />

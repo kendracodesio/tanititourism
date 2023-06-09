@@ -1,5 +1,7 @@
 package com.kendrareynolds.tanititourism.entity;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public enum Cost {
     BUDGET("$"),
     ECONOMICAL("$$"),
@@ -12,6 +14,7 @@ public enum Cost {
         this.label = label;
     }
 
+    @JsonValue
     public String getLabel() {
         return this.label;
     }

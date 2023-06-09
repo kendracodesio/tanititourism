@@ -7,6 +7,7 @@ import com.kendrareynolds.tanititourism.service.DoTypeService;
 import com.kendrareynolds.tanititourism.service.RegionService;
 import com.kendrareynolds.tanititourism.service.ThingToDoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -40,16 +41,18 @@ public class ThingToDoController {
     }
 
     @GetMapping("/list")
-    public List<ThingToDo> getThingsToDo(@RequestParam (required = false, defaultValue = "all") String doType,
-                                         @RequestParam(required = false, defaultValue = "all") String region) {
+    public Page<ThingToDo> getThingsToDo(@RequestParam (required = false, defaultValue = "all") String doType,
+                                         @RequestParam(required = false, defaultValue = "all") String region,
+                                         @RequestParam(required = false, defaultValue = "1") int page,
+                                         @RequestParam(required = false, defaultValue = "4") int size){
         if (doType.equals("all") && region.equals("all")) {
-            return thingToDoService.findAll();
+            return thingToDoService.findAll(page, size);
         } else if (region.equals("all")) {
-            return thingToDoService.findByDoType(doType);
+            return thingToDoService.findByDoType(doType, page, size);
         } else if (doType.equals("all")) {
-            return thingToDoService.findByRegion(region);
+            return thingToDoService.findByRegion(region, page, size);
         } else {
-            return thingToDoService.findByDoTypeAndRegion(doType, region);
+            return thingToDoService.findByDoTypeAndRegion(doType, region, page, size);
         }
     }
 }

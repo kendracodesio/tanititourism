@@ -2,13 +2,13 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import CallToActionButton from "./components/CallToActionButton";
-import Home from './components/Home'
+import Home from './pages/HomePage/Home'
 import GoToTopButton from "./components/GoToTopButton";
 import Footer from "./components/Footer";
-import Do from "./components/Do";
-import Stay from "./components/Stay";
-import Dine from "./components/Dine";
-import Plan from "./components/Plan";
+import Do from "./pages/DoPage/Do";
+import Stay from "./pages/StayPage/Stay";
+import Dine from "./pages/DinePage/Dine";
+import Plan from "./pages/PlanPage/Plan";
 
 function App() {
   return (
