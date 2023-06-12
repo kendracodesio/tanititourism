@@ -28,7 +28,7 @@ public class ThingToDoController {
         this.thingToDoService = thingToDoService;
         this.doTypeService = doTypeService;
         this.regionService = regionService;
-    };
+    }
 
     @GetMapping("/type")
     public List<DoType> getDoTypes(){
@@ -41,7 +41,7 @@ public class ThingToDoController {
     }
 
     @GetMapping("/list")
-    public Page<ThingToDo> getThingsToDo(@RequestParam (required = false, defaultValue = "all") String doType,
+    public Page<ThingToDo> getThingsToDo(@RequestParam(required = false, defaultValue = "all") String doType,
                                          @RequestParam(required = false, defaultValue = "all") String region,
                                          @RequestParam(required = false, defaultValue = "1") int page,
                                          @RequestParam(required = false, defaultValue = "4") int size){
