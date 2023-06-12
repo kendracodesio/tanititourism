@@ -20,8 +20,8 @@ interface Listing {
 
 function Do() {
     const apiURL = process.env.REACT_APP_API_URL;
-    const [doType, setDoType] = useState('all');
-    const [region, setRegion] = useState('all');
+    const [doType, setDoType] = useState("all");
+    const [region, setRegion] = useState("all");
     const [listings, setListings] = useState<Listing[]>([]);
     
     useEffect(() => {
@@ -30,7 +30,7 @@ function Do() {
                 setListings(response.data.content);
             })
             .catch(error => {
-                console.log('Error getting things to do:', error);
+                console.log("Error getting things to do:", error);
             });
     },[apiURL, doType, region]);
     
