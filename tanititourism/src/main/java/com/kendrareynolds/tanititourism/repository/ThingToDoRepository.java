@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 
 public interface ThingToDoRepository extends JpaRepository<ThingToDo, Long> {
+    @Override
     Page<ThingToDo> findAll(Pageable pageable);
     Page<ThingToDo> findByDoTypesTypeName(String typeName, Pageable pageable);
     Page<ThingToDo> findByRegionName(String regionName, Pageable pageable);
