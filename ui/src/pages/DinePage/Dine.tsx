@@ -6,7 +6,7 @@ import ListingItem from "../../components/ListingItem";
 import axios from "axios";
 
 interface Listing {
-    id:number;
+    id: number;
     imageUrl: string;
     imageAltText: string;
     name: string;

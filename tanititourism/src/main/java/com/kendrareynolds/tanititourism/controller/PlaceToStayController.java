@@ -20,7 +20,6 @@ import java.util.List;
 public class PlaceToStayController {
 
     private final PlaceToStayService placeToStayService;
-
     private final StayTypeService stayTypeService;
     private final RegionService regionService;
 

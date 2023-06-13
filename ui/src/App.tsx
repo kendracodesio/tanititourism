@@ -1,5 +1,5 @@
-import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import React, {useEffect} from 'react';
+import {Routes, Route, useLocation} from 'react-router-dom';
 import Navbar from './components/Navbar';
 import CallToActionButton from "./components/CallToActionButton";
 import Home from './pages/HomePage/Home'
@@ -10,7 +10,16 @@ import Stay from "./pages/StayPage/Stay";
 import Dine from "./pages/DinePage/Dine";
 import Plan from "./pages/PlanPage/Plan";
 
+const useScrollToTop = () => {
+    const { pathname } = useLocation();
+
+    useEffect(() => {
+        window.scrollTo(0,0);
+    }, [pathname]);
+};
+
 function App() {
+    useScrollToTop();
   return (
     <div className="App">
             <Navbar />
