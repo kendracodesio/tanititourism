@@ -6,14 +6,14 @@ import axios from "axios";
 import ListingItem from "../../components/ListingItem";
 
 interface Listing {
-    id:number
-    imageUrl: string
-    imageAltText: string
-    name: string
-    description: string
-    phone: string
-    actionText: string
-    cost: string
+    id:number;
+    imageUrl: string;
+    imageAltText: string;
+    name: string;
+    description: string;
+    phone: string;
+    actionText: string;
+    cost: string;
 }
 
 function Stay () {
@@ -60,7 +60,6 @@ function Stay () {
                                  name={listing.name}
                                  description={listing.description}
                                  phone={listing.phone}
-                                 actionText="to book or to request more info:"
                                  cost={listing.cost} />
                 ))}
             </div>

@@ -12,7 +12,6 @@ interface Listing {
     name: string;
     description: string;
     phone: string;
-    actionText: string;
     cost: string;
 
 }
@@ -61,8 +60,7 @@ function Do() {
                                  name={listing.name}
                                  description={listing.description}
                                  phone={listing.phone}
-                                 actionText="to book or to request more info:"
-                                 cost={listing.cost} />
+                                 cost={listing.cost}/>
                 ))}
             </div>
 

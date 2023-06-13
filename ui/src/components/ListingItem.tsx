@@ -1,18 +1,26 @@
 import React from 'react';
 
 interface ListingItemProps {
-    key: number
+    key: number;
     imageUrl: string;
     imageAltText: string;
     name: string;
     description: string;
     phone: string;
-    actionText: string;
     cost: string;
+    acceptsReservations?: string; //optional property applies only to Restaurants & Nightlife
 
 }
 
-function ListingItem({imageUrl, imageAltText, name, description, phone, actionText, cost}: ListingItemProps) {
+function ListingItem({imageUrl, imageAltText, name, description, phone, cost, acceptsReservations}: ListingItemProps) {
+    let actionText;
+    if (acceptsReservations === "YES") {
+        actionText = "for reservations or for more info:";
+    } else if (acceptsReservations === "NO") {
+        actionText = "walk-ins only - for more info:";
+    } else {
+        actionText = "to book or to request more info:"
+    }
     return (
         <div className="do-item shadow mx-auto mb-5 ">
             <div className="row p-5">
