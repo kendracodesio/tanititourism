@@ -6,9 +6,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PlaceToStayRepository extends JpaRepository<PlaceToStay, Long> {
-    Page<PlaceToStay> findAll(Pageable pageable);
-    Page<PlaceToStay> findByStayTypeTypeName(String typeName, Pageable pageable);
-    Page<PlaceToStay> findByRegionName(String regionName, Pageable pageable);
-    Page<PlaceToStay> findByStayTypeTypeNameAndRegionName(String typeName, String regionName, Pageable pageable);
+    Page<PlaceToStay> findByDeletedAtIsNull(Pageable pageable);
+    Page<PlaceToStay> findByStayTypeTypeNameAndDeletedAtIsNull(String typeName, Pageable pageable);
+    Page<PlaceToStay> findByRegionNameAndDeletedAtIsNull(String regionName, Pageable pageable);
+    Page<PlaceToStay> findByStayTypeTypeNameAndRegionNameAndDeletedAtIsNull(String typeName, String regionName, Pageable pageable);
 
 }

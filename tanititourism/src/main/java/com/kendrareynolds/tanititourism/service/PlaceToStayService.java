@@ -17,19 +17,19 @@ public class PlaceToStayService {
         this.placeToStayRepository = placeToStayRepository;
     }
 
-    public Page<PlaceToStay> findAll(int page, int size) {
-        return placeToStayRepository.findAll(PageRequest.of(page - 1, size));
+    public Page<PlaceToStay> getActivePlacesToStay(int page, int size) {
+        return placeToStayRepository.findByDeletedAtIsNull(PageRequest.of(page - 1, size));
     }
 
     public Page<PlaceToStay> findByStayType(String stayTypeName, int page, int size) {
-        return placeToStayRepository.findByStayTypeTypeName(stayTypeName, PageRequest.of(page - 1, size));
+        return placeToStayRepository.findByStayTypeTypeNameAndDeletedAtIsNull(stayTypeName, PageRequest.of(page - 1, size));
     }
 
     public Page<PlaceToStay> findByRegion(String regionName, int page, int size) {
-        return placeToStayRepository.findByRegionName(regionName, PageRequest.of(page - 1, size));
+        return placeToStayRepository.findByRegionNameAndDeletedAtIsNull(regionName, PageRequest.of(page - 1, size));
     }
 
     public Page<PlaceToStay> findByStayTypeAndRegion(String stayTypeName, String regionName, int page, int size) {
-        return placeToStayRepository.findByStayTypeTypeNameAndRegionName(stayTypeName, regionName, PageRequest.of(page - 1, size));
+        return placeToStayRepository.findByStayTypeTypeNameAndRegionNameAndDeletedAtIsNull(stayTypeName, regionName, PageRequest.of(page - 1, size));
     }
 }

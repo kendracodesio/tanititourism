@@ -14,6 +14,9 @@ import lombok.Setter;
 @NoArgsConstructor
 public class RestaurantsAndNightlife extends Listing {
 
+    public enum AcceptsReservations {
+        YES, NO
+    }
 
     @Enumerated(EnumType.STRING)
     @Column(name = "accepts_reservations")

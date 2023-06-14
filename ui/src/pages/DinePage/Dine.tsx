@@ -4,6 +4,7 @@ import PageIntro from "../../components/PageIntro";
 import Dropdown from "../../components/Dropdown";
 import ListingItem from "../../components/ListingItem";
 import axios from "axios";
+import Pagination from "../../components/Pagination";
 
 interface Listing {
     id: number;
@@ -21,16 +22,30 @@ function Dine () {
     const [dineType, setDineType] = useState("all");
     const [region, setRegion] = useState("all");
     const [listings, setListings] = useState<Listing[]>([]);
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [pageSize, setPageSize] = useState<number>();
+
 
     useEffect(() => {
-        axios.get(`${apiURL}/api/restaurants-and-nightlife/list?dineType=${dineType}&region=${region}`)
+        axios.get(`${apiURL}/api/restaurants-and-nightlife/list?dineType=${dineType}&region=${region}&page=${page}`)
             .then(response => {
                 setListings(response.data.content);
+                setPageSize(response.data.size);
+                setTotalPages(response.data.totalPages);
             })
             .catch(error => {
                 console.log("Error getting restaurants and nightlife:", error);
             });
-    }, [apiURL, dineType, region]);
+    }, [apiURL, dineType, region, page, pageSize]);
+
+    const handlePrevious = () => {
+        setPage(prevPage => prevPage > 1 ? prevPage -1 :prevPage);
+    };
+
+    const handleNext = () => {
+        setPage(prevPage => prevPage < totalPages ? prevPage + 1 : prevPage);
+    };
 
     return (
         <div>
@@ -64,6 +79,11 @@ function Dine () {
                                  cost={listing.cost}
                                  acceptsReservations={listing.acceptsReservations}/>
                 ))}
+                <Pagination page={page}
+                            totalPages={totalPages}
+                            handlePrevious={handlePrevious}
+                            handleNext={handleNext}
+                            />
             </div>
         </div>
     );

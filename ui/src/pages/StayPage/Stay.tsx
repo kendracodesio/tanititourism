@@ -4,6 +4,7 @@ import PageIntro from "../../components/PageIntro";
 import Dropdown from "../../components/Dropdown";
 import axios from "axios";
 import ListingItem from "../../components/ListingItem";
+import Pagination from "../../components/Pagination";
 
 interface Listing {
     id:number;
@@ -21,17 +22,29 @@ function Stay () {
     const [stayType, setStayType] = useState("all");
     const [region, setRegion] = useState("all");
     const [listings, setListings] = useState<Listing[]>([]);
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [pageSize, setPageSize] = useState<number>();
 
     useEffect(() => {
-        axios.get(`${apiURL}/api/places-to-stay/list?stayType=${stayType}&region=${region}`)
+        axios.get(`${apiURL}/api/places-to-stay/list?stayType=${stayType}&region=${region}&page=${page}`)
             .then(response => {
                 setListings(response.data.content);
+                setPageSize(response.data.size);
+                setTotalPages(response.data.totalPages);
                 })
             .catch(error => {
                 console.log("Error getting places to stay:", error);
             });
 
-            }, [apiURL, stayType, region]);
+            }, [apiURL, stayType, region, page, pageSize]);
+    const handlePrevious = () => {
+        setPage(prevPage => prevPage > 1 ? prevPage -1 :prevPage);
+    };
+
+    const handleNext = () => {
+        setPage(prevPage => prevPage < totalPages ? prevPage + 1 : prevPage);
+    };
 
     return (
         <div>
@@ -62,6 +75,11 @@ function Stay () {
                                  phone={listing.phone}
                                  cost={listing.cost} />
                 ))}
+                <Pagination page={page}
+                            totalPages={totalPages}
+                            handlePrevious={handlePrevious}
+                            handleNext={handleNext}
+                />
             </div>
 
         </div>

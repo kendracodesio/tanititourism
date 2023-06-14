@@ -17,20 +17,20 @@ public class RestaurantsAndNightlifeService {
         this.restaurantsAndNightlifeRepository = restaurantsAndNightlifeRepository;
     }
 
-    public Page<RestaurantsAndNightlife> findAll(int page, int size) {
-        return restaurantsAndNightlifeRepository.findAll(PageRequest.of(page - 1, size));
+    public Page<RestaurantsAndNightlife> getActiveRestaurantsAndNightlife(int page, int size) {
+        return restaurantsAndNightlifeRepository.findByDeletedAtIsNull(PageRequest.of(page - 1, size));
     }
 
     public Page<RestaurantsAndNightlife> findByDineType(String dineTypeName, int page, int size) {
-        return restaurantsAndNightlifeRepository.findByDineTypeTypeName(dineTypeName, PageRequest.of(page - 1, size));
+        return restaurantsAndNightlifeRepository.findByDineTypeTypeNameAndDeletedAtIsNull(dineTypeName, PageRequest.of(page - 1, size));
     }
 
     public Page<RestaurantsAndNightlife> findByRegion(String regionName, int page, int size) {
-        return restaurantsAndNightlifeRepository.findByRegionName(regionName, PageRequest.of(page - 1, size));
+        return restaurantsAndNightlifeRepository.findByRegionNameAndDeletedAtIsNull(regionName, PageRequest.of(page - 1, size));
     }
 
     public Page<RestaurantsAndNightlife> findByDineTypeAndRegion(String dineTypeName, String regionName, int page, int size) {
-        return restaurantsAndNightlifeRepository.findByDineTypeTypeNameAndRegionName(dineTypeName, regionName, PageRequest.of(page - 1, size));
+        return restaurantsAndNightlifeRepository.findByDineTypeTypeNameAndRegionNameAndDeletedAtIsNull(dineTypeName, regionName, PageRequest.of(page - 1, size));
     }
 
 

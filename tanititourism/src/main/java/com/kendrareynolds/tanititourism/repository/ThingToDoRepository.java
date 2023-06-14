@@ -9,11 +9,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 
 public interface ThingToDoRepository extends JpaRepository<ThingToDo, Long> {
-    @Override
-    Page<ThingToDo> findAll(Pageable pageable);
-    Page<ThingToDo> findByDoTypesTypeName(String typeName, Pageable pageable);
-    Page<ThingToDo> findByRegionName(String regionName, Pageable pageable);
-    Page<ThingToDo> findByDoTypesTypeNameAndRegionName(String typeName, String regionName, Pageable pageable);
+
+    Page<ThingToDo> findByDeletedAtIsNull(Pageable pageable);
+    Page<ThingToDo> findByDoTypesTypeNameAndDeletedAtIsNull(String typeName, Pageable pageable);
+    Page<ThingToDo> findByRegionNameAndDeletedAtIsNull(String regionName, Pageable pageable);
+    Page<ThingToDo> findByDoTypesTypeNameAndRegionNameAndDeletedAtIsNull(String typeName, String regionName, Pageable pageable);
 
 
 }

@@ -6,6 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.OffsetDateTime;
+
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -37,6 +42,17 @@ public abstract class Listing {
 
     @Column(name = "image_alt_text")
     private String imageAltText;
+
+    @CreationTimestamp
+    @Column(name = "createdAt")
+    private OffsetDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "updatedAt")
+    private OffsetDateTime updatedAt;
+
+    @Column(name = "deletedAt")
+    private OffsetDateTime deletedAt;
 
     @ManyToOne
     @JoinColumn(name = "region_id")

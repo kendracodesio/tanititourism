@@ -4,6 +4,7 @@ import PageHero from "../../components/PageHero";
 import PageIntro from "../../components/PageIntro";
 import Dropdown from "../../components/Dropdown";
 import ListingItem from "../../components/ListingItem";
+import Pagination from "../../components/Pagination";
 
 interface Listing {
     id: number
@@ -22,16 +23,31 @@ function Do() {
     const [doType, setDoType] = useState("all");
     const [region, setRegion] = useState("all");
     const [listings, setListings] = useState<Listing[]>([]);
-    
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [pageSize, setPageSize] = useState<number>();
+
+
     useEffect(() => {
-        axios.get(`${apiURL}/api/things-to-do/list?doType=${doType}&region=${region}`)
+        axios.get(`${apiURL}/api/things-to-do/list?doType=${doType}&region=${region}&page=${page}`)
             .then(response => {
                 setListings(response.data.content);
+                setPageSize(response.data.size);
+                setTotalPages(response.data.totalPages);
+
             })
             .catch(error => {
                 console.log("Error getting things to do:", error);
             });
-    },[apiURL, doType, region]);
+    },[apiURL, doType, region, page, pageSize]);
+
+    const handlePrevious = () => {
+        setPage(prevPage => prevPage > 1 ? prevPage -1 :prevPage);
+    };
+
+    const handleNext = () => {
+        setPage(prevPage => prevPage < totalPages ? prevPage + 1 : prevPage);
+    };
     
     return (
         <div>
@@ -62,6 +78,11 @@ function Do() {
                                  phone={listing.phone}
                                  cost={listing.cost}/>
                 ))}
+                <Pagination page={page}
+                            totalPages={totalPages}
+                            handlePrevious={handlePrevious}
+                            handleNext={handleNext}
+                />
             </div>
 
         </div>

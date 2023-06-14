@@ -44,9 +44,9 @@ public class ThingToDoController {
     public Page<ThingToDo> getThingsToDo(@RequestParam(required = false, defaultValue = "all") String doType,
                                          @RequestParam(required = false, defaultValue = "all") String region,
                                          @RequestParam(required = false, defaultValue = "1") int page,
-                                         @RequestParam(required = false, defaultValue = "4") int size){
+                                         @RequestParam(required = false, defaultValue = "2") int size){
         if (doType.equals("all") && region.equals("all")) {
-            return thingToDoService.findAll(page, size);
+            return thingToDoService.getActiveThingsToDo(page, size);
         } else if (region.equals("all")) {
             return thingToDoService.findByDoType(doType, page, size);
         } else if (doType.equals("all")) {

@@ -17,7 +17,6 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class DoType {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
