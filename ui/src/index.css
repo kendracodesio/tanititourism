@@ -326,3 +326,32 @@ footer li {
 .copyright {
   font-size: 16px;
 }
+
+.sidebar {
+  background: #3C4DC3;
+}
+
+.sidebar .nav-link {
+  border-radius: 5px;
+}
+
+.sidebar .active-link {
+ background:  #3CC3B2;
+}
+
+.admin-home {
+  margin-top: 200px;
+  margin-left: 60px;
+}
+
+.sidebar li {
+  list-style-type: none;
+}
+
+.listing-detail-img {
+  width: 150px;
+  height: 100px;
+  object-fit: cover;
+}
+
+

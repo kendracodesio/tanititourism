@@ -10,13 +10,15 @@ interface DropdownProps {
 }
 
 interface Item {
-    id: number;
+    id?: number;
     name?: string;  //value for region
     typeName?: string; //value for type
+    cost?: string;
+    label?:string; //for enum label
 
 }
 
-function Dropdown({ apiEndpoint, label, id, onChange }: DropdownProps) {
+function AdminDropdown({ apiEndpoint, label, id, onChange }: DropdownProps) {
     const [items, setItems] = useState<Item[]>([]);
 
     useEffect(() => {
@@ -25,6 +27,8 @@ function Dropdown({ apiEndpoint, label, id, onChange }: DropdownProps) {
                 setItems(response.data);
             });
     }, [apiEndpoint]);
+
+
 
     const handleSelectionChange = (newSelection: any) => {
         if (onChange) {
@@ -37,14 +41,19 @@ function Dropdown({ apiEndpoint, label, id, onChange }: DropdownProps) {
         <div className="col-lg-4 mt-4 mb-4">
             <label htmlFor={id} className="form-label">{label}:</label>
             <select className="form-control" id={id} onChange={e => handleSelectionChange(e.target.value)}>
-                <option value="all">All</option>
-                {items.map((item: Item) => (
-                    //gets the value for either region or type
-                    <option value={item.name || item.typeName} key={item.id}>{item.name || item.typeName}</option>
-                    ))}
+                {items.map((item: Item) => {
+                    // For entities with IDs (region and type)
+                    if (item.id) {
+                        return <option value={item.id} key={item.id}>{item.name || item.typeName}</option>
+                    }
+                    // For enums with name-label pairs (cost)
+                    else if (item.name && item.label) {
+                        return <option value={item.name} key={item.name}>{`${item.name} - ${item.label}`}</option>
+                    }
+                })}
             </select>
         </div>
     )
 }
 
-export default Dropdown;
+export default AdminDropdown;

@@ -13,8 +13,15 @@ import java.util.Set;
 @Getter
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor
 public class ThingToDo extends Listing {
+
+
+    private final ListingType listingType;
+
+    public ThingToDo() {
+        this.listingType = ListingType.DO;
+    }
+
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
@@ -24,12 +31,13 @@ public class ThingToDo extends Listing {
     @JsonManagedReference
     private Set<DoType> doTypes = new HashSet<>();
 
+
     @Override
     public boolean equals(Object o) {
-     if (this == o) return true;
-     if(!(o instanceof ThingToDo)) return false;
-     ThingToDo that = (ThingToDo) o;
-     return Objects.equals(getId(), that.getId());
+        if (this == o) return true;
+        if (!(o instanceof ThingToDo)) return false;
+        ThingToDo that = (ThingToDo) o;
+        return Objects.equals(getId(), that.getId());
     }
 
     @Override
@@ -37,4 +45,24 @@ public class ThingToDo extends Listing {
         return Objects.hash(getId());
     }
 
+    @Override
+    public ListingType getListingType() {
+        return this.listingType;
+    }
+
+    @Override
+    public String toString() {
+        return "ThingToDo{" +
+                "name='" + super.getName() + '\'' +
+                ", description='" + super.getDescription() + '\'' +
+                ", phone='" + super.getPhone() + '\'' +
+                ", cost=" + super.getCost() +
+                ", region=" + super.getRegion() +
+                ", doTypes=" + doTypes +
+                '}';
+    }
+
 }
+
+
+

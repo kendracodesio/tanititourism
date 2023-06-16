@@ -1,5 +1,4 @@
 package com.kendrareynolds.tanititourism.controller;
-
 import com.kendrareynolds.tanititourism.entity.PlaceToStay;
 import com.kendrareynolds.tanititourism.entity.Region;
 import com.kendrareynolds.tanititourism.entity.StayType;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.util.List;
 
 @RestController
@@ -46,7 +44,7 @@ public class PlaceToStayController {
                                              @RequestParam(required = false, defaultValue = "1") int page,
                                              @RequestParam(required = false, defaultValue = "2") int size) {
         if(stayType.equals("all") && region.equals("all")) {
-            return placeToStayService.getActivePlacesToStay(page, size);
+            return placeToStayService.getAllPlacesToStay(page, size);
         } else if (region.equals("all")) {
             return placeToStayService.findByStayType(stayType, page, size);
         } else if (stayType.equals("all")) {

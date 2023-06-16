@@ -1,6 +1,7 @@
 package com.kendrareynolds.tanititourism.controller;
 
 import com.kendrareynolds.tanititourism.entity.DoType;
+import com.kendrareynolds.tanititourism.entity.Listing;
 import com.kendrareynolds.tanititourism.entity.Region;
 import com.kendrareynolds.tanititourism.entity.ThingToDo;
 import com.kendrareynolds.tanititourism.service.DoTypeService;
@@ -46,7 +47,7 @@ public class ThingToDoController {
                                          @RequestParam(required = false, defaultValue = "1") int page,
                                          @RequestParam(required = false, defaultValue = "2") int size){
         if (doType.equals("all") && region.equals("all")) {
-            return thingToDoService.getActiveThingsToDo(page, size);
+            return thingToDoService.getAllThingsToDo(page, size);
         } else if (region.equals("all")) {
             return thingToDoService.findByDoType(doType, page, size);
         } else if (doType.equals("all")) {

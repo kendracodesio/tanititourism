@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -17,9 +16,8 @@ import java.util.Set;
 public class User {
 
     public enum Role {
-        admin
+        ADMIN
     }
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -42,8 +40,7 @@ public class User {
     private String lastName;
 
     @OneToMany(mappedBy = "user")
-    private Set<UserReport> userReports = new HashSet<>();
-
+    private Set<ActionReport> actionReports = new HashSet<>();
 
 
 }

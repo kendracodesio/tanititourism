@@ -1,12 +1,7 @@
 package com.kendrareynolds.tanititourism.entity;
-
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
-import java.time.ZonedDateTime;
-import java.util.Objects;
 
 @Entity
 @Table(name = "user_reports")
@@ -15,7 +10,9 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class UserReport {
+public class ActionReport {
+
+
 
     public enum Action {
         CREATE, UPDATE, DELETE

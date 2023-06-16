@@ -18,4 +18,8 @@ public enum Cost {
     public String getLabel() {
         return this.label;
     }
+
+    public String getName() {
+        return this.name();
+    }
 }

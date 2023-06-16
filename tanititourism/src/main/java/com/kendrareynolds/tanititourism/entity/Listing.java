@@ -20,6 +20,10 @@ import java.time.OffsetDateTime;
 @AllArgsConstructor
 public abstract class Listing {
 
+    public enum ListingType {
+        DO, STAY, DINE
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -44,19 +48,34 @@ public abstract class Listing {
     private String imageAltText;
 
     @CreationTimestamp
-    @Column(name = "createdAt")
+    @Column(name = "created_at")
     private OffsetDateTime createdAt;
 
     @UpdateTimestamp
-    @Column(name = "updatedAt")
+    @Column(name = "updated_at")
     private OffsetDateTime updatedAt;
 
-    @Column(name = "deletedAt")
-    private OffsetDateTime deletedAt;
 
     @ManyToOne
     @JoinColumn(name = "region_id")
     private Region region;
 
+    public abstract ListingType getListingType();
 
+    @Override
+    public String toString() {
+        return "Listing{" +
+                "name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", phone='" + phone + '\'' +
+                ", cost=" + cost +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", imageAltText='" + imageAltText + '\'' +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", region=" + region +
+                '}';
+    }
 }
+
+

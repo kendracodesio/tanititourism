@@ -15,12 +15,17 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
 
-                .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers(new AntPathRequestMatcher("/api/**")).permitAll()
-                        .anyRequest().authenticated())
+                .authorizeHttpRequests((requests) -> requests.anyRequest().permitAll())
+
                 .httpBasic();
 
 
         return http.build();
     }
 }
+
+//
+//  .authorizeHttpRequests((requests) -> requests
+//          .requestMatchers(new AntPathRequestMatcher("/api/**")).permitAll()
+//          .anyRequest().authenticated())
+//          .httpBasic();

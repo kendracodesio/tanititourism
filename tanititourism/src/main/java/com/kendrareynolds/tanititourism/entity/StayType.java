@@ -21,4 +21,5 @@ public class StayType {
     private String typeName;
 
 
+
 }

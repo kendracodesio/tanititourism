@@ -8,7 +8,7 @@ import { NavLink } from 'react-router-dom';
 function Navbar() {
     return (
         <nav className="navbar navbar-expand-lg pt-3 shadow">
-            <NavLink to="/" className ="navbar-brand ps-5 pe-4"><img className="navbar-img" src="/images/taniti-logo.png" alt="taniti-logo" /></NavLink>
+            <NavLink to="/" className ="navbar-brand ps-5 pe-4"><img className="navbar-img" src="https://tanititourismimages.blob.core.windows.net/images/taniti-logo.png" alt="taniti-logo" /></NavLink>
             <button className="navbar-toggler me-2" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
                     aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span className="navbar-toggler-icon"></span>
