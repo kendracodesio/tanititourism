@@ -23,13 +23,23 @@ public class ThingToDo extends Listing {
     }
 
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(
             name = "thingtodo_dotype",
             joinColumns = @JoinColumn(name = "thing_to_do_id"),
             inverseJoinColumns = @JoinColumn(name = "do_type_id"))
     @JsonManagedReference
     private Set<DoType> doTypes = new HashSet<>();
+
+    public void add(DoType doType) {
+        if(doType != null) {
+           if(doTypes == null) {
+               doTypes = new HashSet<>();
+           }
+           doTypes.add(doType);
+        }
+    }
+
 
 
     @Override
@@ -61,6 +71,8 @@ public class ThingToDo extends Listing {
                 ", doTypes=" + doTypes +
                 '}';
     }
+
+
 
 }
 

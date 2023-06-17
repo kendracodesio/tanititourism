@@ -1,6 +1,7 @@
 import React from 'react';
 import Table from 'react-bootstrap/Table';
 import {Link} from "react-router-dom";
+import axios from "axios";
 
 
 interface Listing {
@@ -13,8 +14,8 @@ interface Listing {
     cost: string;
     region: {id: number; name: string;};
     doTypes?: {id: number; typeName: string;}[];
-    stayType?: {id: number; name: string;};
-    dineType?: {id: number; name: string;};
+    stayType?: {id: number; typeName: string;};
+    dineType?: {id: number; typeName: string;};
 
 }
 
@@ -23,8 +24,11 @@ type TypeFieldName = "doTypes" | "stayType" | "dineType"
 interface ListingTableProps {
     listings: Listing[];
     typeFieldName: TypeFieldName;
+    deleteListing: (id: number) => void;
 }
-function ListingTable({listings, typeFieldName}: ListingTableProps) {
+
+function ListingTable({listings, typeFieldName, deleteListing}: ListingTableProps) {
+
     return (
         <Table striped>
             <thead>
@@ -54,22 +58,21 @@ function ListingTable({listings, typeFieldName}: ListingTableProps) {
                                 <span key={idx}>{type.typeName}{idx < (listing[typeFieldName] as {id: number; typeName: string;}[]).length - 1 ? ', ' : ''}</span>
                             ))
                         ) : (
-                            <span>{(listing[typeFieldName] as {id: number; name: string;}).name}</span>
+                            <span>{(listing[typeFieldName] as {id: number; typeName: string;}).typeName}</span>
                         )}
                     </td>
                     <td>
-                        <button onClick={() => handleDelete(listing.id)}>Delete</button>
+                        <button onClick={() => deleteListing(listing.id)}>Delete</button>
                     </td>
                 </tr>
             ))}
             </tbody>
+
         </Table>
     );
 }
 
-function handleDelete(id: number) {
-    //TODO make a DELETE request to the API
-}
+
 export default ListingTable;
 
 

@@ -60,6 +60,8 @@ public abstract class Listing {
     @JoinColumn(name = "region_id")
     private Region region;
 
+
+
     public abstract ListingType getListingType();
 
     @Override

@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -28,6 +29,16 @@ public class DoType {
     @ManyToMany(mappedBy = "doTypes")
     @JsonBackReference
     private Set<ThingToDo> thingsToDo = new HashSet<>();
+
+    public void add(ThingToDo thingToDo) {
+        if (thingToDo != null) {
+            if (thingsToDo == null) {
+                thingsToDo = new HashSet<>();
+            }
+            thingsToDo.add(thingToDo);
+        }
+    }
+
 
     @Override
     public boolean equals(Object o) {

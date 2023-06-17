@@ -14,8 +14,8 @@ interface Listing {
     cost: string;
     region: { id: number; name: string; };
     doTypes?: { id: number; typeName: string; }[];
-    stayType?: { id: number; name: string; };
-    dineType?: { id: number; name: string; };
+    stayType?: { id: number; typeName: string; };
+    dineType?: { id: number; typeName: string; };
     acceptsReservations?: string;
 
 }
@@ -46,9 +46,9 @@ function ListingComponent({listing}: ListingProps) {
                 {listing.doTypes && listing.doTypes.length > 0 &&
                     <ListGroup.Item>Type(s): {listing.doTypes.map(type => type.typeName).join(', ')}</ListGroup.Item>}
                 {listing.stayType &&
-                    <ListGroup.Item>Type: {listing.stayType.name}</ListGroup.Item>}
+                    <ListGroup.Item>Type: {listing.stayType.typeName}</ListGroup.Item>}
                 {listing.dineType &&
-                    <ListGroup.Item>Type: {listing.dineType.name}</ListGroup.Item>}
+                    <ListGroup.Item>Type: {listing.dineType.typeName}</ListGroup.Item>}
                 {listing.acceptsReservations &&
                     <ListGroup.Item>Accepts Reservations: {listing.acceptsReservations} </ListGroup.Item>}
             </ListGroup>

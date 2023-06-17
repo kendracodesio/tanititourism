@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import axios from "axios";
 import ListingComponent from "../components/ListingComponent";
 
@@ -13,8 +13,8 @@ interface Listing {
     cost: string;
     region: {id: number; name: string;};
     doTypes?: {id: number; typeName: string;}[];
-    stayType?: {id: number; name: string;};
-    dineType?: {id: number; name: string;};
+    stayType?: {id: number; typeName: string;};
+    dineType?: {id: number; typeName: string;};
     acceptsReservations?: string;
 }
 
@@ -43,7 +43,11 @@ function ListingDetails() {
     return (
         <div>
         <h2>Listing Details</h2>
-            <div>{listing ? <ListingComponent listing={listing}/> : 'There was a problem loading the listing details. Try again later.'}</div>
+            <div>{listing ?
+                <>
+                <ListingComponent listing={listing}/>
+                    <Link to={`/admin/do-listings/listing-detail/edit/${listing.id}`}>Edit</Link>
+                </> : 'There was a problem loading the listing details. Try again later.'}</div>
         </div>
     );
 }

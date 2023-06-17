@@ -1,10 +1,11 @@
 import React from 'react';
+import GetListingTable from "../components/GetListingTable";
 
 function StayListings() {
     return (
-        <div>
-            <h1>Stay Listings</h1>
-        </div>
+        <GetListingTable apiEndpoint={"/admin/places-to-stay/list"}
+                         deleteEndpoint={"/admin/places-to-stay/delete-listing"}
+                         typeFieldName={"stayType"}/>
 
     );
 

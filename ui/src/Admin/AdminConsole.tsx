@@ -1,11 +1,12 @@
 import {Routes, Route} from 'react-router-dom';
 import AdminSidebar from './components/AdminSidebar';
 import StayListings from './pages/StayListings';
-import DoListings from './pages/DoListings';
 import Reports from './pages/Reports';
 import AdminHome from './pages/AdminHome';
 import DineListings from "./pages/DineListings";
 import ListingDetails from "./pages/ListingDetails";
+import DoListings from "./pages/DoListings";
+import DoListingForm from "./components/DoListingForm";
 
 
 
@@ -22,6 +23,8 @@ function AdminConsole() {
                     <Route path="dine-listings" element={<DineListings />} />
                     <Route path="reports" element={<Reports/>} />
                     <Route path="do-listings/listing-detail/:id" element={<ListingDetails />} />
+                    <Route path="do-listings/listing-detail/edit/:id" element={<DoListingForm />}/>
+                    <Route path="do-listings/add" element={<DoListingForm />}/>
                 </Routes>
             </div>
         </div>
