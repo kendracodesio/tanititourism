@@ -1,15 +1,11 @@
 import React from 'react';
 
-
-function DineListings() {
+function StayListingForm() {
     return (
         <div className="admin-main-content">
-            <h1>Dine Listings</h1>
+            <h1>Stay Listing Form</h1>
         </div>
-
     );
-
-
 }
 
-export default DineListings;
+export default StayListingForm;

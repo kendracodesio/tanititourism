@@ -3,7 +3,7 @@ import React from 'react';
 function Reports() {
 
     return (
-        <div>
+        <div className="admin-main-content">
            <h1>Reports</h1>
         </div>
 

@@ -1,7 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import {Link, useParams} from "react-router-dom";
 import axios from "axios";
-import ListingComponent from "../components/ListingComponent";
+import ListingComponent from "./ListingComponent";
+
+interface ListingDetailsProps {
+    apiEndpoint: string;
+    editLink: string;
+}
+
 
 interface Listing {
     id: number
@@ -19,13 +25,14 @@ interface Listing {
 }
 
 
-function ListingDetails() {
+function GetListingDetails({apiEndpoint, editLink}: ListingDetailsProps) {
     let {id} = useParams();
     const apiURL = process.env.REACT_APP_API_URL;
     const [listing, setListing] = useState<Listing | null> (null);
 
+
     useEffect(() => {
-        axios.get(`${apiURL}/admin/things-to-do/listing-detail/${id}`)
+        axios.get(`${apiURL}${apiEndpoint}/${id}`)
             .then(response => {
                 if(response.data !== null) {
                     setListing(response.data);
@@ -36,7 +43,7 @@ function ListingDetails() {
             .catch(error => {
                 console.error(`Error fetching data: ${error}`);
             });
-    }, [id, apiURL]);
+    }, [id, apiURL, apiEndpoint]);
 
 
 
@@ -46,9 +53,11 @@ function ListingDetails() {
             <div>{listing ?
                 <>
                 <ListingComponent listing={listing}/>
-                    <Link to={`/admin/do-listings/listing-detail/edit/${listing.id}`}>Edit</Link>
+                    <Link to={`${editLink}/${listing.id}`}>Edit</Link>
                 </> : 'There was a problem loading the listing details. Try again later.'}</div>
         </div>
     );
 }
-export default ListingDetails;
+
+
+export default GetListingDetails;

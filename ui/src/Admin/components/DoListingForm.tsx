@@ -15,22 +15,27 @@ interface Item {
 
 }
 
-interface DoListingFormData {
+interface ListingFormData {
     name: string;
     description: string;
     phone: string;
     imageUrl: string;
     imageAltText: string;
     cost: any;
-    region: { id: number; name: string; };
+    region: { id: number; name: string; } | null;
     doTypes: any[];
 }
 
 function DoListingForm() {
     let {id} = useParams();
-    const [doListingForm, setListingForm] = useState<DoListingFormData | null>(null);
-    const [selectedCost, setSelectedCost] = useState<string>('');
-    const [selectedRegion, setSelectedRegion] = useState<number | undefined>(undefined);
+    const [listingForm, setListingForm] = useState<ListingFormData | null>(null);
+    const [selectedCost, setSelectedCost] = useState<string | null>(null);
+    const [selectedRegion, setSelectedRegion] = useState<number | null>(null);
+    const [successMessage, setSuccessMessage] = useState<string | null>(null);
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const [fieldErrors, setFieldErrors] = useState<any | null>(null);
+
+
     const apiURL = process.env.REACT_APP_API_URL;
 
     useEffect(() => {
@@ -56,76 +61,45 @@ function DoListingForm() {
         }
     }, [apiURL, id])
 
+
     useEffect(() => {
         axios.get(`${apiURL}/admin/cost`)
             .then(response => {
                 const allCosts = response.data;
 
-                if (doListingForm != null) {
+                if (listingForm != null) {
                     const correspondingCost = allCosts.find((cost: {
                         label: string;
-                    }) => cost.label === doListingForm.cost);
+                    }) => cost.label === listingForm.cost);
                     if (correspondingCost) {
                         setSelectedCost(correspondingCost.name);
                         console.log('selectedCost:', correspondingCost.name);
                     }
-                    setSelectedRegion(doListingForm.region.id);
-
-                    console.log('selectedRegion:', doListingForm.region.id);
+                    if (listingForm.region) {
+                        setSelectedRegion(listingForm.region.id);
+                        console.log('selectedRegion:', listingForm.region.id);
+                    }
                 }
+
             });
-    }, [doListingForm, apiURL]);
-
-    const handleCostChange = (newCost: Item) => {
-        setSelectedCost(newCost.name);
-        if (doListingForm != null && newCost) {
-            setListingForm({...doListingForm, cost: newCost.name});
-        }
-    };
-
-    const handleRegionChange = (newRegion: Item) => {
-        setSelectedRegion(newRegion.id);
-        if (doListingForm != null && newRegion) {
-            setListingForm({...doListingForm, region: newRegion});
-        }
-    };
-
-    const handleDoTypesChange = (newDoTypes: any[]) => {
-        if (doListingForm !== null) {
-            const updatedForm = {...doListingForm, doTypes: newDoTypes};
-            setListingForm(updatedForm);
-        }
-    };
-
-    const handleFieldChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const fieldName = event.target.name;
-        const fieldValue = event.target.value;
-
-        if (doListingForm != null) {
-            setListingForm({
-                ...doListingForm,
-                [fieldName]: fieldValue,
-            });
-        }
-    };
-
+    }, [listingForm, apiURL]);
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        if (!doListingForm) return;
+        if (!listingForm) return;
 
         const url = id ? `${apiURL}/admin/things-to-do/update-listing/${id}` : `${apiURL}/admin/things-to-do/new-listing`;
         const method = id ? 'put' : 'post';
 
         const payload = {
-            name: doListingForm.name,
-            description: doListingForm.description,
-            phone: doListingForm.phone,
-            imageUrl: doListingForm.imageUrl,
-            imageAltText: doListingForm.imageAltText,
+            name: listingForm.name,
+            description: listingForm.description,
+            phone: listingForm.phone,
+            imageUrl: listingForm.imageUrl,
+            imageAltText: listingForm.imageAltText,
             cost: selectedCost,
             regionId: selectedRegion,
-            doTypesIds: doListingForm.doTypes.map(doType => doType.id)
+            doTypesIds: listingForm.doTypes.map((doType: { id: number; }) => doType.id)
         };
 
         axios({
@@ -135,82 +109,174 @@ function DoListingForm() {
         })
             .then(response => {
                 console.log(response.data);
+                if (response.data.message) {
+                    setSuccessMessage(response.data.message);
+                    setErrorMessage(null);
+                    setFieldErrors(null);
+                } else if (response.data.error) {
+                    setErrorMessage(response.data.error);
+                    setSuccessMessage(null);
+                }
             })
             .catch(error => {
                 console.log(error);
-            });
+                if (error.response && error.response.status === 400) {
+                    const fieldErrors = error.response.data;
+                    for (let field in fieldErrors) {
+                        console.log(`Field: ${field}, Error: ${fieldErrors[field]}`);
+                    }
+                    setFieldErrors(fieldErrors);
+                    if (fieldErrors) {
+                        setErrorMessage("Please correct input error below and resubmit");
+                    } else {
+                        setErrorMessage("An expected error occurred ")
+                    }
+                    setSuccessMessage(null);
+                }
+            })
+
     }
 
+    const handleCostChange = (newCost: Item | null) => {
+        if (newCost) {
+            setSelectedCost(newCost.name);
+            if (listingForm != null && newCost) {
+                setListingForm({...listingForm, cost: newCost.name});
+            }
+        } else {
+            setSelectedCost(null);
+            if (listingForm != null) {
+                setListingForm({...listingForm, cost: null});
+            }
+        }
+    };
+
+    const handleRegionChange = (newRegion: Item | null) => {
+        if (newRegion) {
+            setSelectedRegion(newRegion.id);
+            if (listingForm != null && newRegion) {
+                setListingForm({...listingForm, region: newRegion});
+            }
+        } else {
+            setSelectedRegion(null);
+            if (listingForm != null) {
+                setListingForm({...listingForm, region: null});
+            }
+        }
+    }
+
+        const handleDoTypesChange = (newDoTypes: any[]) => {
+            if (listingForm !== null) {
+                const updatedForm = {...listingForm, doTypes: newDoTypes};
+                setListingForm(updatedForm);
+            }
+        }
 
 
-return (
-    <div className="container p-5">
-        <Form onSubmit={handleSubmit}>
-            <Row>
-                <Col>
-                    <Form.Group controlId="formName">
-                        <Form.Label>Listing Name</Form.Label>
-                        <Form.Control type="text" placeholder="Enter name"
-                                      name="name"
-                                      value={doListingForm ? doListingForm.name : ''}
-                                      onChange={handleFieldChange}/>
-                    </Form.Group>
+        const handleFieldChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+            const fieldName = event.target.name;
+            const fieldValue = event.target.value;
 
-                    <Form.Group controlId="formDescription">
-                        <Form.Label>Description</Form.Label>
-                        <Form.Control as="textarea" placeholder="Enter description"
-                                      name="description"
-                                      value={doListingForm ? doListingForm.description : ''}
-                                      onChange={handleFieldChange}/>
-                    </Form.Group>
+            if (listingForm != null) {
+                setListingForm({
+                    ...listingForm,
+                    [fieldName]: fieldValue,
+                });
+            }
+        };
 
-                    <Form.Group controlId="formPhone">
-                        <Form.Label>Phone</Form.Label>
-                        <Form.Control type="tel" placeholder="Enter phone"
-                                      name="phone"
-                                      value={doListingForm ? doListingForm.phone : ''}
-                                      onChange={handleFieldChange}/>
-                    </Form.Group>
-
-                    <Form.Group controlId="formImageUrl">
-                        <Form.Label>Image URL</Form.Label>
-                        <Form.Control type="url" placeholder="Enter image URL"
-                                      name="imageUrl"
-                                      value={doListingForm ? doListingForm.imageUrl : ''}
-                                      onChange={handleFieldChange}/>
-                    </Form.Group>
-
-                    <Form.Group controlId="formImageAltText">
-                        <Form.Label>Image Alt Text</Form.Label>
-                        <Form.Control type="text" placeholder="Enter image alt text"
-                                      name="imageAltText"
-                                      value={doListingForm ? doListingForm.imageAltText : ''}
-                                      onChange={handleFieldChange}/>
-                    </Form.Group>
+        return (
+            <div className="container me-5 mt-3 admin-form-page">
+                <Col className="text-center"xs={8} md={6} lg={4}>
+                {successMessage && <div className="alert alert-success">{successMessage}</div>}
+                {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
                 </Col>
-                <Col>
-                    <DoTypesChecklist selectedDoTypes={doListingForm ? doListingForm.doTypes : []}
-                                      onChange={handleDoTypesChange}/>
-                </Col>
-            </Row>
-            <div className="d-flex justify-content-start">
-                <AdminDropdown apiEndpoint="/admin/cost"
-                               label="Cost"
-                               id="formCost"
-                               onChange={handleCostChange}
-                               selectedValue={selectedCost}/>
+                <Form onSubmit={handleSubmit}>
+                    <Row>
+                        <Col xs={{ span: 4 }} className="ms-4">
+                            <Form.Group className="mb-3 mt-4" controlId="formName">
+                                <Form.Label>Listing Name</Form.Label>
+                                <Form.Control type="text" placeholder="Enter name"
+                                              name="name"
+                                              value={listingForm ? listingForm.name : ''}
+                                              onChange={handleFieldChange}
+                                />
+                                {fieldErrors && fieldErrors.name &&
+                                    <div className="alert alert-danger" role="alert">{fieldErrors.name}</div>}
+                            </Form.Group>
 
-                <AdminDropdown apiEndpoint="/admin/region"
-                               label="Region"
-                               id="formRegion"
-                               onChange={handleRegionChange}
-                               selectedValue={selectedRegion}/>
+                            <Form.Group className="mb-3" controlId="formDescription">
+                                <Form.Label>Description</Form.Label>
+                                <Form.Control as="textarea" rows={7} placeholder="Enter description"
+                                              name="description"
+                                              value={listingForm ? listingForm.description : ''}
+                                              onChange={handleFieldChange}
+                                />
+                                {fieldErrors && fieldErrors.description &&
+                                    <div className="alert alert-danger" role="alert">{fieldErrors.description}</div>}
+                            </Form.Group>
+
+                            <Form.Group className="mb-3" controlId="formPhone">
+                                <Form.Label>Phone</Form.Label>
+                                <Form.Control type="tel" placeholder="Enter phone"
+                                              name="phone"
+                                              value={listingForm ? listingForm.phone : ''}
+                                              onChange={handleFieldChange}
+                                />
+                                {fieldErrors && fieldErrors.phone &&
+                                    <div className="alert alert-danger" role="alert">{fieldErrors.phone}</div>}
+                            </Form.Group>
+                            <Form.Group className="mb-3" controlId="formImageUrl">
+                                <Form.Label>Image URL</Form.Label>
+                                <Form.Control type="url" placeholder="Enter image URL"
+                                              name="imageUrl"
+                                              value={listingForm ? listingForm.imageUrl : ''}
+                                              onChange={handleFieldChange}
+                                />
+                                {fieldErrors && fieldErrors.imageUrl &&
+                                    <div className="alert alert-danger" role="alert">{fieldErrors.imageUrl}</div>}
+                            </Form.Group>
+
+                            <Form.Group className="mb-3" controlId="formImageAltText">
+                                <Form.Label>Image Alt Text</Form.Label>
+                                <Form.Control type="text" placeholder="Enter image alt text"
+                                              name="imageAltText"
+                                              value={listingForm ? listingForm.imageAltText : ''}
+                                              onChange={handleFieldChange}
+                                />
+                                {fieldErrors && fieldErrors.imageAltText &&
+                                    <div className="alert alert-danger" role="alert">{fieldErrors.imageAltText}</div>}
+                            </Form.Group>
+                        </Col>
+                        <Col xs={{ span: 4 }} className="mt-4 ms-4">
+                            <DoTypesChecklist selectedDoTypes={listingForm ? listingForm.doTypes : []}
+                                              onChange={handleDoTypesChange}/>
+                            {fieldErrors && fieldErrors.doTypesIds &&
+                                <div className="alert alert-danger pe-5" role="alert">{fieldErrors.doTypesIds}</div>}
+                            <div className="mt-3 mb-3">
+                                <AdminDropdown apiEndpoint="/admin/cost"
+                                               label="Cost"
+                                               id="formCost"
+                                               onChange={handleCostChange}
+                                               selectedValue={selectedCost}/>
+                                {fieldErrors && fieldErrors.cost &&
+                                    <div className="alert alert-danger" role="alert">{fieldErrors.cost}</div>}
+                            </div>
+                            <AdminDropdown apiEndpoint="/admin/region"
+                                           label="Region"
+                                           id="formRegion"
+                                           onChange={handleRegionChange}
+                                           selectedValue={selectedRegion}/>
+                            {fieldErrors && fieldErrors.regionId &&
+                                <div className="alert alert-danger" role="alert">{fieldErrors.regionId}</div>}
+                        </Col>
+
+                    </Row>
+                    <Button className="mt-3 ms-4 submit-btn" variant="primary" type="submit">
+                        Submit</Button>
+                </Form>
             </div>
-            <Button variant="primary" type="submit">
-                Submit</Button>
-        </Form>
-    </div>
-);
-}
+        );
+    }
 
 export default DoListingForm;

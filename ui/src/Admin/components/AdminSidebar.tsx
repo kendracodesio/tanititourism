@@ -40,13 +40,10 @@ function ExpandableSidebarLink({ to, children, links }: {to: string, children: R
 }
 
 function AdminSidebar() {
-    const style = {
-        height: "100vh",
-        width: "280px"
-    };
+
 
     return (
-        <div className="d-flex flex-column flex-shrink-0 p-5 text-white sidebar" style={style}>
+        <div className="d-flex flex-column flex-shrink-0 p-5 text-white sidebar">
             <img className="navbar-img mx-auto" src="https://tanititourismimages.blob.core.windows.net/images/taniti-logo.png" alt="taniti-logo" />
             <hr/>
             <div className="d-flex justify-content-center align-items-center mb-3 mb-md-0 mx-auto text-white text-decoration-none">

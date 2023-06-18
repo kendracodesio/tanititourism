@@ -1,5 +1,6 @@
 package com.kendrareynolds.tanititourism.entity;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum Cost {
@@ -22,4 +23,16 @@ public enum Cost {
     public String getName() {
         return this.name();
     }
+
+    @JsonCreator
+    public static Cost fromName(String name) {
+        for (Cost cost : Cost.values()) {
+            if (cost.getName().equalsIgnoreCase(name)) {
+                return cost;
+            }
+        }
+        throw new IllegalArgumentException("Invalid cost name: " + name);
+    }
+
 }
+

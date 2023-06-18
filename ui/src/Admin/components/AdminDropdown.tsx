@@ -1,7 +1,5 @@
 import axios from 'axios';
-import { useEffect, useState } from 'react';
-
-
+import {useEffect, useState} from 'react';
 
 
 interface DropdownProps {
@@ -9,7 +7,7 @@ interface DropdownProps {
     label: string;
     id: string;
     onChange?: (newValue: any) => void;
-    selectedValue?: string | number;
+    selectedValue?: string | number | null;
 
 }
 
@@ -18,11 +16,11 @@ interface Item {
     name?: string;  //cost
     typeName?: string; //value for type
     cost?: string;
-    label?:string; //for enum label
+    label?: string; //for enum label
 
 }
 
-function AdminDropdown({ apiEndpoint, label, id, onChange, selectedValue }: DropdownProps) {
+function AdminDropdown({apiEndpoint, label, id, onChange, selectedValue}: DropdownProps) {
     const [items, setItems] = useState<Item[]>([]);
 
 
@@ -36,26 +34,31 @@ function AdminDropdown({ apiEndpoint, label, id, onChange, selectedValue }: Drop
 
     const handleSelectionChange = (newSelection: any) => {
         if (onChange) {
-            //For entities with IDs
-            if (items[0] && 'id' in items[0]) {
-                onChange(items.find((item) => item.id === parseInt(newSelection)));
+            if (newSelection === "") {
+                onChange(null);
+            } else {
+                //For entities with IDs
+                if (items[0] && 'id' in items[0]) {
+                    onChange(items.find((item) => item.id === parseInt(newSelection)));
 
-            }
-            //For enums with name and label
-            else {
-                onChange(items.find((item) => item.name === newSelection));
+                }
+                //For enums with name and label
+                else {
+                    onChange(items.find((item) => item.name === newSelection));
 
+                }
             }
         }
     };
 
     return (
-        <div className="col-lg-4 mt-4 mb-4">
+        <div className="mt-4">
             <label htmlFor={id} className="form-label">{label}:</label>
             <select className="form-control" id={id} name={id}
-                    value={selectedValue}
+                    value={selectedValue ?? undefined}
                     onChange={e => handleSelectionChange(e.target.value)}
             >
+                <option value="">Select One</option>
                 {items.map((item: Item) => {
                     // For entities with IDs (region and type)
                     if (item.id) {

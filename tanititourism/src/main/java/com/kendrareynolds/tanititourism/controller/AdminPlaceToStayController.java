@@ -1,8 +1,10 @@
 package com.kendrareynolds.tanititourism.controller;
 
 import com.kendrareynolds.tanititourism.entity.PlaceToStay;
+import com.kendrareynolds.tanititourism.entity.ThingToDo;
 import com.kendrareynolds.tanititourism.service.AdminPlaceToStayService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,8 +23,9 @@ public class AdminPlaceToStayController {
     }
 
     @GetMapping("/list")
-    public List<PlaceToStay> getAllPlacesToStay() {
-        return adminPlaceToStayService.getAllPlacesToStay();
+    public Page<PlaceToStay> getAllPlacesToDo(@RequestParam(required = false, defaultValue = "1") int page,
+                                            @RequestParam(required = false, defaultValue = "6") int size){
+        return adminPlaceToStayService.getAllPlacesToStay(page, size);
     }
 
     @GetMapping("/listing-detail/{id}")

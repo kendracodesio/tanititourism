@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RegionService {
@@ -20,4 +21,15 @@ public class RegionService {
     public List<Region> findAll() {
         return regionRepository.findAll();
     }
+
+    public Region getRegionById(Long id){
+        Optional<Region> optionalRegion = regionRepository.findById(id);
+
+        if(optionalRegion.isPresent()) {
+            return optionalRegion.get();
+        } else {
+            throw new RuntimeException("Region not found for id :: " + id);
+        }
+    }
+
 }
