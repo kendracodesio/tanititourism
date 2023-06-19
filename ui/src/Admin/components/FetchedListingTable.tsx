@@ -27,7 +27,7 @@ interface ListingData {
 
 }
 
-function GetListingTable({apiEndpoint, deleteEndpoint, typeFieldName, addLink, tableName}: GetListingTableProps) {
+function FetchedListingTable({apiEndpoint, deleteEndpoint, typeFieldName, addLink, tableName}: GetListingTableProps) {
     const apiURL = process.env.REACT_APP_API_URL;
     const [listings, setListings] = useState<ListingData[]>([]);
     const [page, setPage] = useState(1);
@@ -91,4 +91,4 @@ function GetListingTable({apiEndpoint, deleteEndpoint, typeFieldName, addLink, t
 
 }
 
-export default GetListingTable;
+export default FetchedListingTable;

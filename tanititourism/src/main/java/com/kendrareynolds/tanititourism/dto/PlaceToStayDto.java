@@ -5,11 +5,10 @@ import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.URL;
-import java.util.Set;
 
 @Getter
 @Setter
-public class ThingToDoDto {
+public class PlaceToStayDto {
 
     @NotBlank(message = "Listing name must not be blank")
     @Size(max = 50, message = "Name cannot be longer than 50 characters")
@@ -36,7 +35,8 @@ public class ThingToDoDto {
     @Min(value = 1, message = "Must select a region")
     private Long regionId;
 
-    @NotEmpty(message = "At least one type selection is required")
-    private Set<Long> doTypesIds;
-}
+    @Min(value = 1, message = "Must select a type")
+    private Long stayTypeId;
 
+
+}

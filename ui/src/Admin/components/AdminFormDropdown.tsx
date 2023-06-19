@@ -15,12 +15,11 @@ interface Item {
     id?: number; // region
     name?: string;  //cost
     typeName?: string; //value for type
-    cost?: string;
     label?: string; //for enum label
 
 }
 
-function AdminDropdown({apiEndpoint, label, id, onChange, selectedValue}: DropdownProps) {
+function AdminFormDropdown({apiEndpoint, label, id, onChange, selectedValue}: DropdownProps) {
     const [items, setItems] = useState<Item[]>([]);
 
 
@@ -78,4 +77,4 @@ function AdminDropdown({apiEndpoint, label, id, onChange, selectedValue}: Dropdo
     );
 }
 
-export default AdminDropdown;
+export default AdminFormDropdown;

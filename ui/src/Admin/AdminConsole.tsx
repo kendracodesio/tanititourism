@@ -1,14 +1,14 @@
 import {Routes, Route} from 'react-router-dom';
 import AdminSidebar from './components/AdminSidebar';
-import StayListings from './pages/StayListings';
+import StayListings from './pages/StayListingPages/StayListings';
 import Reports from './pages/Reports';
 import AdminHome from './pages/AdminHome';
-import DineListings from "./pages/DineListings";
-import DoListings from "./pages/DoListings";
-import DoListingForm from "./components/DoListingForm";
-import DoListingDetails from "./pages/DoListingDetails";
-import StayListingDetails from "./pages/StayListingDetails";
-import StayListingForm from "./pages/StayListingForm";
+import DineListings from "./pages/DineListingPages/DineListings";
+import DoListings from "./pages/DoListingPages/DoListings";
+import DoListingForm from "./pages/DoListingPages/DoListingForm";
+import DoListingDetails from "./pages/DoListingPages/DoListingDetails";
+import StayListingDetails from "./pages/StayListingPages/StayListingDetails";
+import StayListingForm from "./pages/StayListingPages/StayListingForm";
 
 
 

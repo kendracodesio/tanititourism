@@ -13,7 +13,7 @@ interface DoType {
 }
 
 function DoTypesChecklist({selectedDoTypes, onChange}: DoTypesProps) {
-    const apiEndpoint = ("/admin/type")
+    const apiEndpoint = ("/admin/do-type")
     const [doTypes, setDoTypes] = useState<DoType[]>([]);
 
     useEffect(() => {

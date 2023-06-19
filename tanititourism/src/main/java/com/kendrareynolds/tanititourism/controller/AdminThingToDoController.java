@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
@@ -57,11 +56,7 @@ public class AdminThingToDoController {
     @PostMapping("/new-listing")
     public ResponseEntity<?> addThingToDo(@Valid @RequestBody ThingToDoDto thingToDoDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            Map<String, String> errors = new HashMap<>();
-            for (FieldError error : bindingResult.getFieldErrors()) {
-                errors.put(error.getField(), error.getDefaultMessage());
-            }
-            return ResponseEntity.badRequest().body(errors);
+            return responseHelperService.getBindingErrors(bindingResult);
         }
         try {
             ThingToDo thingToDo = convertDtoToThingToDo(thingToDoDto);
@@ -78,11 +73,7 @@ public class AdminThingToDoController {
     @PutMapping("/update-listing/{id}")
     public ResponseEntity<?> updateThingToDo(@PathVariable Long id, @Valid @RequestBody ThingToDoDto thingToDoDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            Map<String, String> errors = new HashMap<>();
-            for (FieldError error : bindingResult.getFieldErrors()) {
-                errors.put(error.getField(), error.getDefaultMessage());
-            }
-            return ResponseEntity.badRequest().body(errors);
+            return responseHelperService.getBindingErrors(bindingResult);
         }
         try {
             ThingToDo thingToDo = convertDtoToThingToDo(thingToDoDto);

@@ -24,7 +24,7 @@ interface ListingProps {
     listing: Listing;
 }
 
-function ListingComponent({listing}: ListingProps) {
+function ListingDetail({listing}: ListingProps) {
     return (
         <Card style={{width: '60rem'}} className="ms-5">
             <ListGroup variant="flush">
@@ -55,4 +55,4 @@ function ListingComponent({listing}: ListingProps) {
         </Card>
     );
 }
-export default ListingComponent;
+export default ListingDetail;

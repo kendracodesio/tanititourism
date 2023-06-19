@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Link, useParams} from "react-router-dom";
 import axios from "axios";
-import ListingComponent from "./ListingComponent";
+import ListingDetail from "./ListingDetail";
 
 interface ListingDetailsProps {
     apiEndpoint: string;
@@ -25,7 +25,7 @@ interface Listing {
 }
 
 
-function GetListingDetails({apiEndpoint, editLink}: ListingDetailsProps) {
+function FetchedListingDetail({apiEndpoint, editLink}: ListingDetailsProps) {
     let {id} = useParams();
     const apiURL = process.env.REACT_APP_API_URL;
     const [listing, setListing] = useState<Listing | null> (null);
@@ -52,7 +52,7 @@ function GetListingDetails({apiEndpoint, editLink}: ListingDetailsProps) {
         <h2>Listing Details</h2>
             <div>{listing ?
                 <>
-                <ListingComponent listing={listing}/>
+                <ListingDetail listing={listing}/>
                     <Link to={`${editLink}/${listing.id}`}>Edit</Link>
                 </> : 'There was a problem loading the listing details. Try again later.'}</div>
         </div>
@@ -60,4 +60,4 @@ function GetListingDetails({apiEndpoint, editLink}: ListingDetailsProps) {
 }
 
 
-export default GetListingDetails;
+export default FetchedListingDetail;
