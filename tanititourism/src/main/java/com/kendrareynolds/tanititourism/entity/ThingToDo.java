@@ -13,15 +13,14 @@ import java.util.Set;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class ThingToDo extends Listing {
 
 
-    private final ListingType listingType;
-
-    public ThingToDo() {
-        this.listingType = ListingType.DO;
+    @Override
+    public ListingType getListingType() {
+        return ListingType.DO;
     }
-
 
     @ManyToMany
     @JoinTable(
@@ -40,8 +39,6 @@ public class ThingToDo extends Listing {
         }
     }
 
-
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -55,10 +52,6 @@ public class ThingToDo extends Listing {
         return Objects.hash(getId());
     }
 
-    @Override
-    public ListingType getListingType() {
-        return this.listingType;
-    }
 
     @Override
     public String toString() {

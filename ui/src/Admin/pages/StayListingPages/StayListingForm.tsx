@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {useParams} from "react-router-dom";
+import {useParams, useNavigate} from "react-router-dom";
 import axios from "axios";
 import {Col, Row} from "react-bootstrap";
 import Form from "react-bootstrap/Form";
@@ -20,9 +20,9 @@ interface ListingFormData {
     phone: string;
     imageUrl: string;
     imageAltText: string;
-    cost: any;
-    region: { id: number; name: string; } | null;
-    stayType: { id: number; typeName: string; } | null;
+    cost: string | null;
+    region: { id: number | null; name: string; } | null;
+    stayType: { id: number | null; typeName: string; } | null;
 }
 
 function StayListingForm() {
@@ -31,10 +31,10 @@ function StayListingForm() {
     const [selectedCost, setSelectedCost] = useState<string | null>(null);
     const [selectedRegion, setSelectedRegion] = useState<number | null>(null);
     const [selectedStayType, setSelectedStayType] = useState<number | null>(null);
-    const [successMessage, setSuccessMessage] = useState<string | null>(null);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [fieldErrors, setFieldErrors] = useState<any | null>(null);
-
+    const [costsValues, setCostsValues] = useState<{ name: string, label: string }[]>([]);
+    const navigate = useNavigate();
     const apiURL = process.env.REACT_APP_API_URL;
 
     useEffect(() => {
@@ -53,45 +53,53 @@ function StayListingForm() {
                 imageUrl: "",
                 imageAltText: "",
                 cost: "",
-                region: {id: 0, name: ""},
-                stayType: {id: 0, typeName: ""}
+                region: {id: null, name: ""},
+                stayType: {id: null, typeName: ""}
             });
         }
     }, [apiURL, id])
 
-
+    //get Cost enum names with corresponding label
     useEffect(() => {
         axios.get(`${apiURL}/admin/cost`)
             .then(response => {
-                const allCosts = response.data;
-
-                if (listingForm != null) {
-                    const correspondingCost = allCosts.find((cost: {
-                        label: string;
-                    }) => cost.label === listingForm.cost);
-                    if (correspondingCost) {
-                        setSelectedCost(correspondingCost.name);
-                        console.log('selectedCost:', correspondingCost.name);
-                    }
-                    if (listingForm.region) {
-                        setSelectedRegion(listingForm.region.id);
-                        console.log('selectedRegion:', listingForm.region.id);
-                    }
-                    if(listingForm.stayType){
-                        setSelectedStayType(listingForm.stayType.id);
-                        console.log('selectedStayType', listingForm.stayType.id)
-                    }
-                }
-
+                setCostsValues(response.data);
             });
-    }, [listingForm, apiURL]);
+    }, [apiURL]);
+
+    useEffect(() => {
+        //Match the label from listingId api call/listingForm to the corresponding name for selectedCost
+        if (listingForm != null) {
+            const correspondingCost = costsValues.find((cost: {
+                label: string;
+            }) => cost.label === listingForm.cost);
+            if (correspondingCost) {
+                setSelectedCost(correspondingCost.name);
+                console.log('selectedCost:', correspondingCost.name);
+            }
+            //setting regionId from listingForm
+            if (listingForm.region) {
+                setSelectedRegion(listingForm.region.id);
+                console.log('selectedRegion:', listingForm.region.id);
+            }
+            //setting stayTypeId from ListingForm
+            if (listingForm.stayType) {
+                setSelectedStayType(listingForm.stayType.id);
+                console.log('selectedStayType', listingForm.stayType.id)
+            }
+
+        }
+    }, [listingForm, apiURL, costsValues]);
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
+        setErrorMessage(null);
+        setFieldErrors(null);
         if (!listingForm) return;
 
         const url = id ? `${apiURL}/admin/places-to-stay/update-listing/${id}` : `${apiURL}/admin/places-to-stay/new-listing`;
         const method = id ? 'put' : 'post';
+        const successMessage = id ? "Listing updated successfully" : "Listing created successfully";
 
         const payload = {
             name: listingForm.name,
@@ -110,30 +118,30 @@ function StayListingForm() {
             data: payload
         })
             .then(response => {
-                console.log(response.data);
-                if (response.data.message) {
-                    setSuccessMessage(response.data.message);
-                    setErrorMessage(null);
-                    setFieldErrors(null);
-                } else if (response.data.error) {
+                if (response.data.id) {
+                    navigate(`/admin/stay-listings/listing-detail/${response.data.id}`, {state: {successMessage: successMessage}});
+                }
+                if (response.data.error) {
                     setErrorMessage(response.data.error);
-                    setSuccessMessage(null);
                 }
             })
             .catch(error => {
                 console.log(error);
-                if (error.response && error.response.status === 400) {
-                    const fieldErrors = error.response.data;
-                    for (let field in fieldErrors) {
-                        console.log(`Field: ${field}, Error: ${fieldErrors[field]}`);
+                if (error.response) {
+                    if (error.response.status === 400) {
+                        const fieldErrors = error.response.data;
+                        for (let field in fieldErrors) {
+                            console.log(`Field: ${field}, Error: ${fieldErrors[field]}`);
+                        }
+                        setFieldErrors(fieldErrors);
+                        if (fieldErrors) {
+                            setErrorMessage("Please correct input errors below and resubmit");
+                        }
+                    } else if (error.response.status === 500) {
+                        setErrorMessage("Server error. Please try again later");
                     }
-                    setFieldErrors(fieldErrors);
-                    if (fieldErrors) {
-                        setErrorMessage("Please correct input errors below and resubmit");
-                    } else {
-                        setErrorMessage("An expected error occurred")
-                    }
-                    setSuccessMessage(null);
+                } else {
+                    setErrorMessage("An unexpected error occurred");
                 }
             })
     }
@@ -195,7 +203,6 @@ function StayListingForm() {
     return (
         <div className="container me-5 mt-3 admin-main-content">
             <Col className="text-center" xs={8} md={6} lg={4}>
-                {successMessage && <div className="alert alert-success">{successMessage}</div>}
                 {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
             </Col>
             <Form onSubmit={handleSubmit}>

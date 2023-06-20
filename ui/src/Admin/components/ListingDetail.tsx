@@ -2,6 +2,7 @@ import React from 'react';
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 import {Col, Image, Row} from "react-bootstrap";
+import {Link} from "react-router-dom";
 
 
 interface Listing {
@@ -22,9 +23,10 @@ interface Listing {
 
 interface ListingProps {
     listing: Listing;
+    editLink: string;
 }
 
-function ListingDetail({listing}: ListingProps) {
+function ListingDetail({listing, editLink}: ListingProps) {
     return (
         <Card style={{width: '60rem'}} className="ms-5">
             <ListGroup variant="flush">
@@ -33,6 +35,9 @@ function ListingDetail({listing}: ListingProps) {
                         Image:
                         <Col>
                             <Image src={listing.imageUrl} thumbnail className="listing-detail-img"/>
+                        </Col>
+                        <Col>
+                            <Link to={`${editLink}/${listing.id}`} className="mt-2 ms-5">Edit</Link>
                         </Col>
                     </Row>
                 </ListGroup.Item>

@@ -48,16 +48,17 @@ public class AdminThingToDoService {
         thingToDoRepository.deleteById(id);
     }
 
-    public void addThingToDo(ThingToDo newThingToDo, Region region, Set<DoType> doTypes) {
+    public ThingToDo addThingToDo(ThingToDo newThingToDo, Region region, Set<DoType> doTypes) {
         newThingToDo.setRegion(region);
         for (DoType doType : doTypes) {
             newThingToDo.add(doType);
             doType.getThingsToDo().add(newThingToDo);
         }
         thingToDoRepository.save(newThingToDo);
+        return newThingToDo;
     }
 
-    public void updateThingToDo(Long id, ThingToDo updatedThingToDo, Region region, Set<DoType> doTypes) {
+    public ThingToDo updateThingToDo(Long id, ThingToDo updatedThingToDo, Region region, Set<DoType> doTypes) {
         Optional<ThingToDo> thingToDo = thingToDoRepository.findById(id);
         if (thingToDo.isPresent()) {
             ThingToDo existingThingToDo = thingToDo.get();
@@ -69,6 +70,7 @@ public class AdminThingToDoService {
                 doType.getThingsToDo().add(existingThingToDo);
             }
             thingToDoRepository.save(existingThingToDo);
+            return existingThingToDo;
         } else {
             throw new EntityNotFoundException("Thing To Do not found with id: " + id);
         }

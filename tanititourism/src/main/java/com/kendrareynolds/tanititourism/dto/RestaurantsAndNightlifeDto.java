@@ -1,15 +1,15 @@
 package com.kendrareynolds.tanititourism.dto;
 
 import com.kendrareynolds.tanititourism.entity.Cost;
+import com.kendrareynolds.tanititourism.entity.RestaurantsAndNightlife;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.URL;
-import java.util.Set;
 
 @Getter
 @Setter
-public class ThingToDoDto {
+public class RestaurantsAndNightlifeDto {
 
     @NotBlank(message = "Listing name must not be blank")
     @Size(max = 50, message = "Name cannot be longer than 50 characters")
@@ -33,10 +33,12 @@ public class ThingToDoDto {
     @Size(max = 100, message="Image alt text cannot be longer than 100 characters")
     private String imageAltText;
 
+    @NotNull(message = "Must select an option")
+    private RestaurantsAndNightlife.AcceptsReservations acceptsReservations;
+
     @NotNull(message = "Must select a region")
     private Long regionId;
 
-    @NotEmpty(message = "At least one type selection is required")
-    private Set<Long> doTypesIds;
+    @NotNull(message = "Must select a type")
+    private Long dineTypeId;
 }
-

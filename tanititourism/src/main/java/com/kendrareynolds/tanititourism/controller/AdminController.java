@@ -1,10 +1,8 @@
 package com.kendrareynolds.tanititourism.controller;
 
 import com.kendrareynolds.tanititourism.dto.CostRepresentation;
-import com.kendrareynolds.tanititourism.entity.Cost;
-import com.kendrareynolds.tanititourism.entity.DoType;
-import com.kendrareynolds.tanititourism.entity.Region;
-import com.kendrareynolds.tanititourism.entity.StayType;
+import com.kendrareynolds.tanititourism.entity.*;
+import com.kendrareynolds.tanititourism.service.DineTypeService;
 import com.kendrareynolds.tanititourism.service.DoTypeService;
 import com.kendrareynolds.tanititourism.service.RegionService;
 import com.kendrareynolds.tanititourism.service.StayTypeService;
@@ -23,12 +21,15 @@ public class AdminController {
     private final DoTypeService doTypeService;
     private final RegionService regionService;
     private final StayTypeService stayTypeService;
+    private final DineTypeService dineTypeService;
 
     @Autowired
-    public AdminController(DoTypeService doTypeService, RegionService regionService, StayTypeService stayTypeService) {
+    public AdminController(DoTypeService doTypeService, RegionService regionService, StayTypeService stayTypeService,
+                           DineTypeService dineTypeService) {
         this.stayTypeService = stayTypeService;
         this.doTypeService = doTypeService;
         this.regionService = regionService;
+        this.dineTypeService = dineTypeService;
     }
 
 
@@ -53,6 +54,11 @@ public class AdminController {
     @GetMapping("/stay-type")
     public List<StayType> getStayType() {
         return stayTypeService.findAll();
+    }
+
+    @GetMapping("/dine-type")
+    public List<DineType> getDineType() {
+        return dineTypeService.findAll();
     }
 }
 

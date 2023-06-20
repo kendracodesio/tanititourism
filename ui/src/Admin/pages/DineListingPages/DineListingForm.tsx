@@ -1,23 +1,18 @@
 import React, {useEffect, useState} from 'react';
-import DoTypesCheckbox from "./components/DoTypesCheckbox";
+import {useNavigate, useParams} from "react-router-dom";
 import axios from "axios";
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
-import AdminFormDropdown from "../../components/AdminFormDropdown";
-import {useParams, useNavigate} from "react-router-dom";
+import AcceptsReservationsRadio from "./components/AcceptsReservationsRadio";
 import {Col, Row} from "react-bootstrap";
-
+import Form from "react-bootstrap/Form";
+import AdminFormDropdown from "../../components/AdminFormDropdown";
+import Button from "react-bootstrap/Button";
 
 interface Item {
     id: number; //for region
-    name: string;  //cost
+    name: string; //cost
     label: string; //cost
-
-}
-
-interface DoTypes {
-    id: number;
     typeName: string;
+
 }
 
 interface ListingFormData {
@@ -27,15 +22,18 @@ interface ListingFormData {
     imageUrl: string;
     imageAltText: string;
     cost: string | null;
+    acceptsReservations: 'YES' | 'NO' | null
     region: { id: number | null; name: string; } | null;
-    doTypes: DoTypes[] | null;
+    dineType: { id: number | null; typeName: string; } | null;
+
 }
 
-function DoListingForm() {
+function DineListingForm() {
     let {id} = useParams();
     const [listingForm, setListingForm] = useState<ListingFormData | null>(null);
     const [selectedCost, setSelectedCost] = useState<string | null>(null);
     const [selectedRegion, setSelectedRegion] = useState<number | null>(null);
+    const [selectedDineType, setSelectedDineType] = useState<number | null>(null);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [fieldErrors, setFieldErrors] = useState<any | null>(null);
     const [costsValues, setCostsValues] = useState<{ name: string, label: string }[]>([]);
@@ -44,7 +42,7 @@ function DoListingForm() {
 
     useEffect(() => {
         if (id != null) {
-            axios.get(`${apiURL}/admin/things-to-do/listing-detail/${id}`)
+            axios.get(`${apiURL}/admin/restaurants-and-nightlife/listing-detail/${id}`)
                 .then(response => {
                     console.log(response.data)
                     setListingForm(response.data);
@@ -58,9 +56,9 @@ function DoListingForm() {
                 imageUrl: "",
                 imageAltText: "",
                 cost: "",
+                acceptsReservations: null,
                 region: {id: null, name: ""},
-                doTypes: []
-
+                dineType: {id: null, typeName: ""}
             });
         }
     }, [apiURL, id])
@@ -88,64 +86,14 @@ function DoListingForm() {
                 setSelectedRegion(listingForm.region.id);
                 console.log('selectedRegion:', listingForm.region.id);
             }
+            //setting dineTypeId from ListingForm
+            if (listingForm.dineType) {
+                setSelectedDineType(listingForm.dineType.id);
+                console.log('selectedDineType', listingForm.dineType.id)
+            }
 
         }
     }, [listingForm, apiURL, costsValues]);
-
-    const handleSubmit = (event: React.FormEvent) => {
-        event.preventDefault();
-        setErrorMessage(null);
-        setFieldErrors(null);
-        if (!listingForm) return;
-
-        const url = id ? `${apiURL}/admin/things-to-do/update-listing/${id}` : `${apiURL}/admin/things-to-do/new-listing`;
-        const method = id ? 'put' : 'post';
-        const successMessage = id ? "Listing updated successfully!" : "Listing created successfully!";
-
-        const payload = {
-            name: listingForm.name,
-            description: listingForm.description,
-            phone: listingForm.phone,
-            imageUrl: listingForm.imageUrl,
-            imageAltText: listingForm.imageAltText,
-            cost: selectedCost,
-            regionId: selectedRegion,
-            doTypesIds: listingForm.doTypes?.map((doType: { id: number; }) => doType.id)
-        };
-
-        axios({
-            method: method,
-            url: url,
-            data: payload
-        })
-            .then(response => {
-                if (response.data.id) {
-                    navigate(`/admin/do-listings/listing-detail/${response.data.id}`, {state: {successMessage: successMessage}});
-                }
-                if (response.data.error) {
-                    setErrorMessage(response.data.error);
-                }
-            })
-            .catch(error => {
-                console.log(error);
-                if (error.response) {
-                    if (error.response.status === 400) {
-                        const fieldErrors = error.response.data;
-                        for (let field in fieldErrors) {
-                            console.log(`Field: ${field}, Error: ${fieldErrors[field]}`);
-                        }
-                        setFieldErrors(fieldErrors);
-                        if (fieldErrors) {
-                            setErrorMessage("Please correct input errors below and resubmit");
-                        }
-                    } else if (error.response.status === 500) {
-                        setErrorMessage("Server error. Please try again later.");
-                    }
-                } else {
-                    setErrorMessage("An unexpected error occurred")
-                }
-            })
-    }
 
     const handleCostChange = (newCost: Item | null) => {
         if (newCost) {
@@ -175,9 +123,23 @@ function DoListingForm() {
         }
     };
 
-    const handleDoTypesChange = (newDoTypes: DoTypes[] | null) => {
-        if (listingForm !== null) {
-            const updatedForm = {...listingForm, doTypes: newDoTypes};
+    const handleDineTypeChange = (newDineType: Item | null) => {
+        if (newDineType) {
+            setSelectedDineType(newDineType.id);
+            if (listingForm != null && newDineType) {
+                setListingForm({...listingForm, dineType: newDineType});
+            }
+        } else {
+            setSelectedDineType(null);
+            if (listingForm != null) {
+                setListingForm({...listingForm, dineType: null});
+            }
+        }
+    };
+
+    const handleAcceptsReservationsChange = (newAcceptsReservations: 'YES' | 'NO' | null) => {
+        if (listingForm != null) {
+            const updatedForm = {...listingForm, acceptsReservations: newAcceptsReservations};
             setListingForm(updatedForm);
         }
     }
@@ -193,6 +155,63 @@ function DoListingForm() {
             });
         }
     };
+
+
+    const handleSubmit = (event: React.FormEvent) => {
+        event.preventDefault();
+        setErrorMessage(null);
+        setFieldErrors(null);
+        if (!listingForm) return;
+
+        const url = id ? `${apiURL}/admin/restaurants-and-nightlife/update-listing/${id}` : `${apiURL}/admin/restaurants-and-nightlife/new-listing`;
+        const method = id ? 'put' : 'post';
+        const successMessage = id ? "Listing updated successfully" : "Listing created successfully";
+
+        const payload = {
+            name: listingForm.name,
+            description: listingForm.description,
+            phone: listingForm.phone,
+            imageUrl: listingForm.imageUrl,
+            imageAltText: listingForm.imageAltText,
+            cost: selectedCost,
+            acceptsReservations: listingForm.acceptsReservations,
+            regionId: selectedRegion,
+            dineTypeId: selectedDineType
+        };
+
+        axios({
+            method: method,
+            url: url,
+            data: payload
+        })
+            .then(response => {
+                if (response.data.id) {
+                    navigate(`/admin/dine-listings/listing-detail/${response.data.id}`, {state: {successMessage: successMessage}});
+                }
+                if (response.data.error) {
+                    setErrorMessage(response.data.error);
+                }
+            })
+            .catch(error => {
+                console.log(error);
+                if (error.response) {
+                    if (error.response.status === 400) {
+                        const fieldErrors = error.response.data;
+                        for (let field in fieldErrors) {
+                            console.log(`Field: ${field}, Error: ${fieldErrors[field]}`);
+                        }
+                        setFieldErrors(fieldErrors);
+                        if (fieldErrors) {
+                            setErrorMessage("Please correct input errors below and resubmit");
+                        }
+                    } else if (error.response.status === 500) {
+                        setErrorMessage("Server error. Please try again later");
+                    }
+                } else {
+                    setErrorMessage("An unexpected error occurred");
+                }
+            })
+    }
 
     return (
         <div className="container me-5 mt-3 admin-form-page">
@@ -257,14 +276,17 @@ function DoListingForm() {
                         </Form.Group>
                     </Col>
                     <Col xs={{span: 4}} className="mt-4 ms-4">
-                        <DoTypesCheckbox selectedDoTypes ={listingForm ? listingForm.doTypes : []}
-                                         onChange={handleDoTypesChange}/>
-                        {fieldErrors && fieldErrors.doTypesIds &&
-                            <div className="alert alert-danger pe-5" role="alert">{fieldErrors.doTypesIds}</div>}
+                        <AdminFormDropdown apiEndpoint="/admin/dine-type"
+                                           label="Type"
+                                           id="formDineType"
+                                           onChange={handleDineTypeChange}
+                                           selectedValue={selectedDineType}/>
+                        {fieldErrors && fieldErrors.dineTypeId &&
+                            <div className="alert alert-danger" role="alert">{fieldErrors.dineTypeId}</div>}
                         <div className="mt-3 mb-3">
                             <AdminFormDropdown apiEndpoint="/admin/cost"
                                                label="Cost"
-                                               id="formCost"
+                                               id="formCost-dine"
                                                onChange={handleCostChange}
                                                selectedValue={selectedCost}/>
                             {fieldErrors && fieldErrors.cost &&
@@ -272,19 +294,26 @@ function DoListingForm() {
                         </div>
                         <AdminFormDropdown apiEndpoint="/admin/region"
                                            label="Region"
-                                           id="formRegion"
+                                           id="formRegion-dine"
                                            onChange={handleRegionChange}
                                            selectedValue={selectedRegion}/>
                         {fieldErrors && fieldErrors.regionId &&
                             <div className="alert alert-danger" role="alert">{fieldErrors.regionId}</div>}
-                    </Col>
+                        <AcceptsReservationsRadio
+                            acceptsReservations={listingForm ? listingForm.acceptsReservations : null}
+                            onChange={handleAcceptsReservationsChange}/>
+                        {fieldErrors && fieldErrors.acceptsReservations &&
+                            <div className="alert alert-danger pe-5"
+                                 role="alert">{fieldErrors.acceptsReservations}</div>}
 
+                    </Col>
                 </Row>
                 <Button className="mt-3 ms-4 submit-btn" variant="primary" type="submit">
                     Submit</Button>
+
             </Form>
         </div>
     );
 }
 
-export default DoListingForm;
+export default DineListingForm;

@@ -1,6 +1,5 @@
 package com.kendrareynolds.tanititourism.service;
 
-import com.kendrareynolds.tanititourism.entity.Listing;
 import com.kendrareynolds.tanititourism.entity.ThingToDo;
 import com.kendrareynolds.tanititourism.repository.ThingToDoRepository;
 import org.springframework.beans.factory.annotation.Autowired;

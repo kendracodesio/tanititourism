@@ -32,10 +32,10 @@ public class PlaceToStayDto {
     @Size(max = 100, message="Image alt text cannot be longer than 100 characters")
     private String imageAltText;
 
-    @Min(value = 1, message = "Must select a region")
+    @NotNull(message = "Must select a region")
     private Long regionId;
 
-    @Min(value = 1, message = "Must select a type")
+    @NotNull(message = "Must select a type")
     private Long stayTypeId;
 
 

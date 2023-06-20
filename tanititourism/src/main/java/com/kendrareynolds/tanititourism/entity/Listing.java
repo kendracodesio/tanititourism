@@ -27,18 +27,12 @@ public abstract class Listing {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-
-//    @NotBlank(message = "Listing name must not be blank")
-//    @Size(max = 50, message = "Name cannot be longer than 50 characters")
     @Column(name = "name", unique = true)
     private String name;
 
-//    @NotBlank
-//    @Size(min = 100, max = 400, message = "Description should be between 50 and 350 characters")
     @Column(name = "description", length = 1000)
     private String description;
 
-//    @Pattern(regexp="^\\+\\d{3}\\s\\d{2}\\s\\d{2}\\s\\d{2}\\s\\d{2}$", message="Phone number should be numeric and follow this format: +XXX XX XX XX XX")
     @Column(name = "phone")
     private String phone;
 
@@ -46,13 +40,10 @@ public abstract class Listing {
     @Column(name = "cost")
     private Cost cost;
 
-//    @URL(message = "Invalid image URL")
-//    @Pattern(regexp = ".*\\.(jpg|png|jpeg|gif)$", message="Image URL must end with a valid image extension (.jpg, .png, .jpeg, .gif)")
+
     @Column(name = "image_url")
     private String imageUrl;
 
-//    @NotBlank
-//    @Size(max = 100, message="Image alt text cannot be longer than 100 characters")
     @Column(name = "image_alt_text")
     private String imageAltText;
 
@@ -64,13 +55,11 @@ public abstract class Listing {
     @Column(name = "updated_at")
     private OffsetDateTime updatedAt;
 
-
     @ManyToOne
     @JoinColumn(name = "region_id")
     private Region region;
 
-
-
+    @Transient
     public abstract ListingType getListingType();
 
     @Override

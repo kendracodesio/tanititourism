@@ -62,8 +62,8 @@ public class AdminThingToDoController {
             ThingToDo thingToDo = convertDtoToThingToDo(thingToDoDto);
             Region region = regionService.getRegionById(thingToDoDto.getRegionId());
             Set<DoType> doTypes = doTypeService.getDoTypesByIds(thingToDoDto.getDoTypesIds());
-            adminThingToDoService.addThingToDo(thingToDo, region, doTypes);
-            return responseHelperService.getSuccessResponse("Listing created successfully!");
+            ThingToDo savedThingToDo = adminThingToDoService.addThingToDo(thingToDo, region, doTypes);
+            return ResponseEntity.ok(savedThingToDo);
         } catch (Exception e) {
             System.err.println(e);
             return responseHelperService.getErrorResponse("Failed to create listing");
@@ -79,8 +79,8 @@ public class AdminThingToDoController {
             ThingToDo thingToDo = convertDtoToThingToDo(thingToDoDto);
             Region region = regionService.getRegionById(thingToDoDto.getRegionId());
             Set<DoType> doTypes = doTypeService.getDoTypesByIds(thingToDoDto.getDoTypesIds());
-            adminThingToDoService.updateThingToDo(id, thingToDo, region, doTypes);
-            return responseHelperService.getSuccessResponse("Listing updated successfully!");
+            ThingToDo savedThingToDo = adminThingToDoService.updateThingToDo(id, thingToDo, region, doTypes);
+            return ResponseEntity.ok(savedThingToDo);
         } catch (Exception e) {
             System.err.println(e);
             return responseHelperService.getErrorResponse("Failed to update listing");

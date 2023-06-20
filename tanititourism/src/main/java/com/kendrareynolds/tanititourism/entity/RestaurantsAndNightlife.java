@@ -14,6 +14,10 @@ import lombok.Setter;
 @NoArgsConstructor
 public class RestaurantsAndNightlife extends Listing {
 
+    @Override
+    public ListingType getListingType() {
+        return ListingType.DINE;
+    }
 
     public enum AcceptsReservations {
         YES, NO
@@ -23,14 +27,11 @@ public class RestaurantsAndNightlife extends Listing {
     @Column(name = "accepts_reservations")
     private AcceptsReservations acceptsReservations;
 
+
     @ManyToOne
     @JoinColumn(name = "dine_type_id")
     private DineType dineType;
 
-    @Override
-    public ListingType getListingType() {
-        return ListingType.DINE;
-    }
 
     @Override
     public String toString() {

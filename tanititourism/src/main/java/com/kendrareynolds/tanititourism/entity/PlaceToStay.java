@@ -11,23 +11,20 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class PlaceToStay extends Listing {
 
-    private final ListingType listingType;
 
-    public PlaceToStay() {
-        this.listingType = ListingType.STAY;
+    @Override
+    public ListingType getListingType() {
+        return ListingType.STAY;
+
     }
 
     @ManyToOne
     @JoinColumn(name = "stay_type_id")
     private StayType stayType;
 
-    @Override
-    public ListingType getListingType() {
-        return this.listingType;
-
-    }
 
     @Override
     public String toString() {

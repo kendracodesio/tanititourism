@@ -3,18 +3,19 @@ import axios from 'axios';
 import Form from 'react-bootstrap/Form'
 
 interface DoTypesProps {
-    selectedDoTypes: any[];
-    onChange: (newDoTypes: any[]) => void;
+    selectedDoTypes: DoTypes[] | null;
+    onChange: (newDoTypes: DoTypes[] | null) => void;
 }
 
-interface DoType {
+interface DoTypes {
     id: number;
     typeName: string;
 }
 
-function DoTypesChecklist({selectedDoTypes, onChange}: DoTypesProps) {
+function DoTypesCheckbox({selectedDoTypes, onChange}: DoTypesProps) {
     const apiEndpoint = ("/admin/do-type")
-    const [doTypes, setDoTypes] = useState<DoType[]>([]);
+    const [doTypes, setDoTypes] = useState<DoTypes[]>([]);
+    const selectedDoTypesArray = selectedDoTypes || [];
 
     useEffect(() => {
         axios.get(process.env.REACT_APP_API_URL + apiEndpoint)
@@ -26,9 +27,9 @@ function DoTypesChecklist({selectedDoTypes, onChange}: DoTypesProps) {
 
     const handleCheckboxChange = (doTypeId: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.checked) {
-            onChange([...selectedDoTypes, doTypes.find(doType => doType.id === doTypeId)!]);
+            onChange([...selectedDoTypesArray, doTypes.find(doType => doType.id === doTypeId)!]);
         } else {
-            onChange(selectedDoTypes.filter(doType => doType.id !== doTypeId));
+            onChange(selectedDoTypesArray.filter(doType => doType.id !== doTypeId));
         }
     };
 
@@ -41,7 +42,7 @@ function DoTypesChecklist({selectedDoTypes, onChange}: DoTypesProps) {
                 label={doType.typeName}
                 type="checkbox"
                 id={`checkbox-${doType.id}`}
-                checked={selectedDoTypes.some(selectedDoType => selectedDoType.id === doType.id)}
+                checked={selectedDoTypesArray.some(selectedDoType => selectedDoType.id === doType.id)}
                 onChange={handleCheckboxChange(doType.id)}
                 />
             ))}
@@ -49,4 +50,4 @@ function DoTypesChecklist({selectedDoTypes, onChange}: DoTypesProps) {
     );
 }
 
-export default DoTypesChecklist;
+export default DoTypesCheckbox;

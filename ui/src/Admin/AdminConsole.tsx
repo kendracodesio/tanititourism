@@ -9,7 +9,8 @@ import DoListingForm from "./pages/DoListingPages/DoListingForm";
 import DoListingDetails from "./pages/DoListingPages/DoListingDetails";
 import StayListingDetails from "./pages/StayListingPages/StayListingDetails";
 import StayListingForm from "./pages/StayListingPages/StayListingForm";
-
+import DineListingForm from "./pages/DineListingPages/DineListingForm";
+import DineListingDetails from "./pages/DineListingPages/DineListingDetails";
 
 
 
@@ -30,6 +31,9 @@ function AdminConsole() {
                     <Route path="stay-listings/listing-detail/:id" element={<StayListingDetails />}/>
                     <Route path="stay-listings/listing-detail/edit/:id" element={<StayListingForm />}/>
                     <Route path="stay-listings/add" element={<StayListingForm/>}/>
+                    <Route path="dine-listings/listing-detail/:id" element={<DineListingDetails />}/>
+                    <Route path="dine-listings/listing-detail/edit/:id" element={<DineListingForm />}/>
+                    <Route path="dine-listings/add" element={<DineListingForm />}/>
                 </Routes>
             </div>
         </div>

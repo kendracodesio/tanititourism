@@ -46,8 +46,8 @@ public class AdminPlaceToStayController {
     }
 
     @DeleteMapping("/delete-listing/{id}")
-    public ResponseEntity<Void> deleteThingToDo(@PathVariable Long id) {
-        adminPlaceToStayService.deleteThingToDo(id);
+    public ResponseEntity<Void> deletePlaceToStay(@PathVariable Long id) {
+        adminPlaceToStayService.deletePlaceToStay(id);
         return ResponseEntity.ok().build();
     }
 
@@ -60,8 +60,8 @@ public class AdminPlaceToStayController {
             PlaceToStay placeToStay = convertDtoToPlaceToStay(placeToStayDto);
             Region region = regionService.getRegionById(placeToStayDto.getRegionId());
             StayType stayType = stayTypeService.getStayTypeById(placeToStayDto.getStayTypeId());
-            adminPlaceToStayService.addPlaceToStay(placeToStay, region, stayType);
-            return responseHelperService.getSuccessResponse("Listing created successfully");
+            PlaceToStay savedPlaceToStay = adminPlaceToStayService.addPlaceToStay(placeToStay, region, stayType);
+            return ResponseEntity.ok(savedPlaceToStay);
         } catch (Exception e){
             System.err.println(e);
             return responseHelperService.getErrorResponse("Failed to create listing");
@@ -77,8 +77,8 @@ public class AdminPlaceToStayController {
             PlaceToStay placeToStay = convertDtoToPlaceToStay(placeToStayDto);
             Region region = regionService.getRegionById(placeToStayDto.getRegionId());
             StayType stayType = stayTypeService.getStayTypeById(placeToStayDto.getStayTypeId());
-            adminPlaceToStayService.updatePlaceToStay(id, placeToStay, region, stayType);
-            return responseHelperService.getSuccessResponse("Listing updated successfully");
+            PlaceToStay savedPlaceToStay = adminPlaceToStayService.updatePlaceToStay(id, placeToStay, region, stayType);
+            return ResponseEntity.ok(savedPlaceToStay);
         } catch (Exception e) {
             System.err.println(e);
             return responseHelperService.getErrorResponse("Failed to update listing");

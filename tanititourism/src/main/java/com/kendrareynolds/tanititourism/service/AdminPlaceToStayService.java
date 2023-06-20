@@ -37,17 +37,18 @@ public class AdminPlaceToStayService {
         return placeToStayRepository.findById(id);
     }
 
-    public void deleteThingToDo(Long id) {
+    public void deletePlaceToStay(Long id) {
         placeToStayRepository.deleteById(id);
     }
 
-    public void addPlaceToStay(PlaceToStay newPlaceToStay, Region region, StayType stayType) {
+    public PlaceToStay addPlaceToStay(PlaceToStay newPlaceToStay, Region region, StayType stayType) {
         newPlaceToStay.setRegion(region);
         newPlaceToStay.setStayType(stayType);
         placeToStayRepository.save(newPlaceToStay);
+        return newPlaceToStay;
     }
 
-    public void updatePlaceToStay(Long id, PlaceToStay updatedPlaceToStay, Region region, StayType stayType) {
+    public PlaceToStay updatePlaceToStay(Long id, PlaceToStay updatedPlaceToStay, Region region, StayType stayType) {
         Optional<PlaceToStay> placeToStay = placeToStayRepository.findById(id);
         if (placeToStay.isPresent()) {
             PlaceToStay existingPlaceToStay = placeToStay.get();
@@ -55,8 +56,9 @@ public class AdminPlaceToStayService {
             existingPlaceToStay.setRegion(region);
             existingPlaceToStay.setStayType(stayType);
             placeToStayRepository.save(existingPlaceToStay);
+            return existingPlaceToStay;
         } else {
-            throw new EntityNotFoundException("Place To Stay not found with id" + id);
+            throw new EntityNotFoundException("Place To Stay not found with id " + id);
         }
     }
 
