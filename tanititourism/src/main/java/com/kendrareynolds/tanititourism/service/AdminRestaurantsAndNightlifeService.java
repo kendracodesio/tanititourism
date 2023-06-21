@@ -59,6 +59,7 @@ public class AdminRestaurantsAndNightlifeService {
             setRestaurantAndNightlifeAttributes(updatedRestaurantAndNightlife, existingRestaurantAndNightlife);
             existingRestaurantAndNightlife.setRegion(region);
             existingRestaurantAndNightlife.setDineType(dineType);
+            restaurantsAndNightlifeRepository.save(existingRestaurantAndNightlife);
             return existingRestaurantAndNightlife;
         } else {
             throw new EntityNotFoundException("Restaurant And Nightlife not found with id " + id);
@@ -73,5 +74,6 @@ public class AdminRestaurantsAndNightlifeService {
         databaseRestaurantAndNightlife.setDescription(frontEndRestaurantAndNightlife.getDescription());
         databaseRestaurantAndNightlife.setImageUrl(frontEndRestaurantAndNightlife.getImageUrl());
         databaseRestaurantAndNightlife.setImageAltText(frontEndRestaurantAndNightlife.getImageAltText());
+        databaseRestaurantAndNightlife.setAcceptsReservations(frontEndRestaurantAndNightlife.getAcceptsReservations());
     }
 }

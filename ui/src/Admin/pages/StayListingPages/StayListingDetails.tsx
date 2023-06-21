@@ -4,7 +4,7 @@ import FetchedListingDetail from "../../components/FetchedListingDetail";
 function StayListingDetails() {
     return (
         <div className="admin-main-content">
-        <FetchedListingDetail apiEndpoint={"/admin/places-to-stay/listing-detail"}
+        <FetchedListingDetail apiEndpoint={"/admin/api/places-to-stay/listing-detail"}
                               editLink={"/admin/stay-listings/listing-detail/edit"}
                               backTo={"/admin/stay-listings"}/>
         </div>

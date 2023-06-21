@@ -20,7 +20,7 @@ interface DoTypes {
     typeName: string;
 }
 
-interface ListingFormData {
+interface ListingForm {
     name: string;
     description: string;
     phone: string;
@@ -33,7 +33,7 @@ interface ListingFormData {
 
 function DoListingForm() {
     let {id} = useParams();
-    const [listingForm, setListingForm] = useState<ListingFormData | null>(null);
+    const [listingForm, setListingForm] = useState<ListingForm | null>(null);
     const [selectedCost, setSelectedCost] = useState<string | null>(null);
     const [selectedRegion, setSelectedRegion] = useState<number | null>(null);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -44,7 +44,7 @@ function DoListingForm() {
 
     useEffect(() => {
         if (id != null) {
-            axios.get(`${apiURL}/admin/things-to-do/listing-detail/${id}`)
+            axios.get(`${apiURL}/admin/api/things-to-do/listing-detail/${id}`)
                 .then(response => {
                     console.log(response.data)
                     setListingForm(response.data);
@@ -67,7 +67,7 @@ function DoListingForm() {
 
     //get Cost enum names with corresponding label
     useEffect(() => {
-        axios.get(`${apiURL}/admin/cost`)
+        axios.get(`${apiURL}/admin/api/cost`)
             .then(response => {
                 setCostsValues(response.data);
             });
@@ -98,7 +98,7 @@ function DoListingForm() {
         setFieldErrors(null);
         if (!listingForm) return;
 
-        const url = id ? `${apiURL}/admin/things-to-do/update-listing/${id}` : `${apiURL}/admin/things-to-do/new-listing`;
+        const url = id ? `${apiURL}/admin/api/things-to-do/update-listing/${id}` : `${apiURL}/admin/api/things-to-do/new-listing`;
         const method = id ? 'put' : 'post';
         const successMessage = id ? "Listing updated successfully!" : "Listing created successfully!";
 
@@ -262,7 +262,7 @@ function DoListingForm() {
                         {fieldErrors && fieldErrors.doTypesIds &&
                             <div className="alert alert-danger pe-5" role="alert">{fieldErrors.doTypesIds}</div>}
                         <div className="mt-3 mb-3">
-                            <AdminFormDropdown apiEndpoint="/admin/cost"
+                            <AdminFormDropdown apiEndpoint="/admin/api/cost"
                                                label="Cost"
                                                id="formCost"
                                                onChange={handleCostChange}
@@ -270,7 +270,7 @@ function DoListingForm() {
                             {fieldErrors && fieldErrors.cost &&
                                 <div className="alert alert-danger" role="alert">{fieldErrors.cost}</div>}
                         </div>
-                        <AdminFormDropdown apiEndpoint="/admin/region"
+                        <AdminFormDropdown apiEndpoint="/admin/api/region"
                                            label="Region"
                                            id="formRegion"
                                            onChange={handleRegionChange}

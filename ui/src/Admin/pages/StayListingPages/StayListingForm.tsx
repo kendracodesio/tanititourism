@@ -39,7 +39,7 @@ function StayListingForm() {
 
     useEffect(() => {
         if (id != null) {
-            axios.get(`${apiURL}/admin/places-to-stay/listing-detail/${id}`)
+            axios.get(`${apiURL}/admin/api/places-to-stay/listing-detail/${id}`)
                 .then(response => {
                     console.log(response.data)
                     setListingForm(response.data);
@@ -61,7 +61,7 @@ function StayListingForm() {
 
     //get Cost enum names with corresponding label
     useEffect(() => {
-        axios.get(`${apiURL}/admin/cost`)
+        axios.get(`${apiURL}/admin/api/cost`)
             .then(response => {
                 setCostsValues(response.data);
             });
@@ -97,7 +97,7 @@ function StayListingForm() {
         setFieldErrors(null);
         if (!listingForm) return;
 
-        const url = id ? `${apiURL}/admin/places-to-stay/update-listing/${id}` : `${apiURL}/admin/places-to-stay/new-listing`;
+        const url = id ? `${apiURL}/admin/api/places-to-stay/update-listing/${id}` : `${apiURL}/admin/api/places-to-stay/new-listing`;
         const method = id ? 'put' : 'post';
         const successMessage = id ? "Listing updated successfully" : "Listing created successfully";
 
@@ -262,21 +262,21 @@ function StayListingForm() {
                         </Form.Group>
                     </Col>
                     <Col xs={{span: 4}} className="mt-4 ms-4">
-                        <AdminFormDropdown apiEndpoint="/admin/stay-type"
+                        <AdminFormDropdown apiEndpoint="/admin/api/stay-type"
                                            label="Type"
                                            id="formStayType"
                                            onChange={handleStayTypeChange}
                                            selectedValue={selectedStayType}/>
                         {fieldErrors && fieldErrors.stayTypeId &&
                             <div className="alert alert-danger" role="alert">{fieldErrors.stayTypeId}</div>}
-                        <AdminFormDropdown apiEndpoint="/admin/cost"
+                        <AdminFormDropdown apiEndpoint="/admin/api/cost"
                                            label="Cost"
                                            id="formCost-stay"
                                            onChange={handleCostChange}
                                            selectedValue={selectedCost}/>
                         {fieldErrors && fieldErrors.cost &&
                             <div className="alert alert-danger" role="alert">{fieldErrors.cost}</div>}
-                        <AdminFormDropdown apiEndpoint="/admin/region"
+                        <AdminFormDropdown apiEndpoint="/admin/api/region"
                                            label="Region"
                                            id="formRegion-stay"
                                            onChange={handleRegionChange}

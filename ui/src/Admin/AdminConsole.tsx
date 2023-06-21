@@ -1,4 +1,5 @@
-import {Routes, Route} from 'react-router-dom';
+import {Routes, Route, useLocation} from 'react-router-dom';
+import ProtectedRoute from './ProtectedRoute';
 import AdminSidebar from './components/AdminSidebar';
 import StayListings from './pages/StayListingPages/StayListings';
 import Reports from './pages/Reports';
@@ -11,16 +12,22 @@ import StayListingDetails from "./pages/StayListingPages/StayListingDetails";
 import StayListingForm from "./pages/StayListingPages/StayListingForm";
 import DineListingForm from "./pages/DineListingPages/DineListingForm";
 import DineListingDetails from "./pages/DineListingPages/DineListingDetails";
+import React from "react";
+import SignIn from "./pages/SignIn";
 
 
 
 function AdminConsole() {
+
+    const location = useLocation();
     return (
         <div style={{display: 'flex'}}>
-            <AdminSidebar />
+            {/* Render AdminSidebar only if the path is not /admin */}
+            {location.pathname !== "/admin" && <AdminSidebar />}
             <div style={{flexGrow: 1}}>
                 <Routes>
-                    <Route path="/" element={<AdminHome />} />
+                    <Route path="/" element={<SignIn />} />
+                    <Route path="home" element={<AdminHome />} />
                     <Route path="do-listings" element={<DoListings/>} />
                     <Route path="stay-listings" element={<StayListings />} />
                     <Route path="dine-listings" element={<DineListings />} />

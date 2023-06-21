@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 @RestController
-@RequestMapping("/admin/places-to-stay")
+@RequestMapping("/admin/api/places-to-stay")
 public class AdminPlaceToStayController {
 
     private final AdminPlaceToStayService adminPlaceToStayService;

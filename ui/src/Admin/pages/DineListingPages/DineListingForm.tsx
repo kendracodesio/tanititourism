@@ -42,7 +42,7 @@ function DineListingForm() {
 
     useEffect(() => {
         if (id != null) {
-            axios.get(`${apiURL}/admin/restaurants-and-nightlife/listing-detail/${id}`)
+            axios.get(`${apiURL}/admin/api/restaurants-and-nightlife/listing-detail/${id}`)
                 .then(response => {
                     console.log(response.data)
                     setListingForm(response.data);
@@ -65,7 +65,7 @@ function DineListingForm() {
 
     //get Cost enum names with corresponding label
     useEffect(() => {
-        axios.get(`${apiURL}/admin/cost`)
+        axios.get(`${apiURL}/admin/api/cost`)
             .then(response => {
                 setCostsValues(response.data);
             });
@@ -163,7 +163,7 @@ function DineListingForm() {
         setFieldErrors(null);
         if (!listingForm) return;
 
-        const url = id ? `${apiURL}/admin/restaurants-and-nightlife/update-listing/${id}` : `${apiURL}/admin/restaurants-and-nightlife/new-listing`;
+        const url = id ? `${apiURL}/admin/api/restaurants-and-nightlife/update-listing/${id}` : `${apiURL}/admin/api/restaurants-and-nightlife/new-listing`;
         const method = id ? 'put' : 'post';
         const successMessage = id ? "Listing updated successfully" : "Listing created successfully";
 
@@ -276,7 +276,7 @@ function DineListingForm() {
                         </Form.Group>
                     </Col>
                     <Col xs={{span: 4}} className="mt-4 ms-4">
-                        <AdminFormDropdown apiEndpoint="/admin/dine-type"
+                        <AdminFormDropdown apiEndpoint="/admin/api/dine-type"
                                            label="Type"
                                            id="formDineType"
                                            onChange={handleDineTypeChange}
@@ -284,7 +284,7 @@ function DineListingForm() {
                         {fieldErrors && fieldErrors.dineTypeId &&
                             <div className="alert alert-danger" role="alert">{fieldErrors.dineTypeId}</div>}
                         <div className="mt-3 mb-3">
-                            <AdminFormDropdown apiEndpoint="/admin/cost"
+                            <AdminFormDropdown apiEndpoint="/admin/api/cost"
                                                label="Cost"
                                                id="formCost-dine"
                                                onChange={handleCostChange}
@@ -292,7 +292,7 @@ function DineListingForm() {
                             {fieldErrors && fieldErrors.cost &&
                                 <div className="alert alert-danger" role="alert">{fieldErrors.cost}</div>}
                         </div>
-                        <AdminFormDropdown apiEndpoint="/admin/region"
+                        <AdminFormDropdown apiEndpoint="/admin/api/region"
                                            label="Region"
                                            id="formRegion-dine"
                                            onChange={handleRegionChange}

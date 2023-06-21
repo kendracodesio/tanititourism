@@ -34,7 +34,7 @@ function ExpandableSidebarLink({ to, children, links }: {to: string, children: R
                     {children} {isOpen ? <FontAwesomeIcon icon={faCaretDown} /> : <FontAwesomeIcon icon={faCaretRight} />}
                 </div>
             </li>
-            {isOpen && links.map(linkProps => <SidebarLink {...linkProps} marginLeft="ms-2" />)}
+            {isOpen && links.map(linkProps => <SidebarLink key={linkProps.to} {...linkProps} marginLeft="ms-2" />)}
         </>
     );
 }
@@ -52,10 +52,10 @@ function AdminSidebar() {
             <hr/>
             <ul className="nav flex-column mb-auto pt-2">
                 <div className="mb-4 pt-3">
-                    <SidebarLink to="/admin" end >Home</SidebarLink>
+                    <SidebarLink to="/admin/home" end >Home</SidebarLink>
                 </div>
                 <div className="mb-4">
-                    <ExpandableSidebarLink to="/admin/queue" links={[
+                    <ExpandableSidebarLink to="#" links={[
                         {to: "/admin/do-listings", children: 'Things To Do'},
                         {to: "/admin/stay-listings", children: 'Places To Stay'},
                         {to: "/admin/dine-listings", children: 'Restaurants And Nightlife'},

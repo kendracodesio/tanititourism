@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/admin/restaurants-and-nightlife")
+@RequestMapping("/admin/api/restaurants-and-nightlife")
 public class AdminRestaurantsAndNightlifeController {
 
 

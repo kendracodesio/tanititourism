@@ -18,7 +18,7 @@ import java.util.*;
 
 
 @RestController
-@RequestMapping("/admin/things-to-do")
+@RequestMapping("/admin/api/things-to-do")
 public class AdminThingToDoController {
 
     private final AdminThingToDoService adminThingToDoService;
@@ -27,7 +27,8 @@ public class AdminThingToDoController {
     private final DoTypeService doTypeService;
 
     @Autowired
-    AdminThingToDoController(AdminThingToDoService adminThingToDoService, ResponseHelperService responseHelperService,
+    AdminThingToDoController(AdminThingToDoService adminThingToDoService,
+                             ResponseHelperService responseHelperService,
                              RegionService regionService, DoTypeService doTypeService) {
         this.adminThingToDoService = adminThingToDoService;
         this.responseHelperService = responseHelperService;
@@ -54,7 +55,8 @@ public class AdminThingToDoController {
     }
 
     @PostMapping("/new-listing")
-    public ResponseEntity<?> addThingToDo(@Valid @RequestBody ThingToDoDto thingToDoDto, BindingResult bindingResult) {
+    public ResponseEntity<?> addThingToDo(@Valid @RequestBody ThingToDoDto thingToDoDto,
+                                          BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return responseHelperService.getBindingErrors(bindingResult);
         }

@@ -13,7 +13,7 @@ interface DoTypes {
 }
 
 function DoTypesCheckbox({selectedDoTypes, onChange}: DoTypesProps) {
-    const apiEndpoint = ("/admin/do-type")
+    const apiEndpoint = ("/admin/api/do-type")
     const [doTypes, setDoTypes] = useState<DoTypes[]>([]);
     const selectedDoTypesArray = selectedDoTypes || [];
 
