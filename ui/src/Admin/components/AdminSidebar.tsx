@@ -1,5 +1,5 @@
 import React, {ReactNode, useState} from 'react';
-import { NavLink, useMatch } from 'react-router-dom';
+import {NavLink, useNavigate, useMatch} from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown, faCaretRight } from '@fortawesome/free-solid-svg-icons';
 
@@ -41,12 +41,20 @@ function ExpandableSidebarLink({ to, children, links }: {to: string, children: R
 
 function AdminSidebar() {
 
+    const navigate = useNavigate();
+
+    const handleSignout = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('username');
+        navigate('/admin');
+    }
+
 
     return (
         <div className="d-flex flex-column flex-shrink-0 p-5 text-white sidebar">
-            <img className="navbar-img mx-auto" src="https://tanititourismimages.blob.core.windows.net/images/taniti-logo.png" alt="taniti-logo" />
+            <img className="navbar-img" src="https://tanititourismimages.blob.core.windows.net/images/taniti-logo.png" alt="taniti-logo" />
             <hr/>
-            <div className="d-flex justify-content-center align-items-center mb-3 mb-md-0 mx-auto text-white text-decoration-none">
+            <div className="text-white text-decoration-none">
                 <span className="fs-6">Admin Console</span>
             </div>
             <hr/>
@@ -69,7 +77,9 @@ function AdminSidebar() {
             </ul>
             <hr/>
             <div className="mt-2">
-                <SidebarLink to="/logout" >Logout</SidebarLink>
+                <div onClick={handleSignout} className="nav-item">
+                    <div className="nav-link text-white signout">Sign out</div>
+                </div>
             </div>
         </div>
     );
