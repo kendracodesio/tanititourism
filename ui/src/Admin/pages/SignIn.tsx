@@ -47,6 +47,7 @@ function SignIn() {
                 if (response.data) {
                     axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`
                     localStorage.setItem('token', response.data.token);
+                    localStorage.setItem('username', response.data.username);
                     navigate("/admin/home");
                 }
                 if (response.data.error) {

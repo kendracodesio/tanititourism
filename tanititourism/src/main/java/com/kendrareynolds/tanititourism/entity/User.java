@@ -1,5 +1,6 @@
 package com.kendrareynolds.tanititourism.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -42,7 +43,21 @@ public class User implements UserDetails {
     private String lastName;
 
     @OneToMany(mappedBy = "user")
+    @JsonBackReference
     private Set<ActionReport> actionReports = new HashSet<>();
+
+    public void addActionReport(ActionReport actionReport) {
+        if (actionReport != null) {
+            if (actionReports == null) {
+                actionReports = new HashSet<>();
+            }
+            actionReports.add(actionReport);
+            actionReport.setUser(this);
+
+        }
+
+    }
+
 
     @Override
     public boolean equals(Object o) {

@@ -17,7 +17,7 @@ import java.util.function.Function;
 public class JwtService {
 
 
-   private String jwtSecret;
+   private String jwtSecret = "92a39ceae54168418fa006ae63d2381a0267be26ce4c9bd338a3e599b6bdeb3ce30ee7c595af5ea5d49e70d51a80b9786204d361bec74cd320d7854b45271e1f";
 
 
     public String extractUsername(String token) {

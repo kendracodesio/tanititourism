@@ -9,7 +9,7 @@ import com.kendrareynolds.tanititourism.service.DoTypeService;
 import com.kendrareynolds.tanititourism.service.RegionService;
 import com.kendrareynolds.tanititourism.service.ResponseHelperService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -18,6 +18,7 @@ import java.util.*;
 
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/admin/api/things-to-do")
 public class AdminThingToDoController {
 
@@ -26,24 +27,15 @@ public class AdminThingToDoController {
     private final RegionService regionService;
     private final DoTypeService doTypeService;
 
-    @Autowired
-    AdminThingToDoController(AdminThingToDoService adminThingToDoService,
-                             ResponseHelperService responseHelperService,
-                             RegionService regionService, DoTypeService doTypeService) {
-        this.adminThingToDoService = adminThingToDoService;
-        this.responseHelperService = responseHelperService;
-        this.regionService = regionService;
-        this.doTypeService = doTypeService;
-    }
 
     @GetMapping("/list")
     public Page<ThingToDo> getAllThingsToDo(@RequestParam(required = false, defaultValue = "1") int page,
-                                            @RequestParam(required = false, defaultValue = "6") int size) {
+                                            @RequestParam(required = false, defaultValue = "10") int size) {
         return adminThingToDoService.getAllThingsToDo(page, size);
     }
 
     @GetMapping("/listing-detail/{id}")
-    public Optional<ThingToDo> getThingToDo(@PathVariable("id") Long id) {
+    public Optional<ThingToDo> getThingToDo(@PathVariable Long id) {
         return adminThingToDoService.getThingToDo(id);
     }
 
@@ -56,6 +48,7 @@ public class AdminThingToDoController {
 
     @PostMapping("/new-listing")
     public ResponseEntity<?> addThingToDo(@Valid @RequestBody ThingToDoDto thingToDoDto,
+                                          @RequestHeader("X-Username") String username,
                                           BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return responseHelperService.getBindingErrors(bindingResult);
@@ -64,7 +57,7 @@ public class AdminThingToDoController {
             ThingToDo thingToDo = convertDtoToThingToDo(thingToDoDto);
             Region region = regionService.getRegionById(thingToDoDto.getRegionId());
             Set<DoType> doTypes = doTypeService.getDoTypesByIds(thingToDoDto.getDoTypesIds());
-            ThingToDo savedThingToDo = adminThingToDoService.addThingToDo(thingToDo, region, doTypes);
+            ThingToDo savedThingToDo = adminThingToDoService.addThingToDo(thingToDo, region, doTypes, username);
             return ResponseEntity.ok(savedThingToDo);
         } catch (Exception e) {
             System.err.println(e);
@@ -73,7 +66,9 @@ public class AdminThingToDoController {
     }
 
     @PutMapping("/update-listing/{id}")
-    public ResponseEntity<?> updateThingToDo(@PathVariable Long id, @Valid @RequestBody ThingToDoDto thingToDoDto, BindingResult bindingResult) {
+    public ResponseEntity<?> updateThingToDo(@PathVariable Long id, @Valid @RequestBody ThingToDoDto thingToDoDto,
+                                             @RequestHeader("X-Username") String username,
+                                             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return responseHelperService.getBindingErrors(bindingResult);
         }
@@ -81,7 +76,7 @@ public class AdminThingToDoController {
             ThingToDo thingToDo = convertDtoToThingToDo(thingToDoDto);
             Region region = regionService.getRegionById(thingToDoDto.getRegionId());
             Set<DoType> doTypes = doTypeService.getDoTypesByIds(thingToDoDto.getDoTypesIds());
-            ThingToDo savedThingToDo = adminThingToDoService.updateThingToDo(id, thingToDo, region, doTypes);
+            ThingToDo savedThingToDo = adminThingToDoService.updateThingToDo(id, thingToDo, region, doTypes, username);
             return ResponseEntity.ok(savedThingToDo);
         } catch (Exception e) {
             System.err.println(e);

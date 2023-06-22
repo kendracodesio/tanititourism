@@ -2,27 +2,25 @@ package com.kendrareynolds.tanititourism.service;
 
 import com.kendrareynolds.tanititourism.entity.*;
 import com.kendrareynolds.tanititourism.repository.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class ActionReportService {
     private final ActionReportRepository actionReportRepository;
     private final UserRepository userRepository;
 
 
-    @Autowired
-    public ActionReportService(ActionReportRepository actionReportRepository,
-                               UserRepository userRepository) {
-        this.actionReportRepository = actionReportRepository;
-        this.userRepository = userRepository;
-    }
 
     public void recordAction(String username, String action, Listing listing) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
-        if (!optionalUser.isPresent()) {
+        if (optionalUser.isEmpty()) {
             throw new IllegalArgumentException("Username " + username + " not found");
         }
         User user = optionalUser.get();
@@ -35,21 +33,26 @@ public class ActionReportService {
         switch (listingType) {
             case DO -> {
                 ThingToDo thingToDo = (ThingToDo) listing;
-                report.setThingToDoId(thingToDo.getId());
+                report.setThingToDo(thingToDo);
             }
             case STAY -> {
                 PlaceToStay placeToStay = (PlaceToStay) listing;
-                report.setPlacesToStayId(placeToStay.getId());
+                report.setPlacesToStay(placeToStay);
             }
             case DINE -> {
                 RestaurantsAndNightlife restaurantsAndNightlife = (RestaurantsAndNightlife) listing;
-                report.setRestaurantsAndNightlifeId(restaurantsAndNightlife.getId());
+                report.setRestaurantsAndNightlife(restaurantsAndNightlife);
             }
             default -> throw new IllegalArgumentException("Invalid listing type: " + listingType);
         }
 
         report.setAction(ActionReport.Action.valueOf(action.toUpperCase()));
         report.setTimestamp(OffsetDateTime.now());
+        user.addActionReport(report);
         actionReportRepository.save(report);
+    }
+
+    public Page<ActionReport> getAllActionReports(int page, int size) {
+        return actionReportRepository.findAll(PageRequest.of(page - 1, size));
     }
 }

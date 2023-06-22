@@ -1,11 +1,12 @@
 package com.kendrareynolds.tanititourism.entity;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.OffsetDateTime;
 import java.util.Objects;
 
 @Entity
-@Table(name = "user_reports")
+@Table(name = "action_reports")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -15,7 +16,7 @@ public class ActionReport {
 
 
     public enum Action {
-        CREATE, UPDATE, DELETE
+        CREATE, UPDATE
     }
 
     @Id
@@ -29,18 +30,24 @@ public class ActionReport {
     @Column(name = "timestamp", nullable = false)
     private OffsetDateTime timestamp;
 
-    @Column(name = "thing_to_do_id")
-    private Long thingToDoId;
-
-    @Column(name = "places_to_stay_id")
-    private Long placesToStayId;
-
-    @Column(name = "restaurants_and_nightlife_id")
-    private Long restaurantsAndNightlifeId;
+    @ManyToOne
+    @JoinColumn(name = "thing_to_do_id")
+    private ThingToDo thingToDo;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false, insertable = false, updatable = false)
+    @JoinColumn (name = "places_to_stay_id")
+    private PlaceToStay placesToStay;
+
+    @ManyToOne
+    @JoinColumn (name = "restaurants_and_nightlife_id")
+    private RestaurantsAndNightlife restaurantsAndNightlife;
+
+    @ManyToOne
+    @JsonManagedReference
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+
 
     @Override
     public boolean equals(Object o) {

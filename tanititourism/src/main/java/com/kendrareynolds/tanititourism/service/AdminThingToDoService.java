@@ -3,12 +3,9 @@ package com.kendrareynolds.tanititourism.service;
 import com.kendrareynolds.tanititourism.entity.DoType;
 import com.kendrareynolds.tanititourism.entity.Region;
 import com.kendrareynolds.tanititourism.entity.ThingToDo;
-import com.kendrareynolds.tanititourism.repository.DoTypeRepository;
-import com.kendrareynolds.tanititourism.repository.RegionRepository;
 import com.kendrareynolds.tanititourism.repository.ThingToDoRepository;
-import com.kendrareynolds.tanititourism.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -17,23 +14,12 @@ import java.util.Set;
 
 
 @Service
+@RequiredArgsConstructor
 public class AdminThingToDoService {
 
     public final ThingToDoRepository thingToDoRepository;
-    public final DoTypeRepository doTypeRepository;
-    public final RegionRepository regionRepository;
     public final ActionReportService actionReportService;
-    public final UserRepository userRepository;
 
-    @Autowired
-    public AdminThingToDoService(ThingToDoRepository thingToDoRepository, ActionReportService actionReportService,
-                                 UserRepository userRepository, DoTypeRepository doTypeRepository, RegionRepository regionRepository) {
-        this.thingToDoRepository = thingToDoRepository;
-        this.actionReportService = actionReportService;
-        this.userRepository = userRepository;
-        this.doTypeRepository = doTypeRepository;
-        this.regionRepository = regionRepository;
-    }
 
 
     public Page<ThingToDo> getAllThingsToDo(int page, int size) {
@@ -48,17 +34,18 @@ public class AdminThingToDoService {
         thingToDoRepository.deleteById(id);
     }
 
-    public ThingToDo addThingToDo(ThingToDo newThingToDo, Region region, Set<DoType> doTypes) {
+    public ThingToDo addThingToDo(ThingToDo newThingToDo, Region region, Set<DoType> doTypes, String username) {
         newThingToDo.setRegion(region);
         for (DoType doType : doTypes) {
             newThingToDo.add(doType);
             doType.getThingsToDo().add(newThingToDo);
         }
         thingToDoRepository.save(newThingToDo);
+        actionReportService.recordAction(username, "CREATE", newThingToDo);
         return newThingToDo;
     }
 
-    public ThingToDo updateThingToDo(Long id, ThingToDo updatedThingToDo, Region region, Set<DoType> doTypes) {
+    public ThingToDo updateThingToDo(Long id, ThingToDo updatedThingToDo, Region region, Set<DoType> doTypes, String username) {
         Optional<ThingToDo> thingToDo = thingToDoRepository.findById(id);
         if (thingToDo.isPresent()) {
             ThingToDo existingThingToDo = thingToDo.get();
@@ -70,6 +57,7 @@ public class AdminThingToDoService {
                 doType.getThingsToDo().add(existingThingToDo);
             }
             thingToDoRepository.save(existingThingToDo);
+            actionReportService.recordAction(username, "UPDATE", existingThingToDo);
             return existingThingToDo;
         } else {
             throw new EntityNotFoundException("Thing To Do not found with id: " + id);

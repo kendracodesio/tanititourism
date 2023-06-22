@@ -10,15 +10,15 @@ import com.kendrareynolds.tanititourism.service.DineTypeService;
 import com.kendrareynolds.tanititourism.service.RegionService;
 import com.kendrareynolds.tanititourism.service.ResponseHelperService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Optional;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/admin/api/restaurants-and-nightlife")
 public class AdminRestaurantsAndNightlifeController {
 
@@ -27,15 +27,6 @@ public class AdminRestaurantsAndNightlifeController {
     private final RegionService regionService;
     private final DineTypeService dineTypeService;
     private final ResponseHelperService responseHelperService;
-
-    @Autowired
-    AdminRestaurantsAndNightlifeController(AdminRestaurantsAndNightlifeService adminRestaurantsAndNightlifeService, RegionService regionService,
-                                            DineTypeService dineTypeService, ResponseHelperService responseHelperService) {
-        this.adminRestaurantsAndNightlifeService = adminRestaurantsAndNightlifeService;
-        this.regionService = regionService;
-        this.dineTypeService = dineTypeService;
-        this.responseHelperService = responseHelperService;
-    }
 
     @GetMapping("/list")
     public Page<RestaurantsAndNightlife> getAllRestaurantsAndNightlife(@RequestParam(required = false, defaultValue = "1") int page,
@@ -56,6 +47,7 @@ public class AdminRestaurantsAndNightlifeController {
 
     @PostMapping("/new-listing")
     public ResponseEntity<?> addRestaurantAndNightlife(@Valid @RequestBody RestaurantsAndNightlifeDto restaurantsAndNightlifeDto,
+                                                       @RequestHeader("X-Username") String username,
                                                        BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return responseHelperService.getBindingErrors(bindingResult);
@@ -64,7 +56,8 @@ public class AdminRestaurantsAndNightlifeController {
             RestaurantsAndNightlife restaurantsAndNightlife = convertDtoToRestaurantAndNightlife(restaurantsAndNightlifeDto);
             Region region = regionService.getRegionById(restaurantsAndNightlifeDto.getRegionId());
             DineType dineType = dineTypeService.getDineTypeById(restaurantsAndNightlifeDto.getDineTypeId());
-            RestaurantsAndNightlife savedRestaurantAndNightlife = adminRestaurantsAndNightlifeService.addRestaurantAndNightlife(restaurantsAndNightlife, region, dineType);
+            RestaurantsAndNightlife savedRestaurantAndNightlife = adminRestaurantsAndNightlifeService
+                    .addRestaurantAndNightlife(restaurantsAndNightlife, region, dineType, username);
             return ResponseEntity.ok(savedRestaurantAndNightlife);
         } catch (Exception e) {
             System.err.println(e);
@@ -73,7 +66,9 @@ public class AdminRestaurantsAndNightlifeController {
     }
 
     @PutMapping("/update-listing/{id}")
-    public ResponseEntity<?> updateRestaurantAndNightlife(@PathVariable Long id, @Valid @RequestBody RestaurantsAndNightlifeDto restaurantsAndNightlifeDto,
+    public ResponseEntity<?> updateRestaurantAndNightlife(@PathVariable Long id,
+                                                          @Valid @RequestBody RestaurantsAndNightlifeDto restaurantsAndNightlifeDto,
+                                                          @RequestHeader("X-Username") String username,
                                                           BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return responseHelperService.getBindingErrors(bindingResult);
@@ -82,7 +77,8 @@ public class AdminRestaurantsAndNightlifeController {
             RestaurantsAndNightlife restaurantsAndNightlife = convertDtoToRestaurantAndNightlife(restaurantsAndNightlifeDto);
             Region region = regionService.getRegionById(restaurantsAndNightlifeDto.getRegionId());
             DineType dineType = dineTypeService.getDineTypeById(restaurantsAndNightlifeDto.getDineTypeId());
-            RestaurantsAndNightlife savedRestaurantAndNightlife = adminRestaurantsAndNightlifeService.updateRestaurantAndNightlife(id, restaurantsAndNightlife, region, dineType);
+            RestaurantsAndNightlife savedRestaurantAndNightlife = adminRestaurantsAndNightlifeService
+                    .updateRestaurantAndNightlife(id, restaurantsAndNightlife, region, dineType, username);
             return ResponseEntity.ok(savedRestaurantAndNightlife);
         } catch (Exception e) {
             System.err.println(e);

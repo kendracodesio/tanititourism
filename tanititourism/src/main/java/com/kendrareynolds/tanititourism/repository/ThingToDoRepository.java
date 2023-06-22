@@ -16,7 +16,4 @@ public interface ThingToDoRepository extends JpaRepository<ThingToDo, Long> {
     Page<ThingToDo> findByRegionName(String regionName, Pageable pageable);
     Page<ThingToDo> findByDoTypesTypeNameAndRegionName(String typeName, String regionName, Pageable pageable);
 
-
-
-
 }

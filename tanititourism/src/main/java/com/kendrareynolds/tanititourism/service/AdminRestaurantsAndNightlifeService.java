@@ -1,35 +1,24 @@
 package com.kendrareynolds.tanititourism.service;
 
 import com.kendrareynolds.tanititourism.entity.DineType;
-import com.kendrareynolds.tanititourism.entity.PlaceToStay;
 import com.kendrareynolds.tanititourism.entity.Region;
 import com.kendrareynolds.tanititourism.entity.RestaurantsAndNightlife;
-import com.kendrareynolds.tanititourism.repository.DineTypeRepository;
-import com.kendrareynolds.tanititourism.repository.RegionRepository;
 import com.kendrareynolds.tanititourism.repository.RestaurantsAndNightlifeRepository;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class AdminRestaurantsAndNightlifeService {
 
-    public final RestaurantsAndNightlifeRepository restaurantsAndNightlifeRepository;
-    public final DineTypeRepository dineTypeRepository;
-    public final RegionRepository regionRepository;
+    private final RestaurantsAndNightlifeRepository restaurantsAndNightlifeRepository;
+    private final ActionReportService actionReportService;
 
 
-    @Autowired
-    public AdminRestaurantsAndNightlifeService(RestaurantsAndNightlifeRepository restaurantsAndNightlifeRepository,
-                                               DineTypeRepository dineTypeRepository, RegionRepository regionRepository) {
-        this.restaurantsAndNightlifeRepository = restaurantsAndNightlifeRepository;
-        this.dineTypeRepository = dineTypeRepository;
-        this.regionRepository = regionRepository;
-    }
 
     public Page<RestaurantsAndNightlife> getAllRestaurantsAndNightlife(int page, int size) {
         return restaurantsAndNightlifeRepository.findAll(PageRequest.of(page - 1, size));
@@ -44,15 +33,16 @@ public class AdminRestaurantsAndNightlifeService {
     }
 
     public RestaurantsAndNightlife addRestaurantAndNightlife(RestaurantsAndNightlife newRestaurantAndNightlife, Region region,
-                                                             DineType dineType) {
+                                                             DineType dineType, String username) {
         newRestaurantAndNightlife.setRegion(region);
         newRestaurantAndNightlife.setDineType(dineType);
         restaurantsAndNightlifeRepository.save(newRestaurantAndNightlife);
+        actionReportService.recordAction(username, "CREATE", newRestaurantAndNightlife);
         return newRestaurantAndNightlife;
     }
 
     public RestaurantsAndNightlife updateRestaurantAndNightlife(Long id, RestaurantsAndNightlife updatedRestaurantAndNightlife,
-                                                                Region region, DineType dineType) {
+                                                                Region region, DineType dineType, String username) {
         Optional<RestaurantsAndNightlife> restaurantAndNightlife = restaurantsAndNightlifeRepository.findById(id);
         if (restaurantAndNightlife.isPresent()) {
             RestaurantsAndNightlife existingRestaurantAndNightlife = restaurantAndNightlife.get();
@@ -60,6 +50,7 @@ public class AdminRestaurantsAndNightlifeService {
             existingRestaurantAndNightlife.setRegion(region);
             existingRestaurantAndNightlife.setDineType(dineType);
             restaurantsAndNightlifeRepository.save(existingRestaurantAndNightlife);
+            actionReportService.recordAction(username, "UPDATE", existingRestaurantAndNightlife);
             return existingRestaurantAndNightlife;
         } else {
             throw new EntityNotFoundException("Restaurant And Nightlife not found with id " + id);

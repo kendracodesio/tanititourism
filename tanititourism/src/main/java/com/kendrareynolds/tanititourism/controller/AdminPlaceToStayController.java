@@ -9,7 +9,7 @@ import com.kendrareynolds.tanititourism.service.RegionService;
 import com.kendrareynolds.tanititourism.service.ResponseHelperService;
 import com.kendrareynolds.tanititourism.service.StayTypeService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/admin/api/places-to-stay")
 public class AdminPlaceToStayController {
 
@@ -25,14 +26,7 @@ public class AdminPlaceToStayController {
     private final StayTypeService stayTypeService;
     private final ResponseHelperService responseHelperService;
 
-    @Autowired
-    AdminPlaceToStayController(AdminPlaceToStayService adminPlaceToStayService, RegionService regionService,
-                               StayTypeService stayTypeService, ResponseHelperService responseHelperService) {
-        this.adminPlaceToStayService = adminPlaceToStayService;
-        this.regionService = regionService;
-        this.stayTypeService = stayTypeService;
-        this.responseHelperService = responseHelperService;
-    }
+
 
     @GetMapping("/list")
     public Page<PlaceToStay> getAllPlacesToDo(@RequestParam(required = false, defaultValue = "1") int page,
@@ -52,7 +46,9 @@ public class AdminPlaceToStayController {
     }
 
     @PostMapping("/new-listing")
-    public ResponseEntity<?> addPlaceToStay(@Valid @RequestBody PlaceToStayDto placeToStayDto, BindingResult bindingResult) {
+    public ResponseEntity<?> addPlaceToStay(@Valid @RequestBody PlaceToStayDto placeToStayDto,
+                                            @RequestHeader("X-Username") String username,
+                                            BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
            return responseHelperService.getBindingErrors(bindingResult);
         }
@@ -60,7 +56,7 @@ public class AdminPlaceToStayController {
             PlaceToStay placeToStay = convertDtoToPlaceToStay(placeToStayDto);
             Region region = regionService.getRegionById(placeToStayDto.getRegionId());
             StayType stayType = stayTypeService.getStayTypeById(placeToStayDto.getStayTypeId());
-            PlaceToStay savedPlaceToStay = adminPlaceToStayService.addPlaceToStay(placeToStay, region, stayType);
+            PlaceToStay savedPlaceToStay = adminPlaceToStayService.addPlaceToStay(placeToStay, region, stayType, username);
             return ResponseEntity.ok(savedPlaceToStay);
         } catch (Exception e){
             System.err.println(e);
@@ -69,7 +65,9 @@ public class AdminPlaceToStayController {
     }
 
     @PutMapping("/update-listing/{id}")
-    public ResponseEntity<?> updatePlaceToStay(@PathVariable Long id, @Valid @RequestBody PlaceToStayDto placeToStayDto, BindingResult bindingResult) {
+    public ResponseEntity<?> updatePlaceToStay(@PathVariable Long id, @Valid @RequestBody PlaceToStayDto placeToStayDto,
+                                               @RequestHeader("X-Username") String username,
+                                               BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return responseHelperService.getBindingErrors(bindingResult);
         }
@@ -77,7 +75,7 @@ public class AdminPlaceToStayController {
             PlaceToStay placeToStay = convertDtoToPlaceToStay(placeToStayDto);
             Region region = regionService.getRegionById(placeToStayDto.getRegionId());
             StayType stayType = stayTypeService.getStayTypeById(placeToStayDto.getStayTypeId());
-            PlaceToStay savedPlaceToStay = adminPlaceToStayService.updatePlaceToStay(id, placeToStay, region, stayType);
+            PlaceToStay savedPlaceToStay = adminPlaceToStayService.updatePlaceToStay(id, placeToStay, region, stayType, username);
             return ResponseEntity.ok(savedPlaceToStay);
         } catch (Exception e) {
             System.err.println(e);

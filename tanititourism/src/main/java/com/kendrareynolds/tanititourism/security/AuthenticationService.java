@@ -20,7 +20,7 @@ public class AuthenticationService {
 
 
     public AuthenticationResponse register(RegisterRequest registerRequest) {
-        var user = User.builder()
+        User user = User.builder()
                 .firstName(registerRequest.getFirstName())
                 .lastName(registerRequest.getLastName())
                 .username(registerRequest.getUsername())
@@ -46,9 +46,10 @@ public class AuthenticationService {
             throw new RuntimeException("Invalid username or password");
         }
 
-        var user = repository.findByUsername(authenticationRequest.getUsername()).get();
+        User user = repository.findByUsername(authenticationRequest.getUsername()).get();
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
+                .username(user.getUsername())
                 .token(jwtToken)
                 .build();
     }
