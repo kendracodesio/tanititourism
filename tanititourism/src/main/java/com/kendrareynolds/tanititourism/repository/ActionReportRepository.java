@@ -13,7 +13,7 @@ public interface ActionReportRepository extends JpaRepository<ActionReport, Long
 
     Page<ActionReport> findAll(Pageable pageable);
 
-    List<ActionReport> findTop10ByUserIdOrderByTimestampDesc(Long userId);
+    List<ActionReport> findTop5ByUser_UsernameOrderByTimestampDesc(String username);
 
     List<ActionReport> findByTimestampBetweenOrderByTimestampDesc(OffsetDateTime start, OffsetDateTime end);
 

@@ -64,7 +64,7 @@ function AdminSidebar() {
                     </ExpandableSidebarLink>
                 </div>
                 <div className="mb-4">
-                    <SidebarLink to="/admin/reports">Action Reports</SidebarLink>
+                    <SidebarLink to="/admin/reports">Action Report</SidebarLink>
                 </div>
             </ul>
             <hr/>

@@ -369,3 +369,14 @@ footer li {
   margin: 3px;
 
 }
+
+.admin-title {
+  margin-top: 80px;
+}
+
+.admin-home {
+  margin-top: 80px;
+  margin-left: 120px;
+  margin-bottom: 30px;
+  font-size: 30px;
+}

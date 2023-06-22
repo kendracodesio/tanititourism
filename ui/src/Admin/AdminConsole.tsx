@@ -2,7 +2,7 @@ import {Routes, Route, useLocation} from 'react-router-dom';
 import ProtectedRoutes from './ProtectedRoutes';
 import AdminSidebar from './components/AdminSidebar';
 import StayListings from './pages/StayListingPages/StayListings';
-import Reports from './pages/Reports';
+import ActionReportPage from './pages/ActionReportPage';
 import AdminHome from './pages/AdminHome';
 import DineListings from "./pages/DineListingPages/DineListings";
 import DoListings from "./pages/DoListingPages/DoListings";
@@ -31,7 +31,7 @@ function AdminConsole() {
                         <Route path="do-listings" element={<DoListings/>}/>
                         <Route path="stay-listings" element={<StayListings/>}/>
                         <Route path="dine-listings" element={<DineListings/>}/>
-                        <Route path="reports" element={<Reports/>}/>
+                        <Route path="reports" element={<ActionReportPage/>}/>
                         <Route path="do-listings/listing-detail/:id" element={<DoListingDetails/>}/>
                         <Route path="do-listings/listing-detail/edit/:id" element={<DoListingForm/>}/>
                         <Route path="do-listings/add" element={<DoListingForm/>}/>

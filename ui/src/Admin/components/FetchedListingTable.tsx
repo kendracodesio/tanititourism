@@ -71,7 +71,7 @@ function FetchedListingTable({apiEndpoint, deleteEndpoint, typeFieldName, addLin
                 <div className="mt-5">
                     <div className="d-flex justify-content-start">
                         <h1 className="ms-3"> Listings: {tableName}</h1>
-                        <Link to={addLink} className="ms-4 mb-3">Add New Listing</Link>
+                        <Link to={addLink} className="ms-5 mt-2">Add New Listing</Link>
                     </div>
                 </div>
                 <ListingTable listings={listings}

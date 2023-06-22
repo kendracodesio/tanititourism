@@ -30,7 +30,7 @@ public class AdminPlaceToStayController {
 
     @GetMapping("/list")
     public Page<PlaceToStay> getAllPlacesToDo(@RequestParam(required = false, defaultValue = "1") int page,
-                                            @RequestParam(required = false, defaultValue = "6") int size){
+                                            @RequestParam(required = false, defaultValue = "10") int size){
         return adminPlaceToStayService.getAllPlacesToStay(page, size);
     }
 

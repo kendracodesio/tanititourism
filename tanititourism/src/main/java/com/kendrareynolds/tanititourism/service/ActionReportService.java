@@ -55,4 +55,8 @@ public class ActionReportService {
     public Page<ActionReport> getAllActionReports(int page, int size) {
         return actionReportRepository.findAll(PageRequest.of(page - 1, size));
     }
+
+    public List<ActionReport> getUserRecentActivity(String username) {
+        return actionReportRepository.findTop5ByUser_UsernameOrderByTimestampDesc(username);
+    }
 }

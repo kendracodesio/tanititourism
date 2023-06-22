@@ -30,12 +30,12 @@ public class AdminRestaurantsAndNightlifeController {
 
     @GetMapping("/list")
     public Page<RestaurantsAndNightlife> getAllRestaurantsAndNightlife(@RequestParam(required = false, defaultValue = "1") int page,
-                                                                       @RequestParam(required = false, defaultValue = "6") int size) {
+                                                                       @RequestParam(required = false, defaultValue = "10") int size) {
         return adminRestaurantsAndNightlifeService.getAllRestaurantsAndNightlife(page, size);
     }
 
     @GetMapping("/listing-detail/{id}")
-    public Optional<RestaurantsAndNightlife> getRestaurantAndNightlife(@PathVariable("id") Long id) {
+    public Optional<RestaurantsAndNightlife> getRestaurantAndNightlife(@PathVariable Long id) {
         return adminRestaurantsAndNightlifeService.getRestaurantAndNightlife(id);
     }
 
