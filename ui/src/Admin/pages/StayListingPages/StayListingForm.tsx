@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {useParams, useNavigate} from "react-router-dom";
-import axios from "axios";
 import {Col, Row} from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import AdminFormDropdown from "../../components/AdminFormDropdown";
 import Button from "react-bootstrap/Button";
+import axiosInstance from "../../axiosInstance";
 
 interface Item {
     id: number; //for region
@@ -39,7 +39,7 @@ function StayListingForm() {
 
     useEffect(() => {
         if (id != null) {
-            axios.get(`${apiURL}/admin/api/places-to-stay/listing-detail/${id}`)
+            axiosInstance.get(`${apiURL}/admin/api/places-to-stay/listing-detail/${id}`)
                 .then(response => {
                     console.log(response.data)
                     setListingForm(response.data);
@@ -61,7 +61,7 @@ function StayListingForm() {
 
     //get Cost enum names with corresponding label
     useEffect(() => {
-        axios.get(`${apiURL}/admin/api/cost`)
+        axiosInstance.get(`${apiURL}/admin/api/cost`)
             .then(response => {
                 setCostsValues(response.data);
             });
@@ -112,7 +112,7 @@ function StayListingForm() {
             stayTypeId: selectedStayType
         };
 
-        axios({
+        axiosInstance({
             method: method,
             url: url,
             data: payload

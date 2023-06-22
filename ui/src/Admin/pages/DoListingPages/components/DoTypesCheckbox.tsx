@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import axios from 'axios';
 import Form from 'react-bootstrap/Form'
+import axiosInstance from "../../../axiosInstance";
 
 interface DoTypesProps {
     selectedDoTypes: DoTypes[] | null;
@@ -18,7 +18,7 @@ function DoTypesCheckbox({selectedDoTypes, onChange}: DoTypesProps) {
     const selectedDoTypesArray = selectedDoTypes || [];
 
     useEffect(() => {
-        axios.get(process.env.REACT_APP_API_URL + apiEndpoint)
+        axiosInstance.get(process.env.REACT_APP_API_URL + apiEndpoint)
             .then(response => {
                 setDoTypes(response.data);
             });

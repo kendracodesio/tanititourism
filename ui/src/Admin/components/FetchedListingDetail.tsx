@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {Link, useParams, useLocation} from "react-router-dom";
-import axios from "axios";
 import ListingDetail from "./ListingDetail";
 import {Alert} from "react-bootstrap";
+import axiosInstance from "../axiosInstance";
 
 interface ListingDetailsProps {
     apiEndpoint: string;
@@ -35,7 +35,7 @@ function FetchedListingDetail({apiEndpoint, editLink, backTo}: ListingDetailsPro
 
 
     useEffect(() => {
-        axios.get(`${apiURL}${apiEndpoint}/${id}`)
+        axiosInstance.get(`${apiURL}${apiEndpoint}/${id}`)
             .then(response => {
                 if(response.data !== null) {
                     setListing(response.data);

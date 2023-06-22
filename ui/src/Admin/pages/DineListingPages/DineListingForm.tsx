@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {useNavigate, useParams} from "react-router-dom";
-import axios from "axios";
 import AcceptsReservationsRadio from "./components/AcceptsReservationsRadio";
 import {Col, Row} from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import AdminFormDropdown from "../../components/AdminFormDropdown";
 import Button from "react-bootstrap/Button";
+import axiosInstance from "../../axiosInstance";
 
 interface Item {
     id: number; //for region
@@ -42,7 +42,7 @@ function DineListingForm() {
 
     useEffect(() => {
         if (id != null) {
-            axios.get(`${apiURL}/admin/api/restaurants-and-nightlife/listing-detail/${id}`)
+            axiosInstance.get(`${apiURL}/admin/api/restaurants-and-nightlife/listing-detail/${id}`)
                 .then(response => {
                     console.log(response.data)
                     setListingForm(response.data);
@@ -65,7 +65,7 @@ function DineListingForm() {
 
     //get Cost enum names with corresponding label
     useEffect(() => {
-        axios.get(`${apiURL}/admin/api/cost`)
+        axiosInstance.get(`${apiURL}/admin/api/cost`)
             .then(response => {
                 setCostsValues(response.data);
             });
@@ -179,7 +179,7 @@ function DineListingForm() {
             dineTypeId: selectedDineType
         };
 
-        axios({
+        axiosInstance({
             method: method,
             url: url,
             data: payload

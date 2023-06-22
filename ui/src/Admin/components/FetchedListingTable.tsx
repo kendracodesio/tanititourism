@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
-import axios from "axios";
 import ListingTable from "./ListingTable";
 import {Link} from "react-router-dom";
 import Pagination from "../../components/Pagination"
+import axiosInstance from "../axiosInstance";
 
 interface GetListingTableProps {
     apiEndpoint: string;
@@ -35,7 +35,7 @@ function FetchedListingTable({apiEndpoint, deleteEndpoint, typeFieldName, addLin
     const [pageSize, setPageSize] = useState<number>();
 
     useEffect(() => {
-        axios.get(`${apiURL}${apiEndpoint}?page=${page}`)
+        axiosInstance.get(`${apiURL}${apiEndpoint}?page=${page}`)
             .then(response => {
                 setListings(response.data.content);
                 setPageSize(response.data.size);
@@ -56,7 +56,7 @@ function FetchedListingTable({apiEndpoint, deleteEndpoint, typeFieldName, addLin
 
 
     const handleDelete = (id: number) => {
-        axios.delete(`${apiURL}${deleteEndpoint}/${id}`)
+        axiosInstance.delete(`${apiURL}${deleteEndpoint}/${id}`)
             .then(response => {
                 setListings(listings.filter(listing => listing.id !== id));
             })

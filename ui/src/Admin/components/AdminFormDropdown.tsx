@@ -1,5 +1,6 @@
-import axios from 'axios';
+
 import {useEffect, useState} from 'react';
+import axiosInstance from "../axiosInstance";
 
 
 interface DropdownProps {
@@ -24,7 +25,7 @@ function AdminFormDropdown({apiEndpoint, label, id, onChange, selectedValue}: Dr
 
 
     useEffect(() => {
-        axios.get(process.env.REACT_APP_API_URL + apiEndpoint)
+        axiosInstance.get(process.env.REACT_APP_API_URL + apiEndpoint)
             .then(response => {
                 setItems(response.data);
             });

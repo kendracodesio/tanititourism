@@ -2,8 +2,8 @@ import React, {useRef, useState, useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {Col} from "react-bootstrap";
 import Form from "react-bootstrap/Form";
-import axios from "axios";
 import Button from "react-bootstrap/Button";
+import axiosInstance from "../axiosInstance";
 
 interface SignInForm {
     username: string;
@@ -20,10 +20,6 @@ function SignIn() {
     const apiURL = process.env.REACT_APP_API_URL;
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        }
         if (userRef.current) {
             userRef.current.focus();
         }
@@ -42,10 +38,10 @@ function SignIn() {
         };
 
 
-        axios.post(`${apiURL}/admin/api/auth`, payload)
+        axiosInstance.post(`${apiURL}/admin/api/auth`, payload)
             .then(response => {
                 if (response.data) {
-                    axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`
+                    axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`
                     localStorage.setItem('token', response.data.token);
                     localStorage.setItem('username', response.data.username);
                     navigate("/admin/home");

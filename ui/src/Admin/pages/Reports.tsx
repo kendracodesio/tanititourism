@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {Link} from "react-router-dom";
 import Table from "react-bootstrap/Table";
-import axios from "axios";
 import Pagination from "../../components/Pagination";
+import axiosInstance from "../axiosInstance";
 
 interface ThingToDo {
     id: number;
@@ -46,7 +46,7 @@ function Reports() {
 
 
     useEffect(() => {
-        axios.get(`${apiURL}/admin/api/action-reports?page=${page}`)
+        axiosInstance.get(`${apiURL}/admin/api/action-reports?page=${page}`)
             .then(response => {
                 setActionReport(response.data.content);
                 setPageSize(response.data.size);
