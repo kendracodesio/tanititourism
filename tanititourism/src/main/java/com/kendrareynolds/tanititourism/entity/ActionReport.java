@@ -2,6 +2,8 @@ package com.kendrareynolds.tanititourism.entity;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.engine.internal.Cascade;
+
 import java.time.OffsetDateTime;
 import java.util.Objects;
 

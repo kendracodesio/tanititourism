@@ -1,14 +1,19 @@
 package com.kendrareynolds.tanititourism.service;
 
+import com.kendrareynolds.tanititourism.entity.ActionReport;
 import com.kendrareynolds.tanititourism.entity.DoType;
 import com.kendrareynolds.tanititourism.entity.Region;
 import com.kendrareynolds.tanititourism.entity.ThingToDo;
+import com.kendrareynolds.tanititourism.repository.ActionReportRepository;
 import com.kendrareynolds.tanititourism.repository.ThingToDoRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -19,6 +24,7 @@ public class AdminThingToDoService {
 
     public final ThingToDoRepository thingToDoRepository;
     public final ActionReportService actionReportService;
+    public final ActionReportRepository actionReportRepository;
 
 
 
@@ -30,8 +36,22 @@ public class AdminThingToDoService {
         return thingToDoRepository.findById(id);
     }
 
+    @Transactional
     public void deleteThingToDo(Long id) {
-        thingToDoRepository.deleteById(id);
+        Optional<ThingToDo> thingToDoOptional = thingToDoRepository.findById(id);
+        if(thingToDoOptional.isPresent()) {
+            ThingToDo thingToDo = thingToDoOptional.get();
+            List<ActionReport> actionReports = actionReportRepository.findByThingToDo(thingToDo);
+
+            for(ActionReport actionReport : actionReports) {
+                actionReport.setThingToDo(null);
+                actionReportRepository.save(actionReport);
+            }
+            thingToDoRepository.delete(thingToDo);
+        } else {
+            throw new EntityNotFoundException("Thing To Do not found with id: " + id);
+        }
+
     }
 
     public ThingToDo addThingToDo(ThingToDo newThingToDo, Region region, Set<DoType> doTypes, String username) {

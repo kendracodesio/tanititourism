@@ -1,12 +1,10 @@
 package com.kendrareynolds.tanititourism.controller;
-
 import com.kendrareynolds.tanititourism.dto.CostRepresentation;
 import com.kendrareynolds.tanititourism.entity.*;
 import com.kendrareynolds.tanititourism.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -59,7 +57,7 @@ public class AdminController {
     @GetMapping("/action-reports")
     public Page<ActionReport> getAllActionReports(@RequestParam(required = false, defaultValue = "1") int page,
                                                   @RequestParam(required = false, defaultValue = "20") int size) {
-        return actionReportService.getAllActionReports(page, size);
+        return actionReportService.getAllActionReportsWithListings(page, size);
     }
 
     @GetMapping("/user-recent-activity")

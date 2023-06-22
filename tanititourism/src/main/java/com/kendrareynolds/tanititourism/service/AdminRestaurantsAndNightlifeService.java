@@ -1,14 +1,16 @@
 package com.kendrareynolds.tanititourism.service;
 
-import com.kendrareynolds.tanititourism.entity.DineType;
-import com.kendrareynolds.tanititourism.entity.Region;
-import com.kendrareynolds.tanititourism.entity.RestaurantsAndNightlife;
+import com.kendrareynolds.tanititourism.entity.*;
+import com.kendrareynolds.tanititourism.repository.ActionReportRepository;
 import com.kendrareynolds.tanititourism.repository.RestaurantsAndNightlifeRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -17,6 +19,7 @@ public class AdminRestaurantsAndNightlifeService {
 
     private final RestaurantsAndNightlifeRepository restaurantsAndNightlifeRepository;
     private final ActionReportService actionReportService;
+    private final ActionReportRepository actionReportRepository;
 
 
 
@@ -28,9 +31,23 @@ public class AdminRestaurantsAndNightlifeService {
         return restaurantsAndNightlifeRepository.findById(id);
     }
 
+    @Transactional
     public void deleteRestaurantAndNightlife(Long id) {
-        restaurantsAndNightlifeRepository.deleteById(id);
+        Optional<RestaurantsAndNightlife> restaurantsAndNightlifeOptional = restaurantsAndNightlifeRepository.findById(id);
+        if(restaurantsAndNightlifeOptional.isPresent()) {
+            RestaurantsAndNightlife restaurantsAndNightlife = restaurantsAndNightlifeOptional.get();
+            List<ActionReport> actionReports = actionReportRepository.findActionReportsByRestaurantAndNightlifeId(id);
+
+            for(ActionReport actionReport : actionReports) {
+                actionReport.setRestaurantsAndNightlife(null);
+                actionReportRepository.save(actionReport);
+            }
+            restaurantsAndNightlifeRepository.delete(restaurantsAndNightlife);
+        } else {
+            throw new EntityNotFoundException("Restaurant And Nightlife not found with id: " + id);
+        }
     }
+
 
     public RestaurantsAndNightlife addRestaurantAndNightlife(RestaurantsAndNightlife newRestaurantAndNightlife, Region region,
                                                              DineType dineType, String username) {
