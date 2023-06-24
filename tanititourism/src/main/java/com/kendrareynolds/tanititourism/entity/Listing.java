@@ -6,9 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-import java.time.OffsetDateTime;
+
 
 
 @Entity
@@ -18,6 +16,16 @@ import java.time.OffsetDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public abstract class Listing {
+
+    public Listing(String name, String description, String phone, Cost cost, String imageUrl, String imageAltText, Region region) {
+        this.name = name;
+        this.description = description;
+        this.phone = phone;
+        this.cost = cost;
+        this.imageUrl = imageUrl;
+        this.imageAltText = imageAltText;
+        this.region = region;
+    }
 
     public enum ListingType {
         DO, STAY, DINE
@@ -47,19 +55,12 @@ public abstract class Listing {
     @Column(name = "image_alt_text")
     private String imageAltText;
 
-    @CreationTimestamp
-    @Column(name = "created_at")
-    private OffsetDateTime createdAt;
-
-    @UpdateTimestamp
-    @Column(name = "updated_at")
-    private OffsetDateTime updatedAt;
 
     @ManyToOne
     @JoinColumn(name = "region_id")
     private Region region;
 
-    @Transient
+
     public abstract ListingType getListingType();
 
     @Override
@@ -71,8 +72,6 @@ public abstract class Listing {
                 ", cost=" + cost +
                 ", imageUrl='" + imageUrl + '\'' +
                 ", imageAltText='" + imageAltText + '\'' +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
                 ", region=" + region +
                 '}';
     }

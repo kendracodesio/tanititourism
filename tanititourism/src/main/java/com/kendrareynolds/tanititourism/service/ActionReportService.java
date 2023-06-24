@@ -6,49 +6,48 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import java.time.OffsetDateTime;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class ActionReportService {
     private final ActionReportRepository actionReportRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
 
 
-
+    @Transactional
     public void recordAction(String username, String action, Listing listing) {
-        Optional<User> optionalUser = userRepository.findByUsername(username);
-        if (optionalUser.isEmpty()) {
-            throw new IllegalArgumentException("Username " + username + " not found");
-        }
-        User user = optionalUser.get();
-
         Listing.ListingType listingType = listing.getListingType();
-
+        User user = userService.findUserByUsername(username);
         ActionReport report = new ActionReport();
         report.setUser(user);
 
         switch (listingType) {
+
             case DO -> {
+
                 ThingToDo thingToDo = (ThingToDo) listing;
                 report.setThingToDo(thingToDo);
             }
             case STAY -> {
+
                 PlaceToStay placeToStay = (PlaceToStay) listing;
-                report.setPlacesToStay(placeToStay);
+                report.setPlaceToStay(placeToStay);
             }
             case DINE -> {
+
                 RestaurantsAndNightlife restaurantsAndNightlife = (RestaurantsAndNightlife) listing;
                 report.setRestaurantsAndNightlife(restaurantsAndNightlife);
             }
             default -> throw new IllegalArgumentException("Invalid listing type: " + listingType);
         }
 
+
         report.setAction(ActionReport.Action.valueOf(action.toUpperCase()));
-        report.setTimestamp(OffsetDateTime.now());
-        user.addActionReport(report);
+        report.setTimestamp(LocalDateTime.now());
         actionReportRepository.save(report);
     }
 
@@ -57,6 +56,11 @@ public class ActionReportService {
     }
 
     public List<ActionReport> getUserRecentActivity(String username) {
-        return actionReportRepository.findTop5ByUser_UsernameWithListingOrderByTimestampDesc(username);
+        Page<ActionReport> page = actionReportRepository.findTop5ByUserMostRecent(username, PageRequest.of(0, 5));
+        return page.getContent();
+    }
+
+    public List<ActionReport> getSearchResults(String searchQuery) {
+        return actionReportRepository.searchByListingName(searchQuery.toLowerCase());
     }
 }

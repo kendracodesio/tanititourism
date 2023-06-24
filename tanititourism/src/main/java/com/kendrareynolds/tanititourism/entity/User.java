@@ -42,21 +42,7 @@ public class User implements UserDetails {
     @Column(name = "last_name")
     private String lastName;
 
-    @OneToMany(mappedBy = "user")
-    @JsonBackReference
-    private Set<ActionReport> actionReports = new HashSet<>();
 
-    public void addActionReport(ActionReport actionReport) {
-        if (actionReport != null) {
-            if (actionReports == null) {
-                actionReports = new HashSet<>();
-            }
-            actionReports.add(actionReport);
-            actionReport.setUser(this);
-
-        }
-
-    }
 
 
     @Override

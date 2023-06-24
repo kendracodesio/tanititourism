@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Entity
 @Table(name = "places_to_stay")
 @Getter
@@ -14,11 +17,18 @@ import lombok.Setter;
 @NoArgsConstructor
 public class PlaceToStay extends Listing {
 
+    public PlaceToStay(String name, String description, String phone, Cost cost, String imageUrl, String imageAltText,  Region region, ListingType listingType, StayType stayType) {
+        super(name, description, phone, cost, imageUrl, imageAltText, region);
+        this.listingType = listingType;
+        this.stayType = stayType;
+    }
+
+    private ListingType listingType;
+
 
     @Override
     public ListingType getListingType() {
-        return ListingType.STAY;
-
+        return this.listingType = ListingType.STAY;
     }
 
     @ManyToOne

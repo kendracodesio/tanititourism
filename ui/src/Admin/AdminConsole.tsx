@@ -31,7 +31,7 @@ function AdminConsole() {
                         <Route path="do-listings" element={<DoListings/>}/>
                         <Route path="stay-listings" element={<StayListings/>}/>
                         <Route path="dine-listings" element={<DineListings/>}/>
-                        <Route path="reports" element={<ActionReportPage/>}/>
+                        <Route path="action-report" element={<ActionReportPage/>}/>
                         <Route path="do-listings/listing-detail/:id" element={<DoListingDetails/>}/>
                         <Route path="do-listings/listing-detail/edit/:id" element={<DoListingForm/>}/>
                         <Route path="do-listings/add" element={<DoListingForm/>}/>

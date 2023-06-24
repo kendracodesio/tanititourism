@@ -32,4 +32,14 @@ public class RegionService {
         }
     }
 
+    public Region findByName(String name) {
+        Optional<Region> optionalRegion = regionRepository.findByName(name);
+
+        if(optionalRegion.isPresent()) {
+            return optionalRegion.get();
+        } else {
+            throw new RuntimeException("Region not found for id :: " + name);
+        }
+    }
+
 }

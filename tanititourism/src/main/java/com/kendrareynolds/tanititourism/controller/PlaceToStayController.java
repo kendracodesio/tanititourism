@@ -42,7 +42,7 @@ public class PlaceToStayController {
     public Page<PlaceToStay> getPlacesToStay(@RequestParam(required = false, defaultValue = "all") String stayType,
                                              @RequestParam(required = false, defaultValue = "all") String region,
                                              @RequestParam(required = false, defaultValue = "1") int page,
-                                             @RequestParam(required = false, defaultValue = "2") int size) {
+                                             @RequestParam(required = false, defaultValue = "8") int size) {
         if(stayType.equals("all") && region.equals("all")) {
             return placeToStayService.getAllPlacesToStay(page, size);
         } else if (region.equals("all")) {

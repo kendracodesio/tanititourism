@@ -53,6 +53,7 @@ public class AdminPlaceToStayController {
            return responseHelperService.getBindingErrors(bindingResult);
         }
         try {
+            System.out.println("FROM THE CONTROLLER: " + username);
             PlaceToStay placeToStay = convertDtoToPlaceToStay(placeToStayDto);
             Region region = regionService.getRegionById(placeToStayDto.getRegionId());
             StayType stayType = stayTypeService.getStayTypeById(placeToStayDto.getStayTypeId());

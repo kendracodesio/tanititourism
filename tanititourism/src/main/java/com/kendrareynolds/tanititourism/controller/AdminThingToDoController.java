@@ -54,6 +54,7 @@ public class AdminThingToDoController {
             return responseHelperService.getBindingErrors(bindingResult);
         }
         try {
+            System.out.println("FROM THE CONTROLLER: " + username);
             ThingToDo thingToDo = convertDtoToThingToDo(thingToDoDto);
             Region region = regionService.getRegionById(thingToDoDto.getRegionId());
             Set<DoType> doTypes = doTypeService.getDoTypesByIds(thingToDoDto.getDoTypesIds());

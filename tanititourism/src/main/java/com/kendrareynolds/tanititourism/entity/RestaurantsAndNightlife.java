@@ -13,10 +13,21 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RestaurantsAndNightlife extends Listing {
+    public RestaurantsAndNightlife(String name, String description, String phone, Cost cost, String imageUrl, String imageAltText, Region region, ListingType listingType, AcceptsReservations acceptsReservations, DineType dineType) {
+        super(name, description, phone, cost, imageUrl, imageAltText, region);
+        this.listingType = listingType;
+        this.acceptsReservations = acceptsReservations;
+        this.dineType = dineType;
+    }
+
+    private ListingType listingType;
+
+
+
 
     @Override
     public ListingType getListingType() {
-        return ListingType.DINE;
+        return this.listingType = ListingType.DINE;
     }
 
     public enum AcceptsReservations {

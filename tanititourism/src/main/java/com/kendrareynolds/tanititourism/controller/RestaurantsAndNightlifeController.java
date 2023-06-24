@@ -42,7 +42,7 @@ public class RestaurantsAndNightlifeController {
     public Page<RestaurantsAndNightlife> getRestaurantsAndNightlife(@RequestParam(required = false, defaultValue = "all") String dineType,
                                                                     @RequestParam(required = false, defaultValue = "all") String region,
                                                                     @RequestParam(required = false, defaultValue = "1") int page,
-                                                                    @RequestParam(required = false, defaultValue = "2") int size) {
+                                                                    @RequestParam(required = false, defaultValue = "8") int size) {
         if(dineType.equals("all") && region.equals("all")) {
             return restaurantsAndNightlifeService.getAllRestaurantsAndNightlife( page, size);
         } else if (region.equals("all")) {

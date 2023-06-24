@@ -64,6 +64,11 @@ public class AdminController {
     public List<ActionReport> getUserRecentActivity(@RequestParam String username) {
         return actionReportService.getUserRecentActivity(username);
     }
+
+    @GetMapping("/search")
+    public List<ActionReport> getSearchResults(@RequestParam String searchQuery) {
+        return actionReportService.getSearchResults(searchQuery);
+    }
 }
 
 

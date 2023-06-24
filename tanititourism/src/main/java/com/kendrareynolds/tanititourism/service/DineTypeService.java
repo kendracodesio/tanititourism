@@ -28,7 +28,17 @@ public class DineTypeService {
         if(optionalDineType.isPresent()) {
             return optionalDineType.get();
         } else {
-            throw new RuntimeException("Dine Type not found for id " + id);
+            throw new RuntimeException("Dine Type not found for id :: " + id);
+        }
+    }
+
+    public DineType findByTypeName(String typeName) {
+        Optional<DineType> optionalDineType = dineTypeRepository.findByTypeName(typeName);
+
+        if(optionalDineType.isPresent()) {
+            return optionalDineType.get();
+        }else {
+            throw new RuntimeException("Dine Type not found for type name :: " + typeName);
         }
     }
 }

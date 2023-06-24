@@ -45,7 +45,7 @@ public class ThingToDoController {
     public Page<ThingToDo> getThingsToDo(@RequestParam(required = false, defaultValue = "all") String doType,
                                          @RequestParam(required = false, defaultValue = "all") String region,
                                          @RequestParam(required = false, defaultValue = "1") int page,
-                                         @RequestParam(required = false, defaultValue = "6") int size){
+                                         @RequestParam(required = false, defaultValue = "8") int size){
         if (doType.equals("all") && region.equals("all")) {
             return thingToDoService.getAllThingsToDo(page, size);
         } else if (region.equals("all")) {

@@ -25,6 +25,16 @@ public class DoTypeService {
         return doTypeRepository.findAll();
     }
 
+    public DoType findByTypeName(String typeName) {
+        Optional<DoType> optionalDoType = doTypeRepository.findByTypeName(typeName);
+        if (optionalDoType.isPresent()) {
+            return optionalDoType.get();
+        } else {
+            throw new RuntimeException("Do type not found for type name :: " + typeName);
+        }
+    }
+
+
     public DoType getDoTypeById(Long id) {
         Optional<DoType> optionalDoType = doTypeRepository.findById(id);
 
@@ -39,11 +49,13 @@ public class DoTypeService {
         Set<DoType> doTypes = new HashSet<>();
         for (Long doTypeId : doTypeIds) {
             DoType doType = doTypeRepository.findById(doTypeId)
-                    .orElseThrow(() -> new EntityNotFoundException("DoType not found with id: " + doTypeId));
+                    .orElseThrow(() -> new EntityNotFoundException("DoType not found with id :: " + doTypeId));
             doTypes.add(doType);
         }
         return doTypes;
     }
+
+
 }
 
 

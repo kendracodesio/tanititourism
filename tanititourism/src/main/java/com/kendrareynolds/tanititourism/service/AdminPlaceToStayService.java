@@ -36,10 +36,10 @@ public class AdminPlaceToStayService {
         Optional<PlaceToStay> placeToStayOptional = placeToStayRepository.findById(id);
         if(placeToStayOptional.isPresent()) {
             PlaceToStay placeToStay = placeToStayOptional.get();
-            List<ActionReport> actionReports = actionReportRepository.findByPlacesToStay(placeToStay);
+            List<ActionReport> actionReports = actionReportRepository.findByPlaceToStay(placeToStay);
 
             for(ActionReport actionReport : actionReports) {
-                actionReport.setPlacesToStay(null);
+                actionReport.setPlaceToStay(null);
                 actionReportRepository.save(actionReport);
             }
             placeToStayRepository.delete(placeToStay);

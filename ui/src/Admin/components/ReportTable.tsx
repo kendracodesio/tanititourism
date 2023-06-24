@@ -29,7 +29,7 @@ export interface IActionReport {
     action: string;
     timestamp: string;
     thingToDo?: ThingToDo;
-    placesToStay?: PlaceToStay;
+    placeToStay?: PlaceToStay;
     restaurantsAndNightlife?: RestaurantsAndNightlife;
     user?: User;
 }
@@ -58,10 +58,10 @@ function ReportTable({reportedActions, showUser}: ReportTableProps) {
                     listingTitle = reportedAction.thingToDo.name;
                     listingId = reportedAction.thingToDo.id;
                     link = "do-listings";
-                } else if (reportedAction.placesToStay) {
+                } else if (reportedAction.placeToStay) {
                     listingType = "Places To Stay";
-                    listingTitle = reportedAction.placesToStay.name;
-                    listingId = reportedAction.placesToStay.id;
+                    listingTitle = reportedAction.placeToStay.name;
+                    listingId = reportedAction.placeToStay.id;
                     link = "stay-listings";
                 } else if (reportedAction.restaurantsAndNightlife) {
                     listingType = "Restaurants And Nightlife"

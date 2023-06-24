@@ -29,7 +29,17 @@ public class StayTypeService {
         if(optionalStayType.isPresent()) {
             return optionalStayType.get();
         } else {
-            throw new RuntimeException("Stay Type not found for id " + id);
+            throw new RuntimeException("Stay Type not found for id :: " + id);
+        }
+    }
+
+    public StayType findByTypeName(String typeName) {
+        Optional<StayType> optionalStayType = stayTypeRepository.findByTypeName(typeName);
+
+        if(optionalStayType.isPresent()){
+            return optionalStayType.get();
+        } else {
+            throw new RuntimeException("Stay Type not found for type name :: " + typeName);
         }
     }
 }

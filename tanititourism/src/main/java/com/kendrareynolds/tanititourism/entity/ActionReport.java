@@ -1,10 +1,7 @@
 package com.kendrareynolds.tanititourism.entity;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.engine.internal.Cascade;
-
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
@@ -14,8 +11,26 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ActionReport {
+    public ActionReport(Action action, LocalDateTime timestamp, ThingToDo thingToDo, User user) {
+        this.action = action;
+        this.timestamp = timestamp;
+        this.thingToDo = thingToDo;
+        this.user = user;
+    }
 
+    public ActionReport(Action action, LocalDateTime timestamp, PlaceToStay placeToStay, User user) {
+        this.action = action;
+        this.timestamp = timestamp;
+        this.placeToStay = placeToStay;
+        this.user = user;
+    }
 
+    public ActionReport(Action action, LocalDateTime timestamp, RestaurantsAndNightlife restaurantsAndNightlife, User user) {
+        this.action = action;
+        this.timestamp = timestamp;
+        this.restaurantsAndNightlife = restaurantsAndNightlife;
+        this.user = user;
+    }
 
     public enum Action {
         CREATE, UPDATE
@@ -30,7 +45,7 @@ public class ActionReport {
     private Action action;
 
     @Column(name = "timestamp", nullable = false)
-    private OffsetDateTime timestamp;
+    private LocalDateTime timestamp;
 
     @ManyToOne
     @JoinColumn(name = "thing_to_do_id")
@@ -38,14 +53,13 @@ public class ActionReport {
 
     @ManyToOne
     @JoinColumn (name = "places_to_stay_id")
-    private PlaceToStay placesToStay;
+    private PlaceToStay placeToStay;
 
     @ManyToOne
     @JoinColumn (name = "restaurants_and_nightlife_id")
     private RestaurantsAndNightlife restaurantsAndNightlife;
 
     @ManyToOne
-    @JsonManagedReference
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 

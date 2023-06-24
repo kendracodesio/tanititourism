@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -15,12 +16,22 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ThingToDo extends Listing {
+    public ThingToDo(String name, String description, String phone, Cost cost, String imageUrl, String imageAltText, Region region, ListingType listingType, Set<DoType> doTypes) {
+        super(name, description, phone, cost, imageUrl, imageAltText, region);
+        this.listingType = listingType;
+        this.doTypes = doTypes;
+    }
+
+    private ListingType listingType;
+
+
 
 
     @Override
     public ListingType getListingType() {
-        return ListingType.DO;
+        return this.listingType = ListingType.DO;
     }
+
 
     @ManyToMany
     @JoinTable(
