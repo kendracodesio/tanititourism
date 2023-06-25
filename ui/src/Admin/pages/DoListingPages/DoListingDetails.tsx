@@ -5,8 +5,7 @@ function DoListingDetails() {
     return (
         <div className="admin-main-content">
       <FetchedListingDetail apiEndpoint={"/admin/api/things-to-do/listing-detail"}
-                            editLink={"/admin/do-listings/listing-detail/edit"}
-                            backTo={"/admin/do-listings"}/>
+                            editLink={"/admin/do-listings/listing-detail/edit"}/>
     </div>
     );
 }

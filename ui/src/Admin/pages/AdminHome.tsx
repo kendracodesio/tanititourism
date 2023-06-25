@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import axiosInstance from "../axiosInstance";
-import ReportTable, { IActionReport } from "../components/ReportTable";
+import ReportTable, {IActionReport} from "../components/ReportTable";
 
 function AdminHome() {
     const [firstName, setFirstName] = useState('');
@@ -36,10 +36,12 @@ function AdminHome() {
         <div className="container admin-main-content">
             <h2 className="admin-title ms-5">Welcome to the Admin Home Page</h2>
             <h3 className="admin-home">Hello {firstName}! </h3>
-            <h3 className="admin-home">Here's your most recent activity:</h3>
 
-            <div style={{width: '80%', margin: '0 auto'}}>
-            <ReportTable reportedActions={recentActivity} showUser={false}/>
+            <div className="border shadow recent-activity p-5 ms-5 rounded">
+                <h3 className="activity-title">Your Recent Activity:</h3>
+                <div>
+                    <ReportTable reportedActions={recentActivity} showUser={false}/>
+                </div>
             </div>
 
         </div>

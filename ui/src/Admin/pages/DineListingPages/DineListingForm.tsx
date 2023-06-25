@@ -145,6 +145,8 @@ function DineListingForm() {
     }
 
     const handleFieldChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setErrorMessage("");
+        setFieldErrors("");
         const fieldName = event.target.name;
         const fieldValue = event.target.value;
 
@@ -159,8 +161,6 @@ function DineListingForm() {
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        setErrorMessage(null);
-        setFieldErrors(null);
         if (!listingForm) return;
 
         const url = id ? `${apiURL}/admin/api/restaurants-and-nightlife/update-listing/${id}` : `${apiURL}/admin/api/restaurants-and-nightlife/new-listing`;
@@ -217,8 +217,8 @@ function DineListingForm() {
     }
 
     return (
-        <div className="container me-5 mt-3 admin-form-page">
-            <Col className="text-center" xs={8} md={6} lg={4}>
+        <div className="container me-5 mt-3 admin-main-content">
+            <Col className="text-center" xs={12} md={10} lg={10}>
                 {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
             </Col>
             <Form onSubmit={handleSubmit}>
@@ -278,7 +278,7 @@ function DineListingForm() {
                                 <div className="alert alert-danger" role="alert">{fieldErrors.imageAltText}</div>}
                         </Form.Group>
                     </Col>
-                    <Col xs={{span: 4}} className="mt-4 ms-4">
+                    <Col xs={{span: 4}} className="ms-4">
                         <AdminFormDropdown apiEndpoint="/admin/api/dine-type"
                                            label="Type"
                                            id="formDineType"
@@ -302,12 +302,14 @@ function DineListingForm() {
                                            selectedValue={selectedRegion}/>
                         {fieldErrors && fieldErrors.regionId &&
                             <div className="alert alert-danger" role="alert">{fieldErrors.regionId}</div>}
+                       <div className="mt-4">
                         <AcceptsReservationsRadio
                             acceptsReservations={listingForm ? listingForm.acceptsReservations : null}
                             onChange={handleAcceptsReservationsChange}/>
                         {fieldErrors && fieldErrors.acceptsReservations &&
                             <div className="alert alert-danger pe-5"
                                  role="alert">{fieldErrors.acceptsReservations}</div>}
+                       </div>
 
                     </Col>
                 </Row>

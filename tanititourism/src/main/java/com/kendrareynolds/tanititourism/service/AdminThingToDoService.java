@@ -4,6 +4,7 @@ import com.kendrareynolds.tanititourism.entity.ActionReport;
 import com.kendrareynolds.tanititourism.entity.DoType;
 import com.kendrareynolds.tanititourism.entity.Region;
 import com.kendrareynolds.tanititourism.entity.ThingToDo;
+import com.kendrareynolds.tanititourism.exception.DuplicateListingException;
 import com.kendrareynolds.tanititourism.repository.ActionReportRepository;
 import com.kendrareynolds.tanititourism.repository.ThingToDoRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -27,7 +28,6 @@ public class AdminThingToDoService {
     public final ActionReportRepository actionReportRepository;
 
 
-
     public Page<ThingToDo> getAllThingsToDo(int page, int size) {
         return thingToDoRepository.findAll(PageRequest.of(page - 1, size));
     }
@@ -39,11 +39,11 @@ public class AdminThingToDoService {
     @Transactional
     public void deleteThingToDo(Long id) {
         Optional<ThingToDo> thingToDoOptional = thingToDoRepository.findById(id);
-        if(thingToDoOptional.isPresent()) {
+        if (thingToDoOptional.isPresent()) {
             ThingToDo thingToDo = thingToDoOptional.get();
             List<ActionReport> actionReports = actionReportRepository.findByThingToDo(thingToDo);
 
-            for(ActionReport actionReport : actionReports) {
+            for (ActionReport actionReport : actionReports) {
                 actionReport.setThingToDo(null);
                 actionReportRepository.save(actionReport);
             }
@@ -55,32 +55,41 @@ public class AdminThingToDoService {
     }
 
     public ThingToDo addThingToDo(ThingToDo newThingToDo, Region region, Set<DoType> doTypes, String username) {
-        newThingToDo.setRegion(region);
-        for (DoType doType : doTypes) {
-            newThingToDo.add(doType);
-            doType.getThingsToDo().add(newThingToDo);
+        if (thingToDoRepository.findByName(newThingToDo.getName()).isPresent()) {
+            throw new DuplicateListingException("A listing with this name already exists.");
+        } else {
+            newThingToDo.setRegion(region);
+            for (DoType doType : doTypes) {
+                newThingToDo.add(doType);
+                doType.getThingsToDo().add(newThingToDo);
+            }
+            thingToDoRepository.save(newThingToDo);
+            actionReportService.recordAction(username, "CREATE", newThingToDo);
+            return newThingToDo;
         }
-        thingToDoRepository.save(newThingToDo);
-        actionReportService.recordAction(username, "CREATE", newThingToDo);
-        return newThingToDo;
     }
 
+
     public ThingToDo updateThingToDo(Long id, ThingToDo updatedThingToDo, Region region, Set<DoType> doTypes, String username) {
-        Optional<ThingToDo> thingToDo = thingToDoRepository.findById(id);
-        if (thingToDo.isPresent()) {
-            ThingToDo existingThingToDo = thingToDo.get();
-            setThingToDoAttributes(updatedThingToDo, existingThingToDo);
-            existingThingToDo.setRegion(region);
-            existingThingToDo.getDoTypes().clear();
-            for (DoType doType : doTypes) {
-                existingThingToDo.add(doType);
-                doType.getThingsToDo().add(existingThingToDo);
-            }
-            thingToDoRepository.save(existingThingToDo);
-            actionReportService.recordAction(username, "UPDATE", existingThingToDo);
-            return existingThingToDo;
+        if (thingToDoRepository.findByName(updatedThingToDo.getName()).isPresent()) {
+            throw new DuplicateListingException("A listing with this name already exists.");
         } else {
-            throw new EntityNotFoundException("Thing To Do not found with id: " + id);
+            Optional<ThingToDo> thingToDo = thingToDoRepository.findById(id);
+            if (thingToDo.isPresent()) {
+                ThingToDo existingThingToDo = thingToDo.get();
+                setThingToDoAttributes(updatedThingToDo, existingThingToDo);
+                existingThingToDo.setRegion(region);
+                existingThingToDo.getDoTypes().clear();
+                for (DoType doType : doTypes) {
+                    existingThingToDo.add(doType);
+                    doType.getThingsToDo().add(existingThingToDo);
+                }
+                thingToDoRepository.save(existingThingToDo);
+                actionReportService.recordAction(username, "UPDATE", existingThingToDo);
+                return existingThingToDo;
+            } else {
+                throw new EntityNotFoundException("Thing To Do not found with id: " + id);
+            }
         }
     }
 
@@ -94,45 +103,3 @@ public class AdminThingToDoService {
         databaseThingToDo.setImageAltText(frontEndThingToDo.getImageAltText());
     }
 }
-
-
-//    public void updateThingToDo(ThingToDo updatedThingToDo, Long thingToDoId, Long regionId, Set<Long> doTypeIds) {
-//        Optional<ThingToDo> thingToDo = thingToDoRepository.findById(thingToDoId);
-//        if (thingToDo.isPresent()) {
-//            ThingToDo existingThingToDo = thingToDo.get();
-//            setThingToDoAttributes(updatedThingToDo, existingThingToDo);
-//            setThingToDoRegion(regionId, existingThingToDo);
-//            setThingToDoAndDoTypeRelationship(doTypeIds, existingThingToDo);
-//            thingToDoRepository.save(existingThingToDo);
-//        } else {
-//            throw new EntityNotFoundException("Thing To Do not found with id: " + thingToDoId);
-//        }
-//    }
-
-
-//    private void setThingToDoAndDoTypeRelationship(Set<DoType> doTypes, ThingToDo thingToDo) {
-//        thingToDo.getDoTypes().clear();
-//        for (DoType doType : doTypes) {
-//            thingToDo.add(doType);
-//            doType.getThingsToDo().add(thingToDo);
-//        }
-//    }
-//
-//    private void setThingToDoRegion(Region region, ThingToDo thingToDo) {
-//            thingToDo.setRegion(region);
-//        }
-//    }
-
-
-
-//    public void addThingToDo(ThingToDo thingToDo, String username) {
-//        ThingToDo savedThingToDo = thingToDoRepository.save(thingToDo);
-//        actionReportService.recordAction(username, "CREATE", savedThingToDo);
-//    }
-
-//    public void updateThingToDo(ThingToDo thingToDo, String username) {
-//        thingToDoRepository.findById(thingToDo.getId())
-//                .orElseThrow(() -> new EntityNotFoundException("ThingToDo not found with id: " + thingToDo.getId()));
-//        ThingToDo updatedThingToDo = thingToDoRepository.save(thingToDo);
-//        actionReportService.recordAction(username, "UPDATE", updatedThingToDo);
-//    }

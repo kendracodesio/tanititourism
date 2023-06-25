@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.*;
 
 
@@ -53,17 +54,11 @@ public class AdminThingToDoController {
         if (bindingResult.hasErrors()) {
             return responseHelperService.getBindingErrors(bindingResult);
         }
-        try {
-            System.out.println("FROM THE CONTROLLER: " + username);
-            ThingToDo thingToDo = convertDtoToThingToDo(thingToDoDto);
-            Region region = regionService.getRegionById(thingToDoDto.getRegionId());
-            Set<DoType> doTypes = doTypeService.getDoTypesByIds(thingToDoDto.getDoTypesIds());
-            ThingToDo savedThingToDo = adminThingToDoService.addThingToDo(thingToDo, region, doTypes, username);
-            return ResponseEntity.ok(savedThingToDo);
-        } catch (Exception e) {
-            System.err.println(e);
-            return responseHelperService.getErrorResponse("Failed to create listing");
-        }
+        ThingToDo thingToDo = convertDtoToThingToDo(thingToDoDto);
+        Region region = regionService.getRegionById(thingToDoDto.getRegionId());
+        Set<DoType> doTypes = doTypeService.getDoTypesByIds(thingToDoDto.getDoTypesIds());
+        ThingToDo savedThingToDo = adminThingToDoService.addThingToDo(thingToDo, region, doTypes, username);
+        return ResponseEntity.ok(savedThingToDo);
     }
 
     @PutMapping("/update-listing/{id}")
@@ -73,16 +68,11 @@ public class AdminThingToDoController {
         if (bindingResult.hasErrors()) {
             return responseHelperService.getBindingErrors(bindingResult);
         }
-        try {
-            ThingToDo thingToDo = convertDtoToThingToDo(thingToDoDto);
-            Region region = regionService.getRegionById(thingToDoDto.getRegionId());
-            Set<DoType> doTypes = doTypeService.getDoTypesByIds(thingToDoDto.getDoTypesIds());
-            ThingToDo savedThingToDo = adminThingToDoService.updateThingToDo(id, thingToDo, region, doTypes, username);
-            return ResponseEntity.ok(savedThingToDo);
-        } catch (Exception e) {
-            System.err.println(e);
-            return responseHelperService.getErrorResponse("Failed to update listing");
-        }
+        ThingToDo thingToDo = convertDtoToThingToDo(thingToDoDto);
+        Region region = regionService.getRegionById(thingToDoDto.getRegionId());
+        Set<DoType> doTypes = doTypeService.getDoTypesByIds(thingToDoDto.getDoTypesIds());
+        ThingToDo savedThingToDo = adminThingToDoService.updateThingToDo(id, thingToDo, region, doTypes, username);
+        return ResponseEntity.ok(savedThingToDo);
     }
 
     private ThingToDo convertDtoToThingToDo(ThingToDoDto thingToDoDto) {

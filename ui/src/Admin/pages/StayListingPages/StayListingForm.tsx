@@ -93,8 +93,6 @@ function StayListingForm() {
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        setErrorMessage(null);
-        setFieldErrors(null);
         if (!listingForm) return;
 
         const url = id ? `${apiURL}/admin/api/places-to-stay/update-listing/${id}` : `${apiURL}/admin/api/places-to-stay/new-listing`;
@@ -192,6 +190,8 @@ function StayListingForm() {
     };
 
     const handleFieldChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setErrorMessage("");
+        setFieldErrors("");
         const fieldName = event.target.name;
         const fieldValue = event.target.value;
 
@@ -205,12 +205,16 @@ function StayListingForm() {
 
     return (
         <div className="container me-5 mt-3 admin-main-content">
-            <Col className="text-center" xs={8} md={6} lg={4}>
-                {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
+            <Col className="text-center" xs={12} md={10} lg={10}>
+                {errorMessage && <div className="alert alert-danger ms-3">{errorMessage}</div>}
+
             </Col>
             <Form onSubmit={handleSubmit}>
+
                 <Row>
+
                     <Col xs={{span: 4}} className="ms-4">
+
                         <Form.Group className="mb-3 mt-4" controlId="formName">
                             <Form.Label>Listing Name</Form.Label>
                             <Form.Control type="text" placeholder="Enter name"
@@ -264,7 +268,7 @@ function StayListingForm() {
                                 <div className="alert alert-danger" role="alert">{fieldErrors.imageAltText}</div>}
                         </Form.Group>
                     </Col>
-                    <Col xs={{span: 4}} className="mt-4 ms-4">
+                    <Col xs={{span: 4}} className="ms-4">
                         <AdminFormDropdown apiEndpoint="/admin/api/stay-type"
                                            label="Type"
                                            id="formStayType"

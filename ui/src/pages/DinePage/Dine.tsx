@@ -79,11 +79,12 @@ function Dine () {
                                  cost={listing.cost}
                                  acceptsReservations={listing.acceptsReservations}/>
                 ))}
+                {totalPages > 1 &&
                 <Pagination page={page}
                             totalPages={totalPages}
                             handlePrevious={handlePrevious}
-                            handleNext={handleNext}
-                            />
+                            handleNext={handleNext}/>
+                }
             </div>
         </div>
     );

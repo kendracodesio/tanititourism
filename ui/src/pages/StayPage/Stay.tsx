@@ -75,11 +75,12 @@ function Stay () {
                                  phone={listing.phone}
                                  cost={listing.cost} />
                 ))}
+                {totalPages > 1 &&
                 <Pagination page={page}
                             totalPages={totalPages}
                             handlePrevious={handlePrevious}
-                            handleNext={handleNext}
-                />
+                            handleNext={handleNext}/>
+                }
             </div>
 
         </div>

@@ -94,8 +94,6 @@ function DoListingForm() {
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        setErrorMessage(null);
-        setFieldErrors(null);
         if (!listingForm) return;
 
         const url = id ? `${apiURL}/admin/api/things-to-do/update-listing/${id}` : `${apiURL}/admin/api/things-to-do/new-listing`;
@@ -186,6 +184,8 @@ function DoListingForm() {
     }
 
     const handleFieldChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setErrorMessage("");
+        setFieldErrors("");
         const fieldName = event.target.name;
         const fieldValue = event.target.value;
 
@@ -198,8 +198,8 @@ function DoListingForm() {
     };
 
     return (
-        <div className="container me-5 mt-3 admin-form-page">
-            <Col className="text-center" xs={8} md={6} lg={4}>
+        <div className="container me-5 mt-3 admin-main-content">
+            <Col className="text-center" xs={12} md={10} lg={10}>
                 {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
             </Col>
             <Form onSubmit={handleSubmit}>

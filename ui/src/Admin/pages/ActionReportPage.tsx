@@ -91,18 +91,23 @@ function ActionReportPage() {
                     </form>
                 </div>
             </div>
+            <div className="p-2">
             <ReportTable reportedActions={actionReport} showUser={true}/>
+            </div>
 
-            {!isSearching &&
+            {isSearching &&
+                <button onClick={goBack} className="mt-5 ms-5">Back To Full Report</button>
+            }
+
+            <div className="pb-4 me-5">
+            {totalPages > 1 && !isSearching &&
                 <Pagination page={page}
                             totalPages={totalPages}
                             handlePrevious={handlePrevious}
                             handleNext={handleNext}/>
             }
 
-            {isSearching &&
-                <button onClick={goBack} className="mt-5 ms-5">Back To Full Report</button>
-        }
+            </div>
 
         </div>
     );

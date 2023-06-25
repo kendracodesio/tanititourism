@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.*;
 
 @RestController
@@ -27,15 +28,14 @@ public class AdminPlaceToStayController {
     private final ResponseHelperService responseHelperService;
 
 
-
     @GetMapping("/list")
     public Page<PlaceToStay> getAllPlacesToDo(@RequestParam(required = false, defaultValue = "1") int page,
-                                            @RequestParam(required = false, defaultValue = "10") int size){
+                                              @RequestParam(required = false, defaultValue = "10") int size) {
         return adminPlaceToStayService.getAllPlacesToStay(page, size);
     }
 
     @GetMapping("/listing-detail/{id}")
-    public Optional<PlaceToStay> getPlaceToStay(@PathVariable("id") Long id){
+    public Optional<PlaceToStay> getPlaceToStay(@PathVariable("id") Long id) {
         return adminPlaceToStayService.getPlaceToStay(id);
     }
 
@@ -50,19 +50,15 @@ public class AdminPlaceToStayController {
                                             @RequestHeader("X-Username") String username,
                                             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-           return responseHelperService.getBindingErrors(bindingResult);
+            return responseHelperService.getBindingErrors(bindingResult);
         }
-        try {
-            System.out.println("FROM THE CONTROLLER: " + username);
-            PlaceToStay placeToStay = convertDtoToPlaceToStay(placeToStayDto);
-            Region region = regionService.getRegionById(placeToStayDto.getRegionId());
-            StayType stayType = stayTypeService.getStayTypeById(placeToStayDto.getStayTypeId());
-            PlaceToStay savedPlaceToStay = adminPlaceToStayService.addPlaceToStay(placeToStay, region, stayType, username);
-            return ResponseEntity.ok(savedPlaceToStay);
-        } catch (Exception e){
-            System.err.println(e);
-            return responseHelperService.getErrorResponse("Failed to create listing");
-        }
+
+        PlaceToStay placeToStay = convertDtoToPlaceToStay(placeToStayDto);
+        Region region = regionService.getRegionById(placeToStayDto.getRegionId());
+        StayType stayType = stayTypeService.getStayTypeById(placeToStayDto.getStayTypeId());
+        PlaceToStay savedPlaceToStay = adminPlaceToStayService.addPlaceToStay(placeToStay, region, stayType, username);
+        return ResponseEntity.ok(savedPlaceToStay);
+
     }
 
     @PutMapping("/update-listing/{id}")
@@ -72,16 +68,11 @@ public class AdminPlaceToStayController {
         if (bindingResult.hasErrors()) {
             return responseHelperService.getBindingErrors(bindingResult);
         }
-        try {
-            PlaceToStay placeToStay = convertDtoToPlaceToStay(placeToStayDto);
-            Region region = regionService.getRegionById(placeToStayDto.getRegionId());
-            StayType stayType = stayTypeService.getStayTypeById(placeToStayDto.getStayTypeId());
-            PlaceToStay savedPlaceToStay = adminPlaceToStayService.updatePlaceToStay(id, placeToStay, region, stayType, username);
-            return ResponseEntity.ok(savedPlaceToStay);
-        } catch (Exception e) {
-            System.err.println(e);
-            return responseHelperService.getErrorResponse("Failed to update listing");
-        }
+        PlaceToStay placeToStay = convertDtoToPlaceToStay(placeToStayDto);
+        Region region = regionService.getRegionById(placeToStayDto.getRegionId());
+        StayType stayType = stayTypeService.getStayTypeById(placeToStayDto.getStayTypeId());
+        PlaceToStay savedPlaceToStay = adminPlaceToStayService.updatePlaceToStay(id, placeToStay, region, stayType, username);
+        return ResponseEntity.ok(savedPlaceToStay);
     }
 
 

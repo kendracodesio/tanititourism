@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Link, useParams, useLocation} from "react-router-dom";
+import {useParams, useLocation} from "react-router-dom";
 import ListingDetail from "./ListingDetail";
 import {Alert} from "react-bootstrap";
 import axiosInstance from "../axiosInstance";
@@ -7,7 +7,7 @@ import axiosInstance from "../axiosInstance";
 interface ListingDetailsProps {
     apiEndpoint: string;
     editLink: string;
-    backTo: string;
+
 }
 
 
@@ -27,7 +27,7 @@ interface Listing {
 }
 
 
-function FetchedListingDetail({apiEndpoint, editLink, backTo}: ListingDetailsProps) {
+function FetchedListingDetail({apiEndpoint, editLink}: ListingDetailsProps) {
     let {id} = useParams();
     const apiURL = process.env.REACT_APP_API_URL;
     const [listing, setListing] = useState<Listing | null> (null);
@@ -51,8 +51,7 @@ function FetchedListingDetail({apiEndpoint, editLink, backTo}: ListingDetailsPro
 
 
     return (
-        <div>
-        <h2>Listing Details</h2>
+        <div className="pe-5 ps-5">
             {location.state && location.state.successMessage &&
                 <Alert variant="success" className="mt-3">{location.state.successMessage}</Alert>
             }
@@ -61,7 +60,7 @@ function FetchedListingDetail({apiEndpoint, editLink, backTo}: ListingDetailsPro
                 <ListingDetail listing={listing} editLink={editLink}/>
                 </> : 'There was a problem loading the listing details. Try again later.'}</div>
 
-            <Link to={`${backTo}`} className="mt-5 ms-5">Back To Listings</Link>
+
         </div>
     );
 }

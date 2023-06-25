@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.Optional;
 
 @RestController
@@ -52,17 +53,13 @@ public class AdminRestaurantsAndNightlifeController {
         if (bindingResult.hasErrors()) {
             return responseHelperService.getBindingErrors(bindingResult);
         }
-        try {
-            RestaurantsAndNightlife restaurantsAndNightlife = convertDtoToRestaurantAndNightlife(restaurantsAndNightlifeDto);
-            Region region = regionService.getRegionById(restaurantsAndNightlifeDto.getRegionId());
-            DineType dineType = dineTypeService.getDineTypeById(restaurantsAndNightlifeDto.getDineTypeId());
-            RestaurantsAndNightlife savedRestaurantAndNightlife = adminRestaurantsAndNightlifeService
-                    .addRestaurantAndNightlife(restaurantsAndNightlife, region, dineType, username);
-            return ResponseEntity.ok(savedRestaurantAndNightlife);
-        } catch (Exception e) {
-            System.err.println(e);
-            return responseHelperService.getErrorResponse("Failed to create listing");
-        }
+        RestaurantsAndNightlife restaurantsAndNightlife = convertDtoToRestaurantAndNightlife(restaurantsAndNightlifeDto);
+        Region region = regionService.getRegionById(restaurantsAndNightlifeDto.getRegionId());
+        DineType dineType = dineTypeService.getDineTypeById(restaurantsAndNightlifeDto.getDineTypeId());
+        RestaurantsAndNightlife savedRestaurantAndNightlife = adminRestaurantsAndNightlifeService
+                .addRestaurantAndNightlife(restaurantsAndNightlife, region, dineType, username);
+        return ResponseEntity.ok(savedRestaurantAndNightlife);
+
     }
 
     @PutMapping("/update-listing/{id}")
@@ -73,17 +70,13 @@ public class AdminRestaurantsAndNightlifeController {
         if (bindingResult.hasErrors()) {
             return responseHelperService.getBindingErrors(bindingResult);
         }
-        try {
-            RestaurantsAndNightlife restaurantsAndNightlife = convertDtoToRestaurantAndNightlife(restaurantsAndNightlifeDto);
-            Region region = regionService.getRegionById(restaurantsAndNightlifeDto.getRegionId());
-            DineType dineType = dineTypeService.getDineTypeById(restaurantsAndNightlifeDto.getDineTypeId());
-            RestaurantsAndNightlife savedRestaurantAndNightlife = adminRestaurantsAndNightlifeService
-                    .updateRestaurantAndNightlife(id, restaurantsAndNightlife, region, dineType, username);
-            return ResponseEntity.ok(savedRestaurantAndNightlife);
-        } catch (Exception e) {
-            System.err.println(e);
-            return responseHelperService.getErrorResponse("Failed to update listing");
-        }
+        RestaurantsAndNightlife restaurantsAndNightlife = convertDtoToRestaurantAndNightlife(restaurantsAndNightlifeDto);
+        Region region = regionService.getRegionById(restaurantsAndNightlifeDto.getRegionId());
+        DineType dineType = dineTypeService.getDineTypeById(restaurantsAndNightlifeDto.getDineTypeId());
+        RestaurantsAndNightlife savedRestaurantAndNightlife = adminRestaurantsAndNightlifeService
+                .updateRestaurantAndNightlife(id, restaurantsAndNightlife, region, dineType, username);
+        return ResponseEntity.ok(savedRestaurantAndNightlife);
+
     }
 
     private RestaurantsAndNightlife convertDtoToRestaurantAndNightlife(RestaurantsAndNightlifeDto restaurantAndNightlifeDto) {

@@ -12,8 +12,10 @@ interface SignInForm {
 
 function SignIn() {
     const userRef = useRef<HTMLInputElement>(null);
-    const [signInForm, setSignInForm] = useState<SignInForm>({username: '',
-        password: ''});
+    const [signInForm, setSignInForm] = useState<SignInForm>({
+        username: '',
+        password: ''
+    });
     const [errorMessage, setErrorMessage] = useState('');
     const [fieldErrors, setFieldErrors] = useState<any | null>(null);
     const navigate = useNavigate();
@@ -23,10 +25,10 @@ function SignIn() {
         if (userRef.current) {
             userRef.current.focus();
         }
-        if (errorMessage !== '') {
-            setErrorMessage('');
-        }
-    }, [signInForm, errorMessage])
+        // if (errorMessage !== '') {
+        //     setErrorMessage('');
+        // }
+    }, [])
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
@@ -55,16 +57,20 @@ function SignIn() {
                     if (error.response.status === 400) {
                         const fieldErrors = error.response.data;
                         setFieldErrors(fieldErrors);
+                    } else if (error.response.status === 403) {
+                        setErrorMessage("Invalid username or password!");
                     } else if (error.response.status === 500) {
-                        setErrorMessage("Server error. Please try again later");
+                        setErrorMessage("Server error. Please try again later.");
                     }
                 } else {
-                    setErrorMessage("An unexpected error occurred");
+                    setErrorMessage("An unexpected error occurred.");
                 }
             })
     }
 
     const handleFieldChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setErrorMessage("");
+        setFieldErrors("");
         const fieldName = event.target.name;
         const fieldValue = event.target.value;
 
@@ -77,38 +83,38 @@ function SignIn() {
     };
 
     return (
-        <div className="container me-5 mt-3 admin-form-page">
-            <Col className="text-center" xs={8} md={6} lg={4}>
-                {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
-            </Col>
-            <h1>Sign In</h1>
-            <Form onSubmit={handleSubmit}>
-                <Col xs={{span: 4}} className="ms-4">
-                    <Form.Group className="mb-3 mt-4" controlId="formUsername">
-                        <Form.Label>Username</Form.Label>
-                        <Form.Control type="text" placeholder="Enter username"
-                                      name="username"
-                                      value={signInForm ? signInForm.username : ''}
-                                      onChange={handleFieldChange}
-                        />
-                        {fieldErrors && fieldErrors.username &&
-                            <div className="alert alert-danger" role="alert">{fieldErrors.username}</div>}
-                    </Form.Group>
-                    <Form.Group className="mb-3 mt-4" controlId="formPassword">
-                        <Form.Label>Password</Form.Label>
-                        <Form.Control type="password" placeholder="Enter password"
-                                      name="password"
-                                      value={signInForm ? signInForm.password : ''}
-                                      onChange={handleFieldChange}
-                        />
-                        {fieldErrors && fieldErrors.password &&
-                            <div className="alert alert-danger" role="alert">{fieldErrors.password}</div>}
-                    </Form.Group>
-
-                    <Button className="mt-3 ms-4 submit-btn" variant="primary" type="submit">
-                        Submit</Button>
-                </Col>
-            </Form>
+        <div className="d-flex justify-content-center align-items-center vh-100">
+            {/*<div className="inline-flex-center">*/}
+                <div className="border rounded shadow form-box">
+                    <h1 className="mb-5">Sign In</h1>
+                    <Form onSubmit={handleSubmit}>
+                        <Col className="sign-in-form">
+                            {errorMessage && <div className="alert alert-danger mb-2 text-center">{errorMessage}</div>}
+                            <Form.Group className="mb-3" controlId="formUsername">
+                                <Form.Label>Username</Form.Label>
+                                <Form.Control type="text" placeholder="Enter username"
+                                              name="username"
+                                              value={signInForm ? signInForm.username : ''}
+                                              onChange={handleFieldChange}
+                                              ref={userRef}/>
+                                {fieldErrors && fieldErrors.username &&
+                                    <div className="alert alert-danger" role="alert">{fieldErrors.username}</div>}
+                            </Form.Group>
+                            <Form.Group className="mb-3 mt-4" controlId="formPassword">
+                                <Form.Label>Password</Form.Label>
+                                <Form.Control type="password" placeholder="Enter password"
+                                              name="password"
+                                              value={signInForm ? signInForm.password : ''}
+                                              onChange={handleFieldChange}/>
+                                {fieldErrors && fieldErrors.password &&
+                                    <div className="alert alert-danger" role="alert">{fieldErrors.password}</div>}
+                            </Form.Group>
+                            <Button className="submit-btn mt-3" variant="primary" type="submit">
+                                Submit</Button>
+                        </Col>
+                    </Form>
+                </div>
+            {/*</div>*/}
         </div>
     )
 }

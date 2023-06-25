@@ -1,6 +1,7 @@
 package com.kendrareynolds.tanititourism.service;
 
 import com.kendrareynolds.tanititourism.entity.*;
+import com.kendrareynolds.tanititourism.exception.DuplicateListingException;
 import com.kendrareynolds.tanititourism.repository.ActionReportRepository;
 import com.kendrareynolds.tanititourism.repository.PlaceToStayRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -34,11 +35,11 @@ public class AdminPlaceToStayService {
     @Transactional
     public void deletePlaceToStay(Long id) {
         Optional<PlaceToStay> placeToStayOptional = placeToStayRepository.findById(id);
-        if(placeToStayOptional.isPresent()) {
+        if (placeToStayOptional.isPresent()) {
             PlaceToStay placeToStay = placeToStayOptional.get();
             List<ActionReport> actionReports = actionReportRepository.findByPlaceToStay(placeToStay);
 
-            for(ActionReport actionReport : actionReports) {
+            for (ActionReport actionReport : actionReports) {
                 actionReport.setPlaceToStay(null);
                 actionReportRepository.save(actionReport);
             }
@@ -50,25 +51,33 @@ public class AdminPlaceToStayService {
     }
 
     public PlaceToStay addPlaceToStay(PlaceToStay newPlaceToStay, Region region, StayType stayType, String username) {
-        newPlaceToStay.setRegion(region);
-        newPlaceToStay.setStayType(stayType);
-        placeToStayRepository.save(newPlaceToStay);
-        actionReportService.recordAction(username, "CREATE", newPlaceToStay);
-        return newPlaceToStay;
+        if (placeToStayRepository.findByName(newPlaceToStay.getName()).isPresent()) {
+            throw new DuplicateListingException("A listing with this name already exists.");
+        } else {
+            newPlaceToStay.setRegion(region);
+            newPlaceToStay.setStayType(stayType);
+            placeToStayRepository.save(newPlaceToStay);
+            actionReportService.recordAction(username, "CREATE", newPlaceToStay);
+            return newPlaceToStay;
+        }
     }
 
     public PlaceToStay updatePlaceToStay(Long id, PlaceToStay updatedPlaceToStay, Region region, StayType stayType, String username) {
-        Optional<PlaceToStay> placeToStay = placeToStayRepository.findById(id);
-        if (placeToStay.isPresent()) {
-            PlaceToStay existingPlaceToStay = placeToStay.get();
-            setPlaceToStayAttributes(updatedPlaceToStay, existingPlaceToStay);
-            existingPlaceToStay.setRegion(region);
-            existingPlaceToStay.setStayType(stayType);
-            placeToStayRepository.save(existingPlaceToStay);
-            actionReportService.recordAction(username, "UPDATE", existingPlaceToStay);
-            return existingPlaceToStay;
+        if (placeToStayRepository.findByName(updatedPlaceToStay.getName()).isPresent()) {
+            throw new DuplicateListingException("A listing with this name already exists.");
         } else {
-            throw new EntityNotFoundException("Place To Stay not found with id " + id);
+            Optional<PlaceToStay> placeToStay = placeToStayRepository.findById(id);
+            if (placeToStay.isPresent()) {
+                PlaceToStay existingPlaceToStay = placeToStay.get();
+                setPlaceToStayAttributes(updatedPlaceToStay, existingPlaceToStay);
+                existingPlaceToStay.setRegion(region);
+                existingPlaceToStay.setStayType(stayType);
+                placeToStayRepository.save(existingPlaceToStay);
+                actionReportService.recordAction(username, "UPDATE", existingPlaceToStay);
+                return existingPlaceToStay;
+            } else {
+                throw new EntityNotFoundException("Place To Stay not found with id " + id);
+            }
         }
     }
 

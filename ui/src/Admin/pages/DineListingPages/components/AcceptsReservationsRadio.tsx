@@ -15,7 +15,7 @@ function AcceptsReservationsRadio({acceptsReservations, onChange}: AcceptsReserv
 
     return (
         <Form.Group>
-            <Form.Label>Accepts Reservations</Form.Label>
+            <Form.Label>Accepts Reservations:</Form.Label>
             <Form.Check
                 label="Yes"
                 type="radio"

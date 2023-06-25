@@ -47,7 +47,7 @@ function FetchedListingTable({apiEndpoint, deleteEndpoint, typeFieldName, addLin
     }, [apiURL, apiEndpoint, page, pageSize]);
 
     const handlePrevious = () => {
-        setPage(prevPage => prevPage > 1 ? prevPage -1 :prevPage);
+        setPage(prevPage => prevPage > 1 ? prevPage - 1 : prevPage);
     };
 
     const handleNext = () => {
@@ -67,24 +67,29 @@ function FetchedListingTable({apiEndpoint, deleteEndpoint, typeFieldName, addLin
 
     return (
 
-            <div>
-                <div className="mt-5">
-                    <div className="d-flex justify-content-start">
-                        <h1 className="ms-3"> Listings: {tableName}</h1>
-                        <Link to={addLink} className="ms-5 mt-2">Add New Listing</Link>
-                    </div>
+        <div>
+            <div className="mt-2">
+                <div className="d-flex justify-content-between align-items-end">
+                    <h1 className="mt-5 ps-3 "> Listings: {tableName}</h1>
+                    <Link to={addLink} className="mt-5 mb-3 pe-4">Add New Listing</Link>
                 </div>
-                <ListingTable listings={listings}
-                              deleteListing={handleDelete}
-                              typeFieldName={typeFieldName}/>
+                <div className="pe-3 ps-3">
+                    <ListingTable listings={listings}
+                                  deleteListing={handleDelete}
+                                  typeFieldName={typeFieldName}/>
+                </div>
 
-                <Pagination page={page}
-                            totalPages={totalPages}
-                            handlePrevious={handlePrevious}
-                            handleNext={handleNext}/>
+                <div className="mb-4 me-5">
+                    {totalPages > 1 &&
+                        <Pagination page={page}
+                                    totalPages={totalPages}
+                                    handlePrevious={handlePrevious}
+                                    handleNext={handleNext}/>
+                    }
+                </div>
+
             </div>
-
-
+        </div>
 
     );
 
