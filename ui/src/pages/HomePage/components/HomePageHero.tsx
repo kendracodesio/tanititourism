@@ -10,6 +10,6 @@ function HomePageHero () {
         </div>
     </div>      
     );
-};
+}
 
 export default HomePageHero;
