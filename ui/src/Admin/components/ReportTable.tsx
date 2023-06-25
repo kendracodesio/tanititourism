@@ -47,7 +47,7 @@ function ReportTable({reportedActions, showUser}: ReportTableProps) {
                 <th>Listing Type</th>
                 <th>Listing Title</th>
                 {showUser && <th>User</th>}
-                <th>Date</th>
+                <th>Date & Time</th>
             </tr>
             </thead>
             <tbody>
@@ -76,7 +76,7 @@ function ReportTable({reportedActions, showUser}: ReportTableProps) {
                         <td>{listingType}</td>
                         <td><Link to={`/admin/${link}/listing-detail/${listingId}`}>{listingTitle}</Link></td>
                         {showUser && <td>{reportedAction.user?.firstName}</td>}
-                        <td>{new Date(reportedAction.timestamp).toLocaleDateString()}</td>
+                        <td>{new Date(reportedAction.timestamp).toLocaleString()}</td>
                     </tr>
                 );
             })}

@@ -51,7 +51,6 @@ public class AdminThingToDoService {
         } else {
             throw new EntityNotFoundException("Thing To Do not found with id: " + id);
         }
-
     }
 
     public ThingToDo addThingToDo(ThingToDo newThingToDo, Region region, Set<DoType> doTypes, String username) {
@@ -71,26 +70,27 @@ public class AdminThingToDoService {
 
 
     public ThingToDo updateThingToDo(Long id, ThingToDo updatedThingToDo, Region region, Set<DoType> doTypes, String username) {
-        if (thingToDoRepository.findByName(updatedThingToDo.getName()).isPresent()) {
-            throw new DuplicateListingException("A listing with this name already exists.");
-        } else {
-            Optional<ThingToDo> thingToDo = thingToDoRepository.findById(id);
-            if (thingToDo.isPresent()) {
-                ThingToDo existingThingToDo = thingToDo.get();
-                setThingToDoAttributes(updatedThingToDo, existingThingToDo);
-                existingThingToDo.setRegion(region);
-                existingThingToDo.getDoTypes().clear();
-                for (DoType doType : doTypes) {
-                    existingThingToDo.add(doType);
-                    doType.getThingsToDo().add(existingThingToDo);
-                }
-                thingToDoRepository.save(existingThingToDo);
-                actionReportService.recordAction(username, "UPDATE", existingThingToDo);
-                return existingThingToDo;
-            } else {
-                throw new EntityNotFoundException("Thing To Do not found with id: " + id);
+        Optional<ThingToDo> thingToDoOptional = thingToDoRepository.findById(id);
+        if (thingToDoOptional.isEmpty()) {
+            throw new EntityNotFoundException("Thing To Do not found with id :: " + id);
+        }
+        ThingToDo existingThingToDo = thingToDoOptional.get();
+        if (!existingThingToDo.getName().equals(updatedThingToDo.getName())) {
+            Optional<ThingToDo> possibleDuplicate = thingToDoRepository.findByName(updatedThingToDo.getName());
+            if (possibleDuplicate.isPresent()) {
+                throw new DuplicateListingException("A listing with this name already exists.");
             }
         }
+        setThingToDoAttributes(updatedThingToDo, existingThingToDo);
+        existingThingToDo.setRegion(region);
+        existingThingToDo.getDoTypes().clear();
+        for (DoType doType : doTypes) {
+            existingThingToDo.add(doType);
+            doType.getThingsToDo().add(existingThingToDo);
+        }
+        thingToDoRepository.save(existingThingToDo);
+        actionReportService.recordAction(username, "UPDATE", existingThingToDo);
+        return existingThingToDo;
     }
 
 

@@ -44,7 +44,7 @@ public class AdminRestaurantsAndNightlifeService {
             }
             restaurantsAndNightlifeRepository.delete(restaurantsAndNightlife);
         } else {
-            throw new EntityNotFoundException("Restaurant And Nightlife not found with id: " + id);
+            throw new EntityNotFoundException("Restaurant And Nightlife not found with id :: " + id);
         }
     }
 
@@ -64,22 +64,23 @@ public class AdminRestaurantsAndNightlifeService {
 
     public RestaurantsAndNightlife updateRestaurantAndNightlife(Long id, RestaurantsAndNightlife updatedRestaurantAndNightlife,
                                                                 Region region, DineType dineType, String username) {
-        if (restaurantsAndNightlifeRepository.findByName(updatedRestaurantAndNightlife.getName()).isPresent()) {
-            throw new DuplicateListingException("A listing with this name already exists.");
-        } else {
-            Optional<RestaurantsAndNightlife> restaurantAndNightlife = restaurantsAndNightlifeRepository.findById(id);
-            if (restaurantAndNightlife.isPresent()) {
-                RestaurantsAndNightlife existingRestaurantAndNightlife = restaurantAndNightlife.get();
-                setRestaurantAndNightlifeAttributes(updatedRestaurantAndNightlife, existingRestaurantAndNightlife);
-                existingRestaurantAndNightlife.setRegion(region);
-                existingRestaurantAndNightlife.setDineType(dineType);
-                restaurantsAndNightlifeRepository.save(existingRestaurantAndNightlife);
-                actionReportService.recordAction(username, "UPDATE", existingRestaurantAndNightlife);
-                return existingRestaurantAndNightlife;
-            } else {
-                throw new EntityNotFoundException("Restaurant And Nightlife not found with id " + id);
+        Optional<RestaurantsAndNightlife> restaurantOptional = restaurantsAndNightlifeRepository.findById(id);
+        if (restaurantOptional.isEmpty()) {
+            throw new EntityNotFoundException("Restaurant And Nightlife not found with id :: " + id);
+        }
+        RestaurantsAndNightlife existingRestaurantAndNightlife = restaurantOptional.get();
+        if (!existingRestaurantAndNightlife.getName().equals(updatedRestaurantAndNightlife.getName())) {
+            Optional<RestaurantsAndNightlife> possibleDuplicate = restaurantsAndNightlifeRepository.findByName(updatedRestaurantAndNightlife.getName());
+            if (possibleDuplicate.isPresent()) {
+                throw new DuplicateListingException("A listing with this name already exists.");
             }
         }
+        setRestaurantAndNightlifeAttributes(updatedRestaurantAndNightlife, existingRestaurantAndNightlife);
+        existingRestaurantAndNightlife.setRegion(region);
+        existingRestaurantAndNightlife.setDineType(dineType);
+        restaurantsAndNightlifeRepository.save(existingRestaurantAndNightlife);
+        actionReportService.recordAction(username, "UPDATE", existingRestaurantAndNightlife);
+        return existingRestaurantAndNightlife;
     }
 
     private void setRestaurantAndNightlifeAttributes(RestaurantsAndNightlife frontEndRestaurantAndNightlife,

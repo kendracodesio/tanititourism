@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -63,23 +64,25 @@ public class AdminPlaceToStayService {
     }
 
     public PlaceToStay updatePlaceToStay(Long id, PlaceToStay updatedPlaceToStay, Region region, StayType stayType, String username) {
-        if (placeToStayRepository.findByName(updatedPlaceToStay.getName()).isPresent()) {
-            throw new DuplicateListingException("A listing with this name already exists.");
-        } else {
-            Optional<PlaceToStay> placeToStay = placeToStayRepository.findById(id);
-            if (placeToStay.isPresent()) {
-                PlaceToStay existingPlaceToStay = placeToStay.get();
-                setPlaceToStayAttributes(updatedPlaceToStay, existingPlaceToStay);
-                existingPlaceToStay.setRegion(region);
-                existingPlaceToStay.setStayType(stayType);
-                placeToStayRepository.save(existingPlaceToStay);
-                actionReportService.recordAction(username, "UPDATE", existingPlaceToStay);
-                return existingPlaceToStay;
-            } else {
-                throw new EntityNotFoundException("Place To Stay not found with id " + id);
+        Optional<PlaceToStay> placeToStayOptional = placeToStayRepository.findById(id);
+        if (placeToStayOptional.isEmpty()) {
+            throw new EntityNotFoundException("Place to Stay not found with id :: " + id);
+        }
+        PlaceToStay existingPlaceToStay = placeToStayOptional.get();
+        if (!existingPlaceToStay.getName().equals(updatedPlaceToStay.getName())) {
+            Optional<PlaceToStay> possibleDuplicate = placeToStayRepository.findByName(updatedPlaceToStay.getName());
+            if (possibleDuplicate.isPresent()) {
+                throw new DuplicateListingException("A listing with this name already exists");
             }
         }
+        setPlaceToStayAttributes(updatedPlaceToStay, existingPlaceToStay);
+        existingPlaceToStay.setRegion(region);
+        existingPlaceToStay.setStayType(stayType);
+        placeToStayRepository.save(existingPlaceToStay);
+        actionReportService.recordAction(username, "UPDATE", existingPlaceToStay);
+        return existingPlaceToStay;
     }
+
 
     private void setPlaceToStayAttributes(PlaceToStay frontEndPlaceToStay, PlaceToStay databasePlaceToStay) {
         databasePlaceToStay.setName(frontEndPlaceToStay.getName());

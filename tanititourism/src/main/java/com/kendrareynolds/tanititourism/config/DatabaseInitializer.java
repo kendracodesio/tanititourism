@@ -29,35 +29,35 @@ public class DatabaseInitializer implements CommandLineRunner {
     @Override
     public void run(String... arg) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDateTime timestamp1 = LocalDateTime.parse("2023-03-02 14:00:00", formatter);
-        LocalDateTime timestamp2 = LocalDateTime.parse("2023-03-15 14:00:00", formatter);
-        LocalDateTime timestamp3 = LocalDateTime.parse("2023-03-21 14:00:00", formatter);
-        LocalDateTime timestamp4 = LocalDateTime.parse("2023-03-28 14:00:00", formatter);
+        LocalDateTime timestamp1 = LocalDateTime.parse("2023-03-02 14:24:05", formatter);
+        LocalDateTime timestamp2 = LocalDateTime.parse("2023-03-15 12:01:50", formatter);
+        LocalDateTime timestamp3 = LocalDateTime.parse("2023-03-21 11:14:12", formatter);
+        LocalDateTime timestamp4 = LocalDateTime.parse("2023-03-28 16:02:32", formatter);
 
-        LocalDateTime timestamp5 = LocalDateTime.parse("2023-03-30 14:00:00", formatter);
-        LocalDateTime timestamp6 = LocalDateTime.parse("2023-04-05 14:00:00", formatter);
-        LocalDateTime timestamp7 = LocalDateTime.parse("2023-04-17 14:00:00", formatter);
-        LocalDateTime timestamp8 = LocalDateTime.parse("2023-04-21 14:00:00", formatter);
+        LocalDateTime timestamp5 = LocalDateTime.parse("2023-03-30 08:28:55", formatter);
+        LocalDateTime timestamp6 = LocalDateTime.parse("2023-04-05 10:10:43", formatter);
+        LocalDateTime timestamp7 = LocalDateTime.parse("2023-04-17 09:52:44", formatter);
+        LocalDateTime timestamp8 = LocalDateTime.parse("2023-04-21 17:22:11", formatter);
 
-        LocalDateTime timestamp9 = LocalDateTime.parse("2023-04-24 14:00:00", formatter);
-        LocalDateTime timestamp10 = LocalDateTime.parse("2023-04-27 14:00:00", formatter);
-        LocalDateTime timestamp11 = LocalDateTime.parse("2023-05-03 14:00:00", formatter);
-        LocalDateTime timestamp12 = LocalDateTime.parse("2023-05-06 14:00:00", formatter);
+        LocalDateTime timestamp9 = LocalDateTime.parse("2023-04-24 12:07:38", formatter);
+        LocalDateTime timestamp10 = LocalDateTime.parse("2023-04-27 11:18:40", formatter);
+        LocalDateTime timestamp11 = LocalDateTime.parse("2023-05-03 09:53:21", formatter);
+        LocalDateTime timestamp12 = LocalDateTime.parse("2023-05-06 08:19:32", formatter);
 
-        LocalDateTime timestamp13 = LocalDateTime.parse("2023-05-11 14:00:00", formatter);
-        LocalDateTime timestamp14 = LocalDateTime.parse("2023-05-16 14:00:00", formatter);
-        LocalDateTime timestamp15 = LocalDateTime.parse("2023-05-19 14:00:00", formatter);
-        LocalDateTime timestamp16 = LocalDateTime.parse("2023-05-20 14:00:00", formatter);
+        LocalDateTime timestamp13 = LocalDateTime.parse("2023-05-11 13:18:26", formatter);
+        LocalDateTime timestamp14 = LocalDateTime.parse("2023-05-16 16:22:47", formatter);
+        LocalDateTime timestamp15 = LocalDateTime.parse("2023-05-19 14:54:19", formatter);
+        LocalDateTime timestamp16 = LocalDateTime.parse("2023-05-20 09:39:35", formatter);
 
-        LocalDateTime timestamp17 = LocalDateTime.parse("2023-05-22 14:00:00", formatter);
-        LocalDateTime timestamp18 = LocalDateTime.parse("2023-05-28 14:00:00", formatter);
-        LocalDateTime timestamp19 = LocalDateTime.parse("2023-06-01 14:00:00", formatter);
-        LocalDateTime timestamp20 = LocalDateTime.parse("2023-06-05 14:00:00", formatter);
+        LocalDateTime timestamp17 = LocalDateTime.parse("2023-05-22 11:14:27", formatter);
+        LocalDateTime timestamp18 = LocalDateTime.parse("2023-05-28 17:28:04", formatter);
+        LocalDateTime timestamp19 = LocalDateTime.parse("2023-06-01 13:00:17", formatter);
+        LocalDateTime timestamp20 = LocalDateTime.parse("2023-06-05 11:11:55", formatter);
 
-        LocalDateTime timestamp21 = LocalDateTime.parse("2023-06-14 14:00:00", formatter);
-        LocalDateTime timestamp22 = LocalDateTime.parse("2023-06-14 14:00:00", formatter);
-        LocalDateTime timestamp23 = LocalDateTime.parse("2023-04-19 14:00:00", formatter);
-        LocalDateTime timestamp24 = LocalDateTime.parse("2023-06-21 14:00:00", formatter);
+        LocalDateTime timestamp21 = LocalDateTime.parse("2023-06-14 10:37:29", formatter);
+        LocalDateTime timestamp22 = LocalDateTime.parse("2023-06-14 12:04:13", formatter);
+        LocalDateTime timestamp23 = LocalDateTime.parse("2023-04-19 08:49:39", formatter);
+        LocalDateTime timestamp24 = LocalDateTime.parse("2023-06-21 17:07:41", formatter);
 
         List<User> users = userService.findAllUsers();
 
