@@ -26,7 +26,6 @@ public class ThingToDo extends Listing {
 
 
 
-
     @Override
     public ListingType getListingType() {
         return this.listingType = ListingType.DO;
