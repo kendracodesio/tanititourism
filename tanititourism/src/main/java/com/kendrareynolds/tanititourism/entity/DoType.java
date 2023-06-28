@@ -19,6 +19,10 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DoType {
+    public DoType(String typeName) {
+        this.typeName = typeName;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

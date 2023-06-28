@@ -25,6 +25,10 @@ public class DoTypeService {
         return doTypeRepository.findAll();
     }
 
+    public void saveAll(List<DoType> doTypes) {
+        doTypeRepository.saveAll(doTypes);
+    }
+
     public DoType findByTypeName(String typeName) {
         Optional<DoType> optionalDoType = doTypeRepository.findByTypeName(typeName);
         if (optionalDoType.isPresent()) {

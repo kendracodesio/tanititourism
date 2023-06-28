@@ -18,6 +18,9 @@ public class RegionService {
         this.regionRepository = regionRepository;
     }
 
+    public void saveAll(List<Region> regions) {
+        regionRepository.saveAll(regions);
+    }
     public List<Region> findAll() {
         return regionRepository.findAll();
     }

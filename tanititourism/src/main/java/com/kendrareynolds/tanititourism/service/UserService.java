@@ -14,6 +14,10 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    public void saveAll(List<User> users) {
+        userRepository.saveAll(users);
+    }
+
     public String getUsersFirstName(String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
         if (optionalUser.isEmpty()) {

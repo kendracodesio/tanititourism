@@ -19,6 +19,9 @@ public class StayTypeService {
         this.stayTypeRepository = stayTypeRepository;
     }
 
+    public void saveAll(List<StayType> stayTypes) {
+         stayTypeRepository.saveAll(stayTypes);
+    }
     public List<StayType> findAll() {
         return stayTypeRepository.findAll();
     }

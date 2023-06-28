@@ -18,6 +18,10 @@ public class DineTypeService {
         this.dineTypeRepository = dineTypeRepository;
     }
 
+    public void saveAll(List<DineType> dineTypes) {
+        dineTypeRepository.saveAll(dineTypes);
+    }
+
     public List<DineType> findAll() {
         return dineTypeRepository.findAll();
     }
