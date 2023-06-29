@@ -16,7 +16,7 @@ public class ThingToDoDto {
     private String name;
 
     @NotBlank(message= "Description cannot be blank")
-    @Size(min = 100, max = 500, message = "Description should be between 50 and 500 characters")
+    @Size(min = 50, max = 500, message = "Description should be between 50 and 500 characters")
     private String description;
 
     @Pattern(regexp="^\\+\\d{3}\\s\\d{2}\\s\\d{2}\\s\\d{2}\\s\\d{2}$", message="Phone number should be numeric and follow this format: +XXX XX XX XX XX")
