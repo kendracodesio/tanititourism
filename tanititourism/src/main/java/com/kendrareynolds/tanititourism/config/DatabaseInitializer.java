@@ -66,6 +66,8 @@ public class DatabaseInitializer implements CommandLineRunner {
             LocalDateTime timestamp23 = LocalDateTime.parse("2023-04-19 08:49:39", formatter);
             LocalDateTime timestamp24 = LocalDateTime.parse("2023-06-21 17:07:41", formatter);
 
+
+
             List<Region> regions = new ArrayList<>();
             Region region1 = new Region();
             region1.setName("Downtown Taniti City");

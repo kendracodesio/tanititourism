@@ -69,14 +69,14 @@ function ReportTable({reportedActions, showUser}: ReportTableProps) {
                     listingId = reportedAction.restaurantsAndNightlife.id;
                     link = "dine-listings";
                 }
-
+                let date = new Date(reportedAction.timestamp + 'Z');
                 return (
                     <tr key={index}>
                         <td>{reportedAction.action}</td>
                         <td>{listingType}</td>
                         <td><Link to={`/admin/${link}/listing-detail/${listingId}`}>{listingTitle}</Link></td>
                         {showUser && <td>{reportedAction.user?.firstName}</td>}
-                        <td>{new Date(reportedAction.timestamp).toLocaleString()}</td>
+                        <td>{date.toLocaleString()}</td>
                     </tr>
                 );
             })}
